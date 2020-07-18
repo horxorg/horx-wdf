@@ -1,0 +1,2 @@
+dubboProviderContextFilter=org.horx.wdf.sys.dubbo.DubboProviderContextFilter
+dubboConsumerContextFilter=org.horx.wdf.sys.dubbo.DubboConsumerContextFilter

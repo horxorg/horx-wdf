@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.UserMapper.ext">
+
+  <sql id="columns">
+    <!--,t1.ext1,t2.ext2-->
+  </sql>
+
+    <sql id="where">
+            <!--<if test="ext1 != null">
+                AND t1.ext1 LIKE ${_concatStart} '%' ${_concatSep} #{ext1} ${_concatSep} '%' ${_concatEnd}
+            </if>-->
+    </sql>
+  
+</mapper>

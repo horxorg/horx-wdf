@@ -1,0 +1,9 @@
+
+.dropdown-div{overflow:auto}
+.dropdown-div-search{height:203px;}
+.dropdown-div-nosearch{height:238px;}
+.dropdown-this{background-color:#D5ECDB}
+.dropdown-search-div{height:30px;line-height:30px;border:solid 1px #c0c4cc;margin:3px;padding-left:3px;padding-right:25px;position: relative}
+.dropdown-search-input{height:100%;width:100%;border-width:0px;}
+.dropdown-search-icon{position:absolute;right:3px;top:50%;margin-top:-10px;cursor:pointer}
+.dropdown-item-hot{background-color:#C2BE9E}

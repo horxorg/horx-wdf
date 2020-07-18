@@ -1,0 +1,149 @@
+::-webkit-input-placeholder {
+    color: #ccc
+}
+
+html {
+    background-color: #f2f2f2;
+    color: #666
+}
+
+.page-grid{
+    padding:5px
+}
+
+.layui-card-header.page-card-header-auto{
+    padding-top:5px;
+    padding-bottom:5px;
+    height:auto
+}
+
+.page-card-header-auto .layui-form-item:last-child{
+    margin-bottom:0
+}
+
+page-query{
+    width:310px;
+    text-align: center
+}
+
+/* 下拉按钮样式 */
+.downpanel {
+    z-index:9999;
+    padding: 0;
+}
+
+.downpanel .layui-select-title {
+    padding-right: 30px;
+    padding-left: 10px;
+}
+
+.downpanel dl {
+    color: #000;
+    font-size: 14px;
+}
+
+
+.downpanel .layui-select-title i {
+    border-top-color: #fff;
+}
+
+.edit-container {
+    padding: 20px 30px 0 0;
+}
+.edit-row {
+    margin-top:5px;margin-bottom:5px;
+}
+.edit-label {
+    text-align:right;min-height:40px;padding-top:10px;padding-right:10px;
+}
+
+.edit-div{
+    min-height:40px;padding-top:10px;color: #297458;
+}
+
+.edit-input {
+
+}
+.edit-required {
+    color:#FF0000;
+    padding-right:3px;
+    font-family: Calibri
+}
+
+@font-face {
+    font-family: 'iconfont';
+    src: url('font/iconfont.eot');
+    src: url('font/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('font/iconfont.woff2') format('woff2'),
+    url('font/iconfont.woff') format('woff'),
+    url('font/iconfont.ttf') format('truetype'),
+    url('font/iconfont.svg#iconfont') format('svg');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+.iconfont-checkbox-on:before {
+    content: "\e651";
+}
+
+.iconfont-checkbox-off:before {
+    content: "\e64f";
+}
+
+.iconfont-checkbox-partial:before {
+    content: "\e700";
+}
+
+.power-tree-status{
+    color:#5FB878;
+    margin-left:-5px;
+    margin-right:3px;
+    font-size:16px;
+    line-height:20px;
+    vertical-align:middle
+}
+
+.bottom-layer-body{
+    overflow-x: hidden;
+    padding-bottom: 60px
+}
+.bottom-div {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 800;
+    width:100%;
+    padding-top:6px;
+    background:#FFFFFF
+}
+
+.list-item {
+    display: block;
+    width:100%;
+    height:30px;
+    line-height: 30px;
+    background-color: #c2c2c2;
+    margin-bottom: 1px;
+    text-align: center;
+}
+.list-container dd.layui-this{
+    background-color:#5FB878;
+    color:#fff
+}
+
+.iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0
+}

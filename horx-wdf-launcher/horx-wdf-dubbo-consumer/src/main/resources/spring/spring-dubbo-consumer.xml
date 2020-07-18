@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+           http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+           http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd"
+       >
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="horx-wdf-dubbo-consumer"  />
+
+    <!-- 使用 Nacos 注册中心 -->
+    <dubbo:registry address="zookeeper://localhost:2181" timeout="2000"/>
+
+    <dubbo:protocol name="dubbo" port="-1"/>
+
+    <dubbo:consumer filter="dubboConsumerContextFilter"/>
+
+    <dubbo:reference id="accessLogService" interface="org.horx.wdf.sys.service.AccessLogService"/>
+    <dubbo:reference id="accessPermissionService" interface="org.horx.wdf.sys.service.AccessPermissionService"/>
+    <dubbo:reference id="dataAuthorityService" interface="org.horx.wdf.sys.service.DataAuthorityService"/>
+    <dubbo:reference id="dataOperationLogService" interface="org.horx.wdf.sys.service.DataOperationLogService"/>
+    <dubbo:reference id="dataPermissionService" interface="org.horx.wdf.sys.service.DataPermissionService"/>
+    <dubbo:reference id="dictService" interface="org.horx.wdf.sys.service.DictService"/>
+    <dubbo:reference id="menuService" interface="org.horx.wdf.sys.service.MenuService"/>
+    <dubbo:reference id="onlineUserService" interface="org.horx.wdf.sys.service.OnlineUserService"/>
+    <dubbo:reference id="orgService" interface="org.horx.wdf.sys.service.OrgService"/>
+    <dubbo:reference id="roleService" interface="org.horx.wdf.sys.service.RoleService"/>
+    <dubbo:reference id="sessionService" interface="org.horx.wdf.sys.service.SessionService"/>
+    <dubbo:reference id="userService" interface="org.horx.wdf.sys.service.UserService"/>
+
+
+</beans>

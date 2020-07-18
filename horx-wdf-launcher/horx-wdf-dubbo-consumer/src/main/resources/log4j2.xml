@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration packages="org.horx.wdf.common.support.log4j2">
+    <Properties>
+        <Property name="baseDir">d:/logs</Property>
+        <Property name="patternLayout">%d{yyyy-MM-dd HH:mm:ss.SSS} %p [%t] %c.%M(%F:%L) %traceId - %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${patternLayout}" />
+        </Console>
+
+        <!-- 按天第天备份一个日志 -->
+        <RollingFile name="RollingFile" fileName="${baseDir}/log.log"
+                     filePattern="${baseDir}/log_%d{yyyy-MM-dd}_%i.log">
+            <PatternLayout pattern="${patternLayout}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" />
+                <SizeBasedTriggeringPolicy size="100MB" />
+            </Policies>
+            <!-- 最多备份数量 -->
+            <DefaultRolloverStrategy max="10000" />
+        </RollingFile>
+
+        <!-- 访问日志 -->
+        <RollingFile name="AccessLogRollingFile" fileName="${baseDir}/access_log.log"
+                     filePattern="${baseDir}/access_log_%d{yyyy-MM-dd}_%i.log">
+            <PatternLayout pattern="%m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" />
+                <SizeBasedTriggeringPolicy size="100MB" />
+            </Policies>
+            <!-- 最多备份数量 -->
+            <DefaultRolloverStrategy max="10000" />
+        </RollingFile>
+
+        <!-- 数据日志 -->
+        <RollingFile name="DataLogRollingFile" fileName="${baseDir}/data_log.log"
+                     filePattern="${baseDir}/data_log_%d{yyyy-MM-dd}_%i.log">
+            <PatternLayout pattern="%m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1" />
+                <SizeBasedTriggeringPolicy size="100MB" />
+            </Policies>
+            <!-- 最多备份数量 -->
+            <DefaultRolloverStrategy max="10000" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Console" />
+            <!--<AppenderRef ref="RollingFile"/>-->
+        </Root>
+        <logger name="org.horx.wdf.sys.extension.accesslog.support.AccessLoggerHandler" additivity="false" level="info" includeLocation="true">
+            <AppenderRef ref="Console" />
+            <!--<AppenderRef ref="AccessLogRollingFile"/>-->
+        </logger>
+        <logger name="org.horx.wdf.sys.extension.datalog.support.DataLoggerHandler" additivity="false" level="info" includeLocation="true">
+            <AppenderRef ref="Console" />
+            <!--<AppenderRef ref="AccessLogRollingFile"/>-->
+        </logger>
+    </Loggers>
+</Configuration>

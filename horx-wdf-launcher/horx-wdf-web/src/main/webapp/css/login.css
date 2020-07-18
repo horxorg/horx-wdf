@@ -1,0 +1,129 @@
+body,html {
+    height: 100%
+}
+
+html {
+    background-color: #f2f2f2;
+    color: #666
+}
+
+.login-container {
+    position: relative;
+    left: 0;
+    top: 0;
+    padding: 110px 0;
+    min-height: 100%;
+    box-sizing: border-box
+}
+
+.login-main {
+    width: 375px;
+    margin: 0 auto;
+    box-sizing: border-box
+}
+
+.login-box {
+    padding: 20px
+}
+
+.login-header {
+    text-align: center
+}
+
+.login-header h2 {
+    margin-bottom: 10px;
+    font-weight: 300;
+    font-size: 30px;
+    color: #000
+}
+
+.login-header p {
+    font-weight: 300;
+    color: #999;
+    padding:10px
+}
+
+.login-body .layui-form-item {
+    position: relative
+}
+
+.login-icon {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    width: 38px;
+    line-height: 36px;
+    text-align: center;
+    color: #d2d2d2
+}
+
+.login-body .layui-form-item .layui-input {
+    padding-left: 38px
+}
+
+.login-codeimg {
+    max-height: 38px;
+    width: 100%;
+    cursor: pointer;
+    box-sizing: border-box
+}
+
+.login-jump-change {
+    float: right
+}
+
+.login-footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    line-height: 30px;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+    color: rgba(0,0,0,.5)
+}
+
+.login-footer span {
+    padding: 0 5px
+}
+
+.login-footer a {
+    padding: 0 5px;
+    color: rgba(0,0,0,.5)
+}
+
+.login-footer a:hover {
+    color: rgba(0,0,0,1)
+}
+
+.login-main[bgimg] {
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,.05)
+}
+
+.login-link {
+    color: #029789!important
+}
+
+.login-button {
+    margin-top:40px
+}
+
+.login-waiting {
+    display:none
+}
+
+@media screen and (max-width:768px) {
+    .login-container {
+        padding-top: 60px
+    }
+
+    .login-main {
+        width: 300px
+    }
+
+    .login-box {
+        padding: 10px
+    }
+}

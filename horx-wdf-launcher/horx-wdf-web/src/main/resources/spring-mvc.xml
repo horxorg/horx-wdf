@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/mvc
+            http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.horx.wdf.common.spring.http.converter.JsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+        <mvc:argument-resolvers>
+            <bean class="org.horx.wdf.common.spring.arg.ArgJsonResolver"/>
+            <bean class="org.horx.wdf.common.spring.arg.ArgEntityResolver"/>
+            <bean class="org.horx.wdf.sys.support.argresolver.ArgDataAuthResolver"/>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+    <!-- 自动扫描包 -->
+    <context:component-scan base-package="org.horx.wdf" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean name="menuAllowedTag" class="org.horx.wdf.sys.view.freemarker.tag.MenuAllowedTag"/>
+    <bean name="permissionAllowedTag" class="org.horx.wdf.sys.view.freemarker.tag.PermissionAllowedTag"/>
+
+    <!-- 配置freeMarker的模板路径 -->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/templates-ftl/" />
+        <property name="defaultEncoding" value="UTF-8" />
+
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="wdf_menuAllowed" value-ref="menuAllowedTag"/>
+                <entry key="wdf_permissionAllowed" value-ref="permissionAllowedTag"/>
+            </map>
+        </property>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="number_format">0</prop>
+                <prop key="template_exception_handler">org.horx.wdf.sys.view.freemarker.handler.FreemarkerExceptionHandler</prop>
+                <prop key="auto_import">spring.ftl as spring, wdf.ftl as wdf</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- freemarker视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="suffix" value=".ftl" />
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="requestContextAttribute" value="rc" />
+    </bean>
+
+    <!-- 支持上传文件 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+    <!-- 定义国际化判断当前语言解析器 -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="zh_CN"/>
+        <property name="cookieMaxAge" value="604800"/>
+        <property name="cookieName" value="lang"></property>
+    </bean>
+
+    <bean id="themeSource" class="org.springframework.ui.context.support.ResourceBundleThemeSource">
+        <property name="basenamePrefix" value="theme/theme-" />
+    </bean>
+
+    <bean id="themeResolver" class="org.springframework.web.servlet.theme.CookieThemeResolver">
+        <property name="defaultThemeName" value="blue" />
+        <property name="cookieMaxAge" value="604800"/>
+        <property name="cookieName" value="theme"></property>
+    </bean>
+
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+        <bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor">
+            <property name="paramName" value="theme" />
+        </bean>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="org.horx.wdf.common.spring.interceptor.EnterMethodInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/login"/>
+            <mvc:mapping path="/main"/>
+            <mvc:mapping path="/page/**"/>
+            <bean class="org.horx.wdf.common.spring.interceptor.WebPageInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/page/**"/>
+            <mvc:mapping path="/api/**"/>
+            <bean class="org.horx.wdf.common.spring.interceptor.UserInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/page/**"/>
+            <mvc:mapping path="/api/**"/>
+            <bean class="org.horx.wdf.sys.support.interceptor.AccessPermissionInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- 异常处理 -->
+    <bean id="exceptionHandler" class="org.horx.wdf.common.spring.ExceptionResolver">
+        <property name="defaultErrorCode">
+            <bean class="org.horx.wdf.common.entity.ErrorCodeEntity">
+                <constructor-arg index="0" value="B0001"/>
+                <constructor-arg index="1" value="common.err.unknown"/>
+            </bean>
+        </property>
+    </bean>
+</beans>

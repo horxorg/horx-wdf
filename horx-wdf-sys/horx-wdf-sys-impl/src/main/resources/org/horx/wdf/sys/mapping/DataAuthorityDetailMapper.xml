@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.DataAuthorityDetailMapper">
+
+    <sql id="selectSql">
+        SELECT
+            t1.id,
+            t1.auth_id,
+            t1.auth_value,
+            t1.checked_type
+        FROM
+            wdf_data_auth_dtl t1
+        WHERE
+            t1.is_deleted=0
+    </sql>
+
+    <select id="selectByAuthorityId" resultType="org.horx.wdf.sys.domain.DataAuthorityDetail">
+        <include refid="selectSql"/>
+        AND t1.auth_id=#{authorityId}
+    </select>
+
+    <select id="selectByAuthorityIds" resultType="org.horx.wdf.sys.domain.DataAuthorityDetail">
+        <include refid="selectSql"/>
+        AND
+        <foreach item="item" collection="authorityIds" separator="OR" open="(" close=")">
+            t1.auth_id=#{item}
+        </foreach>
+    </select>
+
+    <select id="countByAuthorityIds" resultType="int">
+        SELECT COUNT(*)
+        FROM wdf_data_auth_dtl t1
+        WHERE
+            t1.is_deleted=0
+        AND
+        <foreach item="item" collection="authorityIds" separator="OR" open="(" close=")">
+            t1.auth_id=#{item}
+        </foreach>
+        AND t1.auth_value=#{value}
+    </select>
+</mapper>

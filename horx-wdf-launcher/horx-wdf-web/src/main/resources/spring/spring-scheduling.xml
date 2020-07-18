@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="jobAccessLog" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="accessLogManager" />
+        <property name="targetMethod" value="removeHistory" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="jobAccessLogTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="jobAccessLog" />
+        <property name="startDelay" value="30000" /><!-- 调度工厂实例化后，经过30秒开始执行调度 -->
+        <property name="repeatInterval" value="86400000" /><!-- 每1天调度一次 -->
+    </bean>
+
+    <bean id="jobDataLog" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="dataOperationLogManager" />
+        <property name="targetMethod" value="removeHistory" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="jobDataLogTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="jobDataLog" />
+        <property name="startDelay" value="60000" />
+        <property name="repeatInterval" value="86400000" />
+    </bean>
+
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="jobAccessLogTrigger" />
+                <ref bean="jobDataLogTrigger" />
+            </list>
+        </property>
+    </bean>
+</beans>

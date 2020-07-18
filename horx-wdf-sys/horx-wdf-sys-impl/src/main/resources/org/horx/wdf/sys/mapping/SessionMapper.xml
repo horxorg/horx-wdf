@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.SessionMapper">
+
+    <delete id="deleteBySessionKey">
+        DELETE
+        FROM wdf_session
+        WHERE session_key=#{sessionKey, jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteExpired">
+        DELETE
+        FROM wdf_session
+        WHERE expired_time &lt; ${_now}
+    </delete>
+
+    <select id="selectBySessionKey" resultType="org.horx.wdf.sys.domain.Session">
+        SELECT
+            t1.id,
+            t1.user_id,
+            t1.session_key,
+            t1.client_ip,
+            t1.create_time,
+            t1.last_access_time,
+            t1.inactive_interval,
+            t1.expired_time
+        FROM wdf_session t1
+        WHERE t1.session_key=#{sessionKey} AND t1.expired_time &gt; ${_now}
+    </select>
+
+    <select id="pagingSelectOnlineUser" resultType="org.horx.wdf.sys.domain.OnlineUser">
+        SELECT
+            t1.id,
+            t1.user_id,
+            t1.client_ip,
+            t1.create_time,
+            t1.last_access_time,
+            t2.username,
+            t2.name,
+            t3.name AS org_name
+        FROM wdf_session t1
+        JOIN wdf_user t2 ON (t1.user_id=t2.id)
+        LEFT JOIN wdf_org t3 ON (t2.org_id=t3.id)
+        WHERE expired_time > ${_now}
+        AND t2.is_deleted=0
+        <if test="name != null and name != ''">
+            AND t2.name LIKE ${_concatStart} '%' ${_concatSep} #{name} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="username != null and username != ''">
+            AND t2.username LIKE ${_concatStart} '%' ${_concatSep} #{username} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="orgIds != null and orgIds.length > 0">
+            AND
+            <foreach item="item" collection="orgIds" separator="OR" open="(" close=")">
+                t2.org_id=#{item}
+            </foreach>
+        </if>
+        <if test="sysDataAuth != null and sysDataAuth.orgAuth != null and sysDataAuth.orgAuth.scope != 2">
+            AND (1=2
+            <if test="sysDataAuth.orgAuth.orgIds != null and sysDataAuth.orgAuth.orgIds.length > 0">
+                OR
+                <foreach  item="item" collection="sysDataAuth.orgAuth.orgIds" separator="OR" open="(" close=")">
+                    t2.org_id=#{item}
+                </foreach>
+            </if>
+            <if test="sysDataAuth.orgAuth.orgIdsWithSub != null and sysDataAuth.orgAuth.orgIdsWithSub.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_org org
+                    WHERE
+                        t3.level_code LIKE ${_concatStart} org.level_code ${_concatSep} '%' ${_concatEnd}
+                    and
+                        <foreach item="item" collection="sysDataAuth.orgAuth.orgIdsWithSub" separator="OR" open="(" close=")">
+                            org.id=#{item}
+                        </foreach>
+                )
+            </if>
+            <if test="sysDataAuth.orgAuth.authIds != null and sysDataAuth.orgAuth.authIds.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_org org
+                    JOIN wdf_data_auth_dtl AS dtl ON (org.id=dtl.auth_value)
+                    WHERE (
+                        dtl.checked_type=1
+                        AND t2.org_id=dtl.auth_value
+                        OR dtl.checked_type=2
+                        AND t3.level_code LIKE ${_concatStart} org.level_code ${_concatSep} '%' ${_concatEnd}
+                    )
+                    AND
+                    <foreach item="item" collection="sysDataAuth.orgAuth.authIds" separator="OR" open="(" close=")">
+                        dtl.auth_id=#{item}
+                    </foreach>
+                )
+            </if>
+            )
+        </if>
+    </select>
+
+</mapper>

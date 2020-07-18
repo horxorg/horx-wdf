@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.RoleMapper">
+
+    <sql id="selectSql">
+        SELECT
+            t1.id,
+            t1.code,
+            t1.name,
+            t1.org_id,
+            t2.name org_name,
+            t1.is_sub_usable,
+            t1.is_enabled,
+            t1.remarks
+        FROM
+            wdf_role t1
+        LEFT JOIN wdf_org t2 ON (t1.org_id = t2.id)
+        WHERE
+            t1.is_deleted = 0
+    </sql>
+
+    <sql id="sysDataAuth">
+        <if test="sysDataAuth != null and sysDataAuth.orgAuth != null and sysDataAuth.orgAuth.scope != 2">
+            AND (1=2
+            <if test="sysDataAuth.orgAuth.orgIds != null and sysDataAuth.orgAuth.orgIds.length > 0">
+                OR
+                <foreach  item="item" collection="sysDataAuth.orgAuth.orgIds" separator="OR" open="(" close=")">
+                    t1.org_id=#{item}
+                </foreach>
+            </if>
+            <if test="sysDataAuth.orgAuth.orgIdsWithSub != null and sysDataAuth.orgAuth.orgIdsWithSub.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_org org
+                    WHERE
+                        t2.level_code LIKE ${_concatStart} org.level_code ${_concatSep} '%' ${_concatEnd}
+                    AND
+                        <foreach item="item" collection="sysDataAuth.orgAuth.orgIdsWithSub" separator="OR" open="(" close=")">
+                            org.id=#{item}
+                        </foreach>
+                )
+            </if>
+            <if test="sysDataAuth.orgAuth.authIds != null and sysDataAuth.orgAuth.authIds.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_org org
+                    JOIN wdf_data_auth_dtl dtl ON (org.id=dtl.auth_value)
+                    WHERE (
+                        dtl.checked_type=1
+                        AND t1.id=dtl.auth_value
+                        OR dtl.checked_type=2
+                        AND t1.level_code LIKE ${_concatStart} org.level_code ${_concatSep} '%' ${_concatEnd}
+                    )
+                    AND
+                    <foreach item="item" collection="sysDataAuth.orgAuth.authIdsWithSub" separator="OR" open="(" close=")">
+                        dtl.auth_id=#{item}
+                    </foreach>
+                )
+            </if>
+            )
+        </if>
+    </sql>
+
+    <sql id="sysDataAuthUsable">
+        <if test="sysDataAuth != null and sysDataAuth.orgAuth != null and sysDataAuth.orgAuth.scope != 2">
+            AND (1=2
+            <if test="sysDataAuth.orgAuth.orgIds != null and sysDataAuth.orgAuth.orgIds.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_org org
+                    WHERE
+                        org.level_code LIKE ${_concatStart} t2.level_code ${_concatSep} '%' ${_concatEnd}
+                    AND
+                        <foreach item="item" collection="sysDataAuth.orgAuth.orgIds" separator="OR" open="(" close=")">
+                            org.id=#{item}
+                        </foreach>
+                )
+            </if>
+            <if test="sysDataAuth.orgAuth.orgIdsWithSub != null and sysDataAuth.orgAuth.orgIdsWithSub.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_org org
+                    WHERE
+                        org.level_code LIKE ${_concatStart} t2.level_code ${_concatSep} '%' ${_concatEnd}
+                    AND
+                        <foreach item="item" collection="sysDataAuth.orgAuth.orgIdsWithSub" separator="OR" open="(" close=")">
+                            org.id=#{item}
+                        </foreach>
+                )
+            </if>
+            <if test="sysDataAuth.orgAuth.authIds != null and sysDataAuth.orgAuth.authIds.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_org org
+                    JOIN wdf_data_auth_dtl dtl ON (org.id=dtl.auth_value)
+                    WHERE
+                        org.level_code LIKE ${_concatStart} t2.level_code ${_concatSep} '%' ${_concatEnd}
+                    AND
+                        <foreach item="item" collection="sysDataAuth.orgAuth.authIds" separator="OR" open="(" close=")">
+                            dtl.auth_id=#{item}
+                        </foreach>
+                )
+            </if>
+            )
+        </if>
+    </sql>
+
+    <sql id="whereSql">
+        <if test="code != null and code != ''">
+            AND t1.code LIKE ${_concatStart} '%' ${_concatSep} #{code} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="name != null and name != ''">
+            AND t1.name LIKE ${_concatStart} '%' ${_concatSep} #{name} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="orgIds != null and orgIds.length > 0">
+            AND
+            <foreach item="item" collection="orgIds" separator="OR" open="(" close=")">
+                t1.org_id=#{item}
+            </foreach>
+        </if>
+        <if test="subUsable != null">
+            AND t1.is_sub_usable = #{subUsable}
+        </if>
+        <if test="enabled != null">
+            AND t1.is_enabled = #{enabled}
+        </if>
+    </sql>
+
+    <select id="selectById" resultType="org.horx.wdf.sys.domain.Role">
+        <include refid="selectSql"/>
+        AND t1.id = #{id}
+    </select>
+
+    <select id="selectByIdAuthorized" resultType="org.horx.wdf.sys.domain.Role">
+        <include refid="selectSql"/>
+        AND t1.id = #{id}
+        <include refid="sysDataAuth"/>
+    </select>
+
+    <select id="selectByIdUsable" resultType="org.horx.wdf.sys.domain.Role">
+        <include refid="selectSql"/>
+        AND t1.id = #{id}
+        AND (
+            t1.org_id IS NULL AND t1.is_sub_usable=1
+            OR t1.is_sub_usable=0 <include refid="sysDataAuth"/>
+            OR t1.is_sub_usable=1 <include refid="sysDataAuthUsable"/>
+        )
+    </select>
+
+    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.Role">
+        <include refid="selectSql"/>
+        <include refid="whereSql"/>
+        <include refid="sysDataAuth"/>
+    </select>
+
+    <select id="pagingSelectUsable" resultType="org.horx.wdf.sys.domain.Role">
+        <include refid="selectSql"/>
+        <include refid="whereSql"/>
+        AND (
+            t1.org_id IS NULL AND t1.is_sub_usable=1
+            OR t1.is_sub_usable=0 <include refid="sysDataAuth"/>
+            OR t1.is_sub_usable=1 <include refid="sysDataAuthUsable"/>
+        )
+    </select>
+</mapper>

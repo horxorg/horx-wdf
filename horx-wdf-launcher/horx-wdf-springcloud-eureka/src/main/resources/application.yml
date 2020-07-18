@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: horx-wdf-springcloud-eureka
+server:
+  port: 8001
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: http://localhost:${server.port}/eureka

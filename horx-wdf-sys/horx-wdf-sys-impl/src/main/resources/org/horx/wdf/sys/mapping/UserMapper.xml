@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.UserMapper">
+
+
+    <select id="selectByUsername" resultType="org.horx.wdf.sys.domain.User">
+        SELECT
+            id,
+            password,
+            pwd_salt,
+            pwd_encode_type,
+            pwd_modify_time,
+            pwd_err_times,
+            pwd_err_lock_time,
+            pwd_err_unlock_time,
+            status,
+            is_built_in
+        FROM
+            wdf_user
+        WHERE
+            is_deleted = 0
+        AND username = #{username}
+    </select>
+
+    <select id="selectForPwd" resultType="org.horx.wdf.sys.domain.User">
+        SELECT
+            id,
+            password,
+            pwd_salt,
+            pwd_encode_type,
+            pwd_modify_time,
+            status
+        FROM
+            wdf_user
+        WHERE
+            is_deleted = 0
+        AND id = #{id}
+    </select>
+
+    <sql id="selectSql">
+        <![CDATA[
+        SELECT
+            t1.id,
+            t1.name,
+            t1.username,
+            (
+                CASE
+                WHEN t1.pwd_err_unlock_time IS NOT NULL
+                AND t1.pwd_err_unlock_time >= ${_now} THEN
+                    t1.pwd_err_lock_time
+                ELSE
+                    NULL
+                END
+            ) AS pwd_err_lock_time,
+            t1.org_id,
+            t2.name org_name,
+            t1.mobile,
+            t1.phone,
+            t1.email,
+            t1.status,
+            t1.last_login_time,
+            t1.last_login_ip,
+            t1.remarks,
+            t1.is_built_in
+        ]]>
+        <include refid="org.horx.wdf.sys.mapper.UserMapper.ext.columns"/>
+        FROM
+            wdf_user t1
+        LEFT JOIN wdf_org t2 ON (t1.org_id = t2.id)
+        WHERE
+            t1.is_deleted = 0
+    </sql>
+
+    <sql id="sysDataAuth">
+        <if test="sysDataAuth != null and sysDataAuth.orgAuth != null and sysDataAuth.orgAuth.scope != 2">
+            AND (1=2
+            <if test="sysDataAuth.orgAuth.orgIds != null and sysDataAuth.orgAuth.orgIds.length > 0">
+                OR
+                <foreach  item="item" collection="sysDataAuth.orgAuth.orgIds" separator="OR" open="(" close=")">
+                    t1.org_id=#{item}
+                </foreach>
+            </if>
+            <if test="sysDataAuth.orgAuth.orgIdsWithSub != null and sysDataAuth.orgAuth.orgIdsWithSub.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_org org
+                    WHERE
+                        t2.level_code LIKE ${_concatStart} org.level_code ${_concatSep} '%' ${_concatEnd}
+                    AND
+                        <foreach item="item" collection="sysDataAuth.orgAuth.orgIdsWithSub" separator="OR" open="(" close=")">
+                            org.id=#{item}
+                        </foreach>
+                )
+            </if>
+            <if test="sysDataAuth.orgAuth.authIds != null and sysDataAuth.orgAuth.authIds.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_org org
+                    JOIN wdf_data_auth_dtl dtl ON (org.id=dtl.auth_value)
+                    where (
+                        dtl.checked_type=1
+                        AND t1.org_id=dtl.auth_value
+                        OR dtl.checked_type=2
+                        AND t2.level_code LIKE ${_concatStart} org.level_code ${_concatSep} '%' ${_concatEnd}
+                    )
+                    AND
+                    <foreach item="item" collection="sysDataAuth.orgAuth.authIds" separator="OR" open="(" close=")">
+                        dtl.auth_id=#{item}
+                    </foreach>
+                )
+            </if>
+            )
+        </if>
+    </sql>
+
+    <select id="selectById" resultType="org.horx.wdf.sys.domain.User">
+        <include refid="selectSql"/>
+        AND t1.id=#{id}
+    </select>
+
+    <select id="selectByIdAuthorized" resultType="org.horx.wdf.sys.domain.User">
+        <include refid="selectSql"/>
+        AND t1.id=#{id}
+        <include refid="sysDataAuth"/>
+    </select>
+
+    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.User">
+        <include refid="selectSql"/>
+        <if test="name != null and name != ''">
+            AND t1.name LIKE ${_concatStart} '%' ${_concatSep} #{name} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="username != null and username != ''">
+            AND t1.username LIKE ${_concatStart} '%' ${_concatSep} #{username} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="orgIds != null and orgIds.length > 0">
+            AND
+            <foreach item="item" collection="orgIds" separator="OR" open="(" close=")">
+                t1.org_id=#{item}
+            </foreach>
+        </if>
+        <if test="mobile != null and mobile != ''">
+            AND t1.mobile LIKE ${_concatStart} '%' ${_concatSep} #{mobile} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="phone != null and phone != ''">
+            AND t1.phone LIKE ${_concatStart} '%' ${_concatSep} #{phone} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="email != null and email != ''">
+            AND t1.email LIKE ${_concatStart} '%' ${_concatSep} #{email} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="status != null and status.length > 0">
+            AND t1.status IN
+            <foreach item="item" collection="status" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="pwdErrLocked != null and pwdErrLocked == 0">
+            AND (t1.pwd_err_unlock_time IS NULL OR t1.pwd_err_unlock_time &lt;= ${_now})
+        </if>
+        <if test="pwdErrLocked != null and pwdErrLocked == 1">
+            AND (t1.pwd_err_unlock_time IS NOT NULL AND t1.pwd_err_unlock_time &gt; ${_now})
+        </if>
+        <include refid="sysDataAuth"/>
+        <include refid="org.horx.wdf.sys.mapper.UserMapper.ext.where"/>
+    </select>
+
+</mapper>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.AccessLogMapper">
+
+    <delete id="deleteHistory">
+        DELETE
+        FROM
+            wdf_access_log
+        WHERE
+            start_time &lt; #{dateTime}
+    </delete>
+
+    <select id="selectById" resultType="org.horx.wdf.sys.domain.AccessLog">
+        SELECT
+            t1.id,
+            t1.user_id,
+            t2.name AS user_name,
+            t1.org_id,
+            t3.name AS org_name,
+            t1.trace_id,
+            t1.environment,
+            t1.url,
+            t1.http_method,
+            t1.permission_code,
+            t1.role_id,
+            t1.user_agent,
+            t1.client_ip,
+            t1.class_name,
+            t1.method_name,
+            t1.server_ip,
+            t1.start_time,
+            t1.end_time,
+            t1.duration,
+            t1.is_success
+        FROM
+            wdf_access_log t1
+        LEFT JOIN wdf_user t2 ON (t1.user_id = t2.id)
+        LEFT JOIN wdf_org t3 ON (t1.org_id = t2.id)
+        WHERE
+            t1.id = #{id}
+    </select>
+
+    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.AccessLog">
+        SELECT
+            t1.id,
+            t1.user_id,
+            t2.name AS user_name,
+            t1.org_id,
+            t3.name AS org_name,
+            t1.trace_id,
+            t1.environment,
+            t1.url,
+            t1.http_method,
+            t1.permission_code,
+            t1.role_id,
+            t1.client_ip,
+            t1.class_name,
+            t1.method_name,
+            t1.server_ip,
+            t1.start_time,
+            t1.end_time,
+            t1.duration,
+            t1.is_success
+        FROM
+            wdf_access_log t1
+        LEFT JOIN wdf_user t2 ON (t1.user_id = t2.id)
+        LEFT JOIN wdf_org t3 ON (t1.org_id = t3.id)
+        <where>
+            <if test="searchKey != null and searchKey != ''">
+                AND (t2.name LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t3.name LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.trace_id LIKE ${_concatStart} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.environment LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.url LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.http_method LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.permission_code LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.user_agent LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.client_ip LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.class_name LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.method_name LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.server_ip LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                )
+            </if>
+            <if test="startTime != null">
+                AND t1.start_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND t1.start_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="sessionHandler" class="org.horx.wdf.common.extension.session.support.HttpSessionHandler"/>
+    <bean class="org.springframework.session.config.annotation.web.http.SpringHttpSessionConfiguration" />
+    <bean id="sessionRepository" class="org.horx.wdf.common.spring.session.CacheableJdbcSessionRepository">
+        <property name="defaultMaxInactiveInterval" value="2400"/> <!-- session 有效期40分钟 -->
+        <property name="persistInterval" value="120"/> <!--持久化时间间隔2分钟-->
+    </bean>
+
+    <bean id="webTool" class="org.horx.wdf.common.tools.WebTool"/>
+</beans>

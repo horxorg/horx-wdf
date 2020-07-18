@@ -1,0 +1,35 @@
+server:
+  port: 8002
+
+spring:
+  application:
+    name: horx-wdf-springcloud-provider
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: dev
+  mvc:
+    favicon:
+      enabled: false
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+  cache:
+    ehcache:
+      config: classpath:ehcache.xml
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8001/eureka
+
+mybatis:
+  # type-aliases-package: org.horx.wdf.sys.domain
+  mapper-locations: classpath*:org/horx/wdf/sys/mapping/*.xml,mybatis/sys/*.xml
+  config-location: classpath:mybatis/mysql-config.xml
+
+wdf:
+  messageSource:
+    locations: classpath:msg/common,classpath:msg/sys,classpath:msg/sys-meta
+  property:
+    locations: classpath:config/common.properties,classpath:config/sys.properties,classpath:config/tool.properties
+

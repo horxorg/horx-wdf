@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.MenuMapper">
+
+    <select id="selectById" resultType="org.horx.wdf.sys.domain.Menu">
+        SELECT
+            t1.id,
+            t1.parent_id,
+            t2.name parent_name,
+            t1.name,
+            t1.type,
+            t1.icon_type,
+            t1.icon_content,
+            t1.url,
+            t1.permission_code,
+            t1.code,
+            t1.level_num,
+            t1.level_code,
+            t1.is_visible,
+            t1.is_enabled,
+            t1.display_seq,
+            t1.is_built_in,
+            t1.remarks
+        FROM
+            wdf_menu t1
+        LEFT JOIN wdf_menu t2 ON (t1.parent_id = t2.id)
+        WHERE
+            t1.is_deleted = 0
+        AND t1.id = #{id}
+    </select>
+
+    <select id="select" resultType="org.horx.wdf.sys.domain.Menu">
+        SELECT
+            t1.id,
+            t1.parent_id,
+            t1.name,
+            t1.type,
+            t1.icon_type,
+            t1.icon_content,
+            t1.url,
+            t1.permission_code,
+            t1.code,
+            t1.level_num,
+            t1.level_code,
+            t1.is_visible,
+            t1.is_enabled,
+            t1.display_seq,
+            t1.is_built_in,
+            t1.remarks
+        FROM
+            wdf_menu t1
+        WHERE
+            t1.is_deleted = 0
+        <if test="name != null and name != ''">
+            AND t1.name LIKE ${_concatStart} '%' ${_concatSep} #{name} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="code != null and code != ''">
+            AND t1.code LIKE ${_concatStart} '%' ${_concatSep} #{code} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="type != null and type != ''">
+            AND t1.type = #{type}
+        </if>
+        <if test="visible != null">
+            and t1.is_visible = #{visible}
+        </if>
+        <if test="enabled != null">
+            AND t1.is_enabled = #{enabled}
+        </if>
+        <if test="treeQueryName != null and treeQueryName != ''">
+            AND EXISTS (
+                SELECT *
+                FROM wdf_menu menu
+                WHERE
+                    menu.name LIKE ${_concatStart} '%' ${_concatSep} #{treeQueryName} ${_concatSep} '%' ${_concatEnd}
+                AND
+                    menu.level_code LIKE ${_concatStart} t1.level_code ${_concatSep} '%' ${_concatEnd}
+            )
+        </if>
+        <if test="treeQueryCode != null and treeQueryCode != ''">
+            AND EXISTS (
+                SELECT *
+                FROM wdf_menu menu
+                WHERE
+                    menu.code LIKE ${_concatStart} '%' ${_concatSep} #{treeQueryCode} ${_concatSep} '%' ${_concatEnd}
+                AND
+                    menu.level_code LIKE ${_concatStart} t1.level_code ${_concatSep} '%' ${_concatEnd}
+            )
+        </if>
+    </select>
+
+</mapper>

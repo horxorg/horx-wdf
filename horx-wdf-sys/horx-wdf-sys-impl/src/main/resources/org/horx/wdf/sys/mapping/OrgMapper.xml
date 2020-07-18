@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.OrgMapper">
+
+    <sql id="orgAuth">
+        <if test="sysDataAuth != null and sysDataAuth.orgAuth != null and sysDataAuth.orgAuth.scope != 2">
+            AND (1=2
+            <if test="sysDataAuth.orgAuth.orgIds != null and sysDataAuth.orgAuth.orgIds.length > 0">
+                OR
+                <foreach  item="item" collection="sysDataAuth.orgAuth.orgIds" separator="OR" open="(" close=")">
+                    t1.id=#{item}
+                </foreach>
+            </if>
+            <if test="sysDataAuth.orgAuth.orgIdsWithSub != null and sysDataAuth.orgAuth.orgIdsWithSub.length > 0">
+                OR exists (
+                SELECT *
+                FROM wdf_org org
+                WHERE
+                t1.level_code LIKE ${_concatStart} org.level_code ${_concatSep} '%' ${_concatEnd}
+                AND
+                <foreach item="item" collection="sysDataAuth.orgAuth.orgIdsWithSub" separator="OR" open="(" close=")">
+                    org.id=#{item}
+                </foreach>
+                )
+            </if>
+            <if test="sysDataAuth.orgAuth.authIds != null and sysDataAuth.orgAuth.authIds.length > 0">
+                OR exists (
+                SELECT *
+                FROM
+                wdf_org org
+                JOIN wdf_data_auth_dtl AS dtl ON (org.id=dtl.auth_value)
+                WHERE (
+                dtl.checked_type=1
+                AND t1.id=dtl.auth_value
+                OR dtl.checked_type=2
+                AND t1.level_code LIKE ${_concatStart} org.level_code ${_concatSep} '%' ${_concatEnd}
+                )
+                AND
+                <foreach item="item" collection="sysDataAuth.orgAuth.authIds" separator="OR" open="(" close=")">
+                    dtl.auth_id=#{item}
+                </foreach>
+                )
+            </if>
+            )
+        </if>
+    </sql>
+
+    <select id="select" resultType="org.horx.wdf.sys.domain.Org">
+        SELECT
+            t1.id,
+            t1.parent_id,
+            t1.code,
+            t1.name,
+            t1.type,
+            t1.level_num,
+            t1.level_code,
+            t1.is_enabled,
+            t1.establish_date,
+            t1.cancel_date,
+            t1.display_seq,
+            t1.remarks
+        FROM
+            wdf_org t1
+        WHERE
+            t1.is_deleted = 0
+        <if test="name != null and name != ''">
+            AND t1.name LIKE ${_concatStart} '%' ${_concatSep} #{name} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="code != null and code != ''">
+            AND t1.code LIKE ${_concatStart} '%' ${_concatSep} #{code} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="treeQueryName != null and treeQueryName != ''">
+            AND EXISTS (
+                SELECT *
+                FROM wdf_org org
+                WHERE
+                    org.name LIKE ${_concatStart} '%' ${_concatSep} #{treeQueryName} ${_concatSep} '%' ${_concatEnd}
+                AND
+                    org.level_code LIKE ${_concatStart} t1.level_code ${_concatSep} '%' ${_concatEnd}
+            )
+        </if>
+        <if test="treeQueryCode != null and treeQueryCode != ''">
+            AND EXISTS (
+                SELECT *
+                FROM wdf_org org
+                WHERE
+                    org.code LIKE ${_concatStart} '%' ${_concatSep} #{treeQueryCode} ${_concatSep} '%' ${_concatEnd}
+                AND
+                    org.level_code LIKE ${_concatStart} t1.level_code ${_concatSep} '%' ${_concatEnd}
+            )
+        </if>
+        <include refid="orgAuth"/>
+    </select>
+
+    <select id="countByOrgAuth" resultType="int">
+        SELECT COUNT(*)
+        FROM wdf_org t1
+        WHERE t1.is_deleted=0
+        AND t1.id=#{value}
+        <include refid="orgAuth"/>
+    </select>
+</mapper>

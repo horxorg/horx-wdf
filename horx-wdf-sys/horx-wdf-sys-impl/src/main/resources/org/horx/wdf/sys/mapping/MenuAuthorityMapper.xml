@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.MenuAuthorityMapper">
+
+    <select id="selectByRoleId" resultType="org.horx.wdf.sys.domain.MenuAuthority">
+        SELECT
+            t1.id,
+            t1.obj_type,
+            t1.obj_id,
+            t1.menu_id,
+            t1.checked_type
+        FROM
+            wdf_menu_auth t1
+        WHERE
+            t1.is_deleted=0
+        AND
+            t1.obj_type=#{objType}
+        AND
+            t1.obj_id IN
+        <foreach item="item" collection="roleIds" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteByIds">
+        DELETE
+        FROM wdf_menu_auth
+        WHERE
+        <foreach item="item" collection="ids" separator="OR" open="(" close=")">
+            id=#{item}
+        </foreach>
+    </delete>
+</mapper>

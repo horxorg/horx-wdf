@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+    <bean id="levelCodeGenerator" class="org.horx.wdf.common.extension.level.support.IdLevelCodeGenerator"/>
+    <bean id="plaintextPwdEncoder" class="org.horx.wdf.common.extension.user.pwd.support.PlaintextPwdEncoder"/>
+    <bean id="md5SaltPwdEncoder" class="org.horx.wdf.common.extension.user.pwd.support.Md5SaltPwdEncoder"/>
+    <bean id="pwdEncoder" class="org.horx.wdf.common.extension.user.pwd.PwdEncoderConfig">
+        <property name="pwdEncoderMap">
+            <map>
+                <entry key="01" value-ref="plaintextPwdEncoder"/>
+                <entry key="02" value-ref="md5SaltPwdEncoder"/>
+            </map>
+        </property>
+        <property name="currentPwdEncoderCode" value="02"/>
+    </bean>
+
+    <bean id="dataLogHandler" class="org.horx.wdf.sys.extension.datalog.DataLogConfigHandler">
+        <property name="dataLogHandlerList">
+            <list>
+                <bean class="org.horx.wdf.sys.extension.datalog.support.DataLoggerHandler"/>
+                <bean class="org.horx.wdf.sys.extension.datalog.support.DataLogDbHandler"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="argEntityAdvice" class="org.horx.wdf.common.spring.advice.ArgEntityAdvice" />
+    <aop:config>
+        <aop:aspect id="aspectArgEntity" ref="argEntityAdvice">
+            <aop:pointcut id="pointArgEntity" expression="execution(* org.horx.wdf.sys.service..*.*(..))
+                or execution(* org.horx.wdf.sys.mapper.*.*(..))"/>
+            <aop:before method="doBefore" pointcut-ref="pointArgEntity"/>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="dataLogAdvice" class="org.horx.wdf.sys.support.datalog.DataLogAdvice" />
+    <aop:config>
+        <aop:aspect id="aspectDatalog" ref="dataLogAdvice" order="2">
+            <aop:pointcut id="pointDatalog" expression="execution(* org.horx.wdf.sys.manager..*.*(..))
+               and @annotation(org.horx.wdf.sys.support.datalog.DataLog)"/>
+            <aop:around method="doAround" pointcut-ref="pointDatalog"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

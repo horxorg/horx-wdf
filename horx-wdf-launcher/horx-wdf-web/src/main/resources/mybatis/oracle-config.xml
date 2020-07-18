@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 设置MyBatis全局变量 -->
+    <properties>
+        <property name="_dbType" value="oracle"/>
+        <property name="_concatStart" value=""/>
+        <property name="_concatSep" value="||"/>
+        <property name="_concatEnd" value=""/>
+        <property name="_now" value="SYSDATE"/>
+    </properties>
+
+    <objectFactory type="org.horx.wdf.common.mybatis.config.ExtendedObjectFactory"/>
+    <objectWrapperFactory type="org.horx.wdf.common.mybatis.config.ExtendedObjectWrapperFactory"/>
+</configuration>

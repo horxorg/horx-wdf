@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.DataOperationLogMapper">
+
+    <delete id="deleteHistory">
+       DELETE
+        FROM
+            wdf_data_log
+        WHERE
+            start_time &lt; #{dateTime}
+    </delete>
+
+    <select id="selectById" resultType="org.horx.wdf.sys.domain.DataOperationLog">
+        SELECT
+            t1.id,
+            t1.user_id,
+            t2.name AS user_name,
+            t1.org_id,
+            t3.name AS org_name,
+            t1.trace_id,
+            t1.biz_type,
+            t1.biz_name,
+            t1.operation_type,
+            t1.data,
+            t1.description,
+            t1.class_name,
+            t1.method_name,
+            t1.server_ip,
+            t1.start_time,
+            t1.end_time,
+            t1.duration
+        FROM
+            wdf_data_log t1
+        LEFT JOIN wdf_user t2 ON (t1.user_id = t2.id)
+        LEFT JOIN wdf_org t3 ON (t1.org_id = t3.id)
+        WHERE
+            t1.id=#{id}
+    </select>
+
+    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.DataOperationLog">
+        SELECT
+            t1.id,
+            t1.user_id,
+            t2.name AS user_name,
+            t1.org_id,
+            t3.name AS org_name,
+            t1.trace_id,
+            t1.biz_type,
+            t1.biz_name,
+            t1.operation_type,
+            t1.description,
+            t1.class_name,
+            t1.method_name,
+            t1.server_ip,
+            t1.start_time,
+            t1.end_time,
+            t1.duration
+        FROM
+            wdf_data_log t1
+        LEFT JOIN wdf_user t2 ON (t1.user_id = t2.id)
+        LEFT JOIN wdf_org t3 ON (t1.org_id = t3.id)
+        <where>
+            <if test="searchKey != null and searchKey != ''">
+                AND (t2.name LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t3.name LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.trace_id LIKE ${_concatStart} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.biz_type LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.biz_name LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.operation_type LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.description LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.class_name LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.method_name LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                    OR t1.server_ip LIKE ${_concatStart} '%' ${_concatSep} #{searchKey} ${_concatSep} '%' ${_concatEnd}
+                )
+            </if>
+            <if test="startTime != null">
+                AND t1.start_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND t1.start_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+</mapper>

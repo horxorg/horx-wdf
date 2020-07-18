@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.SessionAttrMapper">
+
+    <update id="updateAttrValue">
+        UPDATE wdf_session_attr
+        SET attr_type=#{attrType},attr_value=#{attrValue}
+        WHERE session_id=#{sessionId} AND attr_key = #{attrKey}
+    </update>
+
+    <delete id="deleteByAttrKey">
+        DELETE
+        FROM wdf_session_attr
+        WHERE session_id=#{sessionId} AND attr_key = #{attrKey}
+    </delete>
+
+    <delete id="deleteBySessionId">
+        DELETE
+        FROM wdf_session_attr
+        WHERE session_id=#{sessionId}
+    </delete>
+
+    <delete id="deleteExpired">
+        DELETE
+        FROM wdf_session_attr
+        WHERE NOT EXISTS (
+            SELECT *
+            FROM wdf_session AS s
+            WHERE wdf_session_attr.session_id=s.id
+        )
+    </delete>
+
+    <select id="select" resultType="org.horx.wdf.sys.domain.SessionAttr">
+        SELECT
+            t1.id,
+            t1.session_id,
+            t1.attr_key,
+            t1.attr_type,
+            t1.attr_value
+        FROM wdf_session_attr t1
+        WHERE t1.session_id=#{sessionId}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.DictMapper">
+
+    <sql id="selectSql">
+        SELECT
+            t1.id,
+            t1.code,
+            t1.name,
+            t1.biz_type,
+            t1.is_tree_data,
+            t1.remarks
+        FROM
+            wdf_dict t1
+        WHERE
+            t1.is_deleted = 0
+    </sql>
+
+    <select id="selectByCode" resultType="org.horx.wdf.sys.domain.Dict">
+        <include refid="selectSql"/>
+        AND t1.code=#{code}
+    </select>
+
+    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.Dict">
+        <include refid="selectSql"/>
+        <if test="code != null and code != ''">
+            AND t1.code LIKE ${_concatStart} '%' ${_concatSep} #{code} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="name != null and name != ''">
+            AND t1.name LIKE ${_concatStart} '%' ${_concatSep} #{name} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="bizTypes != null and bizTypes.length > 0">
+            AND t1.biz_type IN
+            <foreach item="item" collection="bizTypes" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="treeData != null">
+            AND t1.is_tree_data = #{treeData}
+        </if>
+        <if test="dictDataAuth != null and dictDataAuth.bizTypeAuth != null and dictDataAuth.bizTypeAuth.scope != 2">
+            AND (1=2
+            <if test="dictDataAuth.bizTypeAuth.dictItemCodes != null and dictDataAuth.bizTypeAuth.dictItemCodes.length > 0">
+                OR
+                <foreach  item="item" collection="dictDataAuth.bizTypeAuth.dictItemCodes" separator="OR" open="(" close=")">
+                    biz_type=#{item}
+                </foreach>
+            </if>
+            <if test="dictDataAuth.bizTypeAuth.authIds != null and dictDataAuth.bizTypeAuth.authIds.length > 0">
+                OR EXISTS (
+                    SELECT *
+                    FROM wdf_data_auth_dtl dtl
+                    WHERE dtl.auth_value=t1.biz_type
+                    AND
+                    <foreach item="item" collection="dictDataAuth.bizTypeAuth.authIds" separator="OR" open="(" close=")">
+                        dtl.auth_id=#{item}
+                    </foreach>
+                )
+            </if>
+            )
+        </if>
+    </select>
+
+</mapper>

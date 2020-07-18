@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.horx.wdf.sys.mapper.DictItemMapper">
+
+    <sql id="selectSql">
+        SELECT
+            t1.id,
+            t1.dict_id,
+            t1.parent_id,
+            t1.code,
+            t1.name,
+            t1.full_code,
+            t1.simple_code,
+            t1.level_num,
+            t1.level_code,
+            t1.is_enabled,
+            t1.display_seq,
+            t1.remarks
+        FROM
+            wdf_dict_item t1
+        WHERE
+            t1.is_deleted = 0
+    </sql>
+
+    <select id="selectByCode" resultType="org.horx.wdf.sys.domain.DictItem">
+        <include refid="selectSql"/>
+        AND t1.dict_id=#{dictId}
+        AND t1.code=#{code}
+    </select>
+
+    <select id="selectEnabledByDictId" resultType="org.horx.wdf.sys.domain.DictItem">
+        <include refid="selectSql"/>
+        AND t1.dict_id=#{dictId}
+        AND t1.is_enabled=1
+        ORDER BY t1.display_seq,t1.code
+    </select>
+
+    <select id="selectEnabledByDictIdWithAuth" resultType="org.horx.wdf.sys.domain.DictItem">
+        <include refid="selectSql"/>
+        AND t1.dict_id=#{dictId}
+        AND t1.is_enabled=1
+        <if test="dictItemAuth != null and dictItemAuth.scope != 2">
+            AND (1=2
+            <if test="dictItemAuth.dictItemCodes != null and dictItemAuth.dictItemCodes.length > 0">
+                OR
+                <foreach  item="item" collection="dictItemAuth.dictItemCodes" separator="OR" open="(" close=")">
+                    t1.code=#{item}
+                </foreach>
+            </if>
+            <if test="dictItemAuth.authIds != null and dictItemAuth.authIds.length > 0">
+                OR EXISTS (SELECT * FROM wdf_data_auth_dtl dtl WHERE dtl.auth_value=t1.code AND
+                <foreach item="item" collection="dictItemAuth.authIds" separator="OR" open="(" close=")">
+                    dtl.auth_id=#{item}
+                </foreach>
+                )
+            </if>
+            )
+        </if>
+        ORDER BY t1.display_seq,t1.code
+    </select>
+
+    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.DictItem">
+        <include refid="selectSql"/>
+        <if test="dictId != null">
+            AND t1.dict_id = #{dictId}
+        </if>
+        <if test="code != null and code != ''">
+            AND t1.code LIKE ${_concatStart} '%' ${_concatSep} #{code} ${_concatSep} '%' ${_concatEnd}
+        </if>
+        <if test="name != null and name != ''">
+            AND t1.name LIKE ${_concatStart} '%' ${_concatSep} #{name} ${_concatSep} '%' ${_concatEnd}
+        </if>
+
+    </select>
+
+    <select id="selectForTree" resultType="org.horx.wdf.sys.domain.Org">
+        <include refid="selectSql"/>
+        <if test="dictId != null">
+            AND t1.dict_id = #{dictId}
+        </if>
+        <if test="name != null and name != ''">
+            AND EXISTS (
+                SELECT *
+                FROM wdf_dict_item item
+                WHERE
+                    item.name LIKE ${_concatStart} '%' ${_concatSep} #{name} ${_concatSep} '%' ${_concatEnd}
+                AND
+                    item.level_code LIKE ${_concatStart} t1.level_code ${_concatSep} '%' ${_concatEnd}
+            )
+        </if>
+        <if test="code != null and code != ''">
+            AND EXISTS (
+                SELECT *
+                FROM wdf_dict_item item
+                WHERE
+                    item.code LIKE ${_concatStart} '%' ${_concatSep} #{code} ${_concatSep} '%' ${_concatEnd}
+                AND
+                    item.level_code LIKE ${_concatStart} t1.level_code ${_concatSep} '%' ${_concatEnd}
+            )
+        </if>
+        ORDER BY t1.display_seq,t1.code
+    </select>
+</mapper>
