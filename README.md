@@ -13,8 +13,8 @@ horx web开发框架（horx web development framework，horx-wdf）旨在减少�
 - 浏览器：支持HTML5的主流浏览器均支持，推荐谷歌、火狐等支持HTML5的较新版本
 
 ## 代码库
-- 框架代码：[]()
-- 示例代码：[]()
+- 框架代码：(https://github.com/horxorg/horx-wdf.git)
+- 示例代码：(https://github.com/horxorg/horx-wdf-sample.git)
 
 ## 主要特性
 - 提供一个完整的、可运行的系统</code>：通过简单的配置，系统即可运行起来。可以在此基础上，开发自己的业务
