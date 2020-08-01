@@ -6,6 +6,15 @@
            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
     <bean id="levelCodeGenerator" class="org.horx.wdf.common.extension.level.support.IdLevelCodeGenerator"/>
+
+    <bean id="userIdentificationConfigHandler" class="org.horx.wdf.sys.extension.identification.UserIdentificationConfigHandler">
+        <property name="handlerList">
+            <list>
+                <bean class="org.horx.wdf.sys.extension.identification.UserIdentificationVcodeHandler"/>
+            </list>
+        </property>
+    </bean>
+
     <bean id="plaintextPwdEncoder" class="org.horx.wdf.common.extension.user.pwd.support.PlaintextPwdEncoder"/>
     <bean id="md5SaltPwdEncoder" class="org.horx.wdf.common.extension.user.pwd.support.Md5SaltPwdEncoder"/>
     <bean id="pwdEncoder" class="org.horx.wdf.common.extension.user.pwd.PwdEncoderConfig">
@@ -38,7 +47,7 @@
 
     <bean id="dataLogAdvice" class="org.horx.wdf.sys.support.datalog.DataLogAdvice" />
     <aop:config>
-        <aop:aspect id="aspectDatalog" ref="dataLogAdvice" order="2">
+        <aop:aspect id="aspectDatalog" ref="dataLogAdvice" order="3">
             <aop:pointcut id="pointDatalog" expression="execution(* org.horx.wdf.sys.manager..*.*(..))
                and @annotation(org.horx.wdf.sys.support.datalog.DataLog)"/>
             <aop:around method="doAround" pointcut-ref="pointDatalog"/>

@@ -120,7 +120,11 @@ public class SessionManagerImpl implements SessionManager {
 
     @Override
     public void modifyAttr(SessionAttr sessionAttr) {
-        sessionAttrMapper.update(sessionAttr);
+        if (sessionAttr.getId() == null) {
+            sessionAttrMapper.updateAttrValue(sessionAttr);
+        } else {
+            sessionAttrMapper.update(sessionAttr);
+        }
     }
 
     @Override

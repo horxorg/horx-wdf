@@ -20,7 +20,7 @@
         <property name="dataSource" ref="dataSource"/>
    </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager" order="1"/>
+    <tx:annotation-driven order="2"/>
 
     <bean id="dbDialect" class="org.horx.wdf.common.jdbc.dialect.support.MysqlDialect"/>
     <!--<bean id="dbDialect" class="org.horx.wdf.common.jdbc.dialect.support.OracleDialect"/>-->

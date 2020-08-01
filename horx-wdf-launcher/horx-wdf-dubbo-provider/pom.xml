@@ -5,13 +5,27 @@
     <parent>
         <groupId>org.horx</groupId>
         <artifactId>horx-wdf</artifactId>
-        <version>1.0.0-RELEASE</version>
+        <version>1.0.1-RELEASE</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>horx-wdf-dubbo-provider</artifactId>
     <packaging>jar</packaging>
+
+    <properties>
+        <mysql-connector.version>8.0.16</mysql-connector.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -119,15 +133,6 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
         </dependency>
@@ -165,6 +170,11 @@
         </dependency>
 
         <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.horx</groupId>
             <artifactId>horx-wdf-common-support</artifactId>
         </dependency>
@@ -194,7 +204,7 @@
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
-            <version>3.4.5</version>
+            <version>3.4.14</version>
             <exclusions>
                 <exclusion>
                     <groupId>log4j</groupId>

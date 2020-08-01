@@ -1,5 +1,8 @@
 package org.horx.common.exchange.file.excel;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -11,6 +14,8 @@ import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -24,6 +29,8 @@ import org.horx.common.report.Font;
 import org.horx.common.report.enums.Align;
 import org.horx.common.report.enums.BorderStyle;
 import org.horx.common.report.enums.VerticalAlign;
+
+import javax.imageio.ImageIO;
 
 /**
  * 写入Excel的工具类。
@@ -161,13 +168,7 @@ public class ExcelWriter {
         return this.currentRowIndex;
     }
 
-    protected Row getRow(int rowIndex) {
-        if (sheet == null) {
-            return null;
-        }
-        Row row = sheet.getRow(rowIndex);
-        return row;
-    }
+
 
     /**
      * 追加行。
@@ -203,16 +204,6 @@ public class ExcelWriter {
     public void appendRow(Object[] value, CellStyle[] styles) {
         createRow(sheet.getPhysicalNumberOfRows());
         setRowValue(value, styles);
-    }
-
-    protected Row createRow(int index) {
-        Row row = sheet.createRow(index);
-        row.setHeightInPoints(-1);
-        for (int i=0; i < currentColCount; i++) {
-            row.createCell(i);
-        }
-        currentRowIndex = index;
-        return row;
     }
 
     public void setRowHeightInPoints(float height) {
@@ -403,12 +394,64 @@ public class ExcelWriter {
         sheet.addMergedRegion(new CellRangeAddress(startRowIndex, endRowIndex, startColIndex, endColIndex));
     }
 
-    protected Cell getCell(int colIndex) {
-        Row row = sheet.getRow(currentRowIndex);
-        if (row == null) {
-            return null;
+    /**
+     * 添加图片。
+     * @param imageFile
+     * @param rowIndex
+     * @param coleIndex
+     * @throws IOException
+     *
+     * @since 1.0.1
+     */
+    public void addImage(File imageFile, int rowIndex, int coleIndex) throws IOException {
+        addImage(imageFile, rowIndex, 1, coleIndex, 1);
+    }
+
+    /**
+     * 添加图片。
+     * @param imageFile
+     * @param rowIndex
+     * @param rowSpan
+     * @param coleIndex
+     * @param colSpan
+     * @throws IOException
+     *
+     * @since 1.0.1
+     */
+    public void addImage(File imageFile, int rowIndex, int rowSpan, int coleIndex, int colSpan) throws IOException {
+        if (imageFile == null) {
+            return;
         }
-        return row.getCell(colIndex);
+
+        Drawing drawing = sheet.createDrawingPatriarch();
+
+        ClientAnchor clientAnchor = drawing.createAnchor(0, 0, 0, 0, coleIndex, rowIndex, coleIndex+rowSpan, rowIndex+colSpan);
+
+        String ext = "";
+        String fileName = imageFile.getName();
+        int dot = fileName.lastIndexOf('.');
+        if (dot >= 0) {
+            ext = fileName.substring(dot + 1);
+        }
+        int type = Workbook.PICTURE_TYPE_JPEG;
+        String fileNameLower = fileName.toLowerCase();
+        if (fileNameLower.endsWith(".png")) {
+            type = Workbook.PICTURE_TYPE_PNG;
+        } else if (fileNameLower.endsWith(".bmp")) {
+            type = Workbook.PICTURE_TYPE_DIB;
+        } else if (fileNameLower.endsWith(".emf")) {
+            type = Workbook.PICTURE_TYPE_EMF;
+        } else if (fileNameLower.endsWith(".pict")) {
+            type = Workbook.PICTURE_TYPE_PICT;
+        }
+
+        ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+        BufferedImage bufferedImage = ImageIO.read(imageFile);
+        ImageIO.write(bufferedImage, ext, byteArrayOut);
+
+        int pictureIdx = workbook.addPicture(byteArrayOut.toByteArray(), type);
+
+        drawing.createPicture(clientAnchor, pictureIdx);
     }
 
     public int getRowLimit() {
@@ -426,6 +469,32 @@ public class ExcelWriter {
      */
     public void write(OutputStream os) throws IOException {
         workbook.write(os);
+    }
+
+    protected Row getRow(int rowIndex) {
+        if (sheet == null) {
+            return null;
+        }
+        Row row = sheet.getRow(rowIndex);
+        return row;
+    }
+
+    protected Row createRow(int index) {
+        Row row = sheet.createRow(index);
+        row.setHeightInPoints(-1);
+        for (int i=0; i < currentColCount; i++) {
+            row.createCell(i);
+        }
+        currentRowIndex = index;
+        return row;
+    }
+
+    protected Cell getCell(int colIndex) {
+        Row row = sheet.getRow(currentRowIndex);
+        if (row == null) {
+            return null;
+        }
+        return row.getCell(colIndex);
     }
 
     protected void setCellValue(Cell cell, Object value) {

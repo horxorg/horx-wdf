@@ -3,11 +3,9 @@ spring:
     url: jdbc:mysql://localhost:3306/wdf?useUnicode=true&characterEncoding=utf-8
     username: wdf
     password: wdf
-    dbcp2:
-      initial-size: 5
-      max-total: 30
-      max-idle: 30
-      min-idle: 5
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 30
 
 logging:
   config: classpath:log4j2-prod.xml

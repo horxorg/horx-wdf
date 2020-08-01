@@ -21,9 +21,9 @@ public interface SessionAttrMapper {
 
 
     @UpdateProvider(type = UpdateSqlProvider.class, method = "updateSql")
-    int update(SessionAttr po);
+    int update(@Param("po") SessionAttr po);
 
-    int updateAttrValue(@Param("po") SessionAttr po);
+    int updateAttrValue(SessionAttr po);
 
     int deleteByAttrKey(@Param("sessionId") Long sessionId, @Param("attrKey") String attrKey);
 

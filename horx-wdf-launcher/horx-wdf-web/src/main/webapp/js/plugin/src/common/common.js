@@ -189,10 +189,7 @@
             if (rst == null) {
                 return {success: false, msg: $.msg("common.oper.fail")};
             }
-            if (rst[$.common.getConfigValue("statusKey")] != $.common.getConfigValue("successValue")) {
-                return {success: false, msg: $.common.escapeHTML(rst["msg"], true)};
-            }
-            return {success: true, msg: $.common.escapeHTML(rst["msg"], true)};
+            return rst;
         },
         listPage : function (customConf) {
             var form = layui.form;
@@ -1046,7 +1043,7 @@
         if (result == null) {
             $.ajax({
                 type : "GET",
-                url : $.root + "/api/public/msg",
+                url : $.root + "/public/api/msg",
                 async:false,
                 success : function(rst) {
                     var checkRst = $.common.onAjaxSuccess(rst);

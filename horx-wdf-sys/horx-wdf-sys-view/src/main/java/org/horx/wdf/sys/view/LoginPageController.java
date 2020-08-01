@@ -1,5 +1,8 @@
 package org.horx.wdf.sys.view;
 
+import org.apache.commons.lang3.StringUtils;
+import org.horx.wdf.common.tools.WebTool;
+import org.horx.wdf.sys.config.SysConfig;
 import org.horx.wdf.sys.dto.UserDTO;
 import org.horx.wdf.common.extension.session.SessionHandler;
 import org.horx.wdf.sys.extension.context.SysContextHolder;
@@ -8,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户登录页面控制器。
@@ -22,11 +27,22 @@ public class LoginPageController {
     @Autowired
     private SessionHandler sessionHandler;
 
+    @Autowired
+    private WebTool webTool;
+
+    @Autowired
+    private SysConfig sysConfig;
+
     @GetMapping("/login")
-    public ModelAndView login() {
+    public ModelAndView login(HttpServletRequest request) {
         ModelAndView mav = new ModelAndView();
         if (sysContextHolder.isLoggedIn()) {
-            mav.setViewName("redirect:/main");
+            String returnUrl = request.getParameter("returnUrl");
+            if (StringUtils.isEmpty(returnUrl)) {
+                returnUrl = webTool.getResourceAbsolutePath(sysConfig.getMainUrl());
+            }
+
+            mav.setViewName("redirect:" + returnUrl);
         } else {
             mav.setViewName("sys/login");
         }
@@ -38,9 +54,9 @@ public class LoginPageController {
     public ModelAndView root() {
         ModelAndView mav = new ModelAndView();
         if (sysContextHolder.isLoggedIn()) {
-            mav.setViewName("redirect:/main");
+            mav.setViewName("redirect:" +  webTool.getResourceAbsolutePath(sysConfig.getMainUrl()));
         } else {
-            mav.setViewName("redirect:/login");
+            mav.setViewName("redirect:" +  webTool.getResourceAbsolutePath(sysConfig.getLoginUrl()));
         }
 
         return mav;
@@ -57,9 +73,10 @@ public class LoginPageController {
         UserDTO user = sysContextHolder.getUser();
         if (user != null) {
             mav.addObject("name", user.getName());
+            mav.addObject("logoutUrl", webTool.getResourceAbsolutePath(sysConfig.getLogoutUrl()));
             mav.setViewName("sys/main");
         } else {
-            mav.setViewName("redirect:/login");
+            mav.setViewName("redirect:" +  webTool.getResourceAbsolutePath(sysConfig.getLoginUrl()));
         }
 
         return mav;
@@ -69,7 +86,7 @@ public class LoginPageController {
     public ModelAndView logout() {
         sessionHandler.logout();
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("redirect:/login");
+        mav.setViewName("redirect:" +  webTool.getResourceAbsolutePath(sysConfig.getLoginUrl()));
         return mav;
     }
 

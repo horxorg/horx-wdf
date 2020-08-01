@@ -61,11 +61,15 @@
     </filter>
     <filter-mapping>
         <filter-name>springSessionRepositoryFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/api/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>springSessionRepositoryFilter</filter-name>
         <url-pattern>/page/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <url-pattern>/public/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>springSessionRepositoryFilter</filter-name>

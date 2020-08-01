@@ -8,7 +8,7 @@ $(document).ready(function(){
 
     $.ajax({
         type : "GET",
-        url : $.root + "/api/public/msg",
+        url : $.root + "/public/api/msg",
         success : function(rst) {
             var checkRst = $.common.onAjaxSuccess(rst);
             if (!checkRst.success) {

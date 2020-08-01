@@ -104,6 +104,40 @@ public class WebTool {
     }
 
     /**
+     * 获取ContextPath。
+     * @return
+     *
+     * @since 1.0.1
+     */
+    public String getContextPath() {
+        String contextPath = servletContext.getContextPath();
+        if (contextPath.endsWith("/")) {
+            contextPath = contextPath.substring(0, contextPath.length() - 1);
+        }
+        return contextPath;
+    }
+
+    /**
+     * 获取资源的绝对路径。
+     * @param url
+     * @return
+     *
+     * @since 1.0.1
+     */
+    public String getResourceAbsolutePath(String url) {
+        if (StringUtils.isEmpty(url)) {
+            return getContextPath();
+        }
+
+        if (url.startsWith("http") || url.startsWith("/")) {
+            return url;
+        }
+
+        String contextPath = getContextPath();
+        return contextPath + "/" + url;
+    }
+
+    /**
      * 设置是否加载js源文件。
      * @param loadJsSrc 是否加载js源文件。
      */

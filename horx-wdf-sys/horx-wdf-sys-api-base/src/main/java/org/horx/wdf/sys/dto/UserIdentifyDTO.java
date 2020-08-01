@@ -13,8 +13,6 @@ public class UserIdentifyDTO implements Serializable {
 
     private String password;
 
-    private String vcode;
-
     private String clientIp;
 
     public String getUsername() {
@@ -31,14 +29,6 @@ public class UserIdentifyDTO implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getVcode() {
-        return vcode;
-    }
-
-    public void setVcode(String vcode) {
-        this.vcode = vcode;
     }
 
     public String getClientIp() {

@@ -33,6 +33,36 @@ public class SysConfig {
     @Value("${sys.dataLog.reserveDays}")
     private int dataLogReserveDays;
 
+    @Value("${sys.vcode.timeout:300000}")
+    private long vcodeTimeout;
+
+    @Value("${sys.vcode.allowedErrorTimes:3}")
+    private int vcodeAllowedErrorTimes;
+
+    @Value("${sys.vcode.width:105}")
+    private int vcodeWidth;
+
+    @Value("${sys.vcode.height:35}")
+    private int vcodeHeight;
+
+    @Value("${sys.vcode.charLength:4}")
+    private int vcodeCharLength;
+
+    @Value("${sys.url.login}")
+    private String loginUrl;
+
+    @Value("${sys.url.vcode}")
+    private String vcodeUrl;
+
+    @Value("${sys.url.identify}")
+    private String identifyUrl;
+
+    @Value("${sys.url.logout}")
+    private String logoutUrl;
+
+    @Value("${sys.url.main}")
+    private String mainUrl;
+
     @PostConstruct
     public void init() {
         adminUsernameSet = stringToSet(adminUsername);
@@ -88,6 +118,46 @@ public class SysConfig {
      */
     public int getDataLogReserveDays() {
         return dataLogReserveDays;
+    }
+
+    public long getVcodeTimeout() {
+        return vcodeTimeout;
+    }
+
+    public int getVcodeAllowedErrorTimes() {
+        return vcodeAllowedErrorTimes;
+    }
+
+    public String getLoginUrl() {
+        return loginUrl;
+    }
+
+    public String getVcodeUrl() {
+        return vcodeUrl;
+    }
+
+    public String getIdentifyUrl() {
+        return identifyUrl;
+    }
+
+    public String getLogoutUrl() {
+        return logoutUrl;
+    }
+
+    public String getMainUrl() {
+        return mainUrl;
+    }
+
+    public int getVcodeWidth() {
+        return vcodeWidth;
+    }
+
+    public int getVcodeHeight() {
+        return vcodeHeight;
+    }
+
+    public int getVcodeCharLength() {
+        return vcodeCharLength;
     }
 
     private Set<String> stringToSet(String str) {

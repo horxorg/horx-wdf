@@ -36,7 +36,7 @@
                         <dd><a id="userInfo" style="cursor:pointer"><@spring.message "sys.main.userInfo"/></a></dd>
                         <dd><a id="modifyPwd" style="cursor:pointer"><@spring.message "sys.user.password.modify"/></a></dd>
                         <hr>
-                        <dd style="text-align: center;cursor:pointer"><a href="${rc.contextPath}/logout"><@spring.message "sys.main.logout"/></a></dd>
+                        <dd style="text-align: center;cursor:pointer"><a href="${logoutUrl}"><@spring.message "sys.main.logout"/></a></dd>
                     </dl>
                 </li>
             </ul>

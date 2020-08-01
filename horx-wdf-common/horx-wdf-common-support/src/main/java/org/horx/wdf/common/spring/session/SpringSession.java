@@ -122,7 +122,7 @@ public class SpringSession implements ExpiringSession {
                 persist(true);
                 return;
             } else if (!sessionRepository.getSysConfig().isSessionUseAttr()) {
-                throw new RuntimeException("不支持session attr，如果需要支持，请设置sys.properties中sys.session.useAttr=true");
+                throw new RuntimeException("不支持session attr，如果需要支持，请设置common.properties中common.session.useAttr=true");
             }
 
             boolean exists = sessionAttrs.containsKey(key);
@@ -134,13 +134,12 @@ public class SpringSession implements ExpiringSession {
             sessionAttr.setAttrType(value.getClass().getName());
             sessionAttr.setAttrValue(attrValueToString(value));
             if (exists) {
-                sessionRepository.getSessionService().createAttr(sessionAttr);
+                sessionRepository.getSessionService().modifyAttr(sessionAttr);
             } else {
                 try {
                     sessionRepository.getSessionService().createAttr(sessionAttr);
                 } catch (Exception e) {
                     LOGGER.error(e.getMessage(), e);
-
                     sessionRepository.getSessionService().modifyAttr(sessionAttr);
                 }
             }

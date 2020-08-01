@@ -10,6 +10,9 @@ import org.horx.wdf.common.extension.user.pwd.PwdEncoder;
 import org.horx.wdf.common.extension.user.pwd.PwdEncoderConfig;
 import org.horx.wdf.common.extension.user.pwd.support.Md5SaltPwdEncoder;
 import org.horx.wdf.common.extension.user.pwd.support.PlaintextPwdEncoder;
+import org.horx.wdf.sys.extension.identification.UserIdentificationConfigHandler;
+import org.horx.wdf.sys.extension.identification.UserIdentificationHandler;
+import org.horx.wdf.sys.extension.identification.UserIdentificationVcodeHandler;
 import org.horx.wdf.sys.support.datalog.DataLogAdvice;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -77,5 +80,19 @@ public class WdfImplConfig {
         list.add(dataLogDbHandler());
         dataLogConfigHandler.setDataLogHandlerList(list);
         return dataLogConfigHandler;
+    }
+
+    @Bean
+    UserIdentificationVcodeHandler userIdentificationVcodeHandler() {
+        return new UserIdentificationVcodeHandler();
+    }
+
+    @Bean
+    UserIdentificationConfigHandler userIdentificationConfigHandler() {
+        List<UserIdentificationHandler> list = new ArrayList<>(1);
+        list.add(userIdentificationVcodeHandler());
+        UserIdentificationConfigHandler configHandler = new UserIdentificationConfigHandler();
+        configHandler.setHandlerList(list);
+        return configHandler;
     }
 }

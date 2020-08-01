@@ -22,4 +22,30 @@ public interface SessionHandler {
      * @return
      */
     Long getCurrentUserId();
+
+    /**
+     * 设置Session变量。
+     * @param attrKey
+     * @param attrValue
+     *
+     * @since 1.0.1
+     */
+    void setSessionAttr(String attrKey, Object attrValue);
+
+    /**
+     * 获取Session变量。
+     * @param attrKey
+     * @return
+     *
+     * @since 1.0.1
+     */
+    Object getSessionAttr(String attrKey);
+
+    /**
+     * 移除Session变量。
+     * @param attrKey
+     *
+     * @since 1.0.1
+     */
+    void removeSessionAttr(String attrKey);
 }

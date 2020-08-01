@@ -10,7 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Aspect
-@Order(2)
+@Order(3)
 @Component
 public class DataLogAop {
 

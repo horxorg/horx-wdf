@@ -26,7 +26,7 @@ public class MsgApiController {
     @Autowired
     private MessageSource messageSource;
 
-    @RequestMapping("/api/public/msg")
+    @RequestMapping("/public/api/msg")
     @ResponseBody
     public Result<Map<String, String>> getLocaleMsg() {
         Locale locale = webTool.getLocale();

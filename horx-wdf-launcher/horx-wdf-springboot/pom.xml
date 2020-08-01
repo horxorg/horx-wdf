@@ -5,13 +5,27 @@
     <parent>
         <groupId>org.horx</groupId>
         <artifactId>horx-wdf</artifactId>
-        <version>1.0.0-RELEASE</version>
+        <version>1.0.1-RELEASE</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>horx-wdf-springboot</artifactId>
     <packaging>jar</packaging>
+
+    <properties>
+        <mysql-connector.version>8.0.16</mysql-connector.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
@@ -109,6 +123,7 @@
                     <include>config/tool.properties</include>
                     <include>msg/*.properties</include>
                     <include>mybatis/**/*</include>
+                    <include>sql/**/*</include>
                     <include>ehcache.xml</include>
                 </includes>
             </resource>
