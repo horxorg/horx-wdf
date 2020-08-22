@@ -1,6 +1,6 @@
 package org.horx.wdf.sys.springcloud.controller;
 
-import org.horx.wdf.common.entity.PagingQuery;
+import org.horx.wdf.common.entity.PaginationQuery;
 import org.horx.wdf.sys.dto.MenuDTO;
 import org.horx.wdf.sys.dto.query.MenuQueryDTO;
 import org.horx.wdf.sys.service.MenuService;
@@ -32,8 +32,8 @@ public class MenuController {
     }
 
     @PostMapping("/query")
-    public List<MenuDTO> query(@RequestBody PagingQuery<MenuQueryDTO> pagingQuery) {
-        return menuService.query(pagingQuery);
+    public List<MenuDTO> query(@RequestBody PaginationQuery<MenuQueryDTO> paginationQuery) {
+        return menuService.query(paginationQuery);
     }
 
     @PostMapping("/create")

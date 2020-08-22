@@ -1,13 +1,10 @@
 package org.horx.wdf.sys.service.impl;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.converter.OnlineUserConverter;
 import org.horx.wdf.sys.domain.OnlineUser;
-import org.horx.wdf.sys.domain.User;
 import org.horx.wdf.sys.dto.OnlineUserDTO;
-import org.horx.wdf.sys.dto.UserDTO;
 import org.horx.wdf.sys.dto.query.OnlineUserQueryDTO;
 import org.horx.wdf.sys.dto.wrapper.BatchWithSysAuthDTO;
 import org.horx.wdf.sys.manager.SessionManager;
@@ -31,13 +28,13 @@ public class OnlineUserServiceImpl implements OnlineUserService {
     private OnlineUserConverter onlineUserConverter;
 
     @Override
-    public PagingResult<OnlineUserDTO> pagingQuery(PagingQuery<OnlineUserQueryDTO> pagingQuery) {
-        PagingResult<OnlineUser> pagingResult = sessionManager.pagingQueryOnlineUser(pagingQuery.getQuery(), pagingQuery.getPagingParam());
+    public PaginationResult<OnlineUserDTO> paginationQuery(PaginationQuery<OnlineUserQueryDTO> paginationQuery) {
+        PaginationResult<OnlineUser> paginationResult = sessionManager.paginationQueryOnlineUser(paginationQuery.getQuery(), paginationQuery.getPaginationParam());
 
-        PagingResult<OnlineUserDTO> pagingResultDTO = PagingResult.copy(pagingResult);
-        List<OnlineUserDTO> dtoList = onlineUserConverter.toDtoList(pagingResult.getData());
-        pagingResultDTO.setData(dtoList);
-        return pagingResultDTO;
+        PaginationResult<OnlineUserDTO> paginationResultDTO = PaginationResult.copy(paginationResult);
+        List<OnlineUserDTO> dtoList = onlineUserConverter.toDtoList(paginationResult.getData());
+        paginationResultDTO.setData(dtoList);
+        return paginationResultDTO;
     }
 
     @Override

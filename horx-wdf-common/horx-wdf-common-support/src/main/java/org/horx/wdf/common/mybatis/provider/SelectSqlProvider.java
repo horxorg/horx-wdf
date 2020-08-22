@@ -85,14 +85,16 @@ public class SelectSqlProvider {
 
         ProviderUtils.genDeletedCondition(entityMeta, sql, paramMap, conditionCount > 0);
 
-        return sql.toString();
+        return "<script>" + sql.toString() + "</script>";
     }
 
     private int genCondition(EntityMeta entityMeta, String prefix, Object paramObj, StringBuilder sql, int conditionCount) {
-        if (paramObj.getClass().isPrimitive() || paramObj instanceof Number || paramObj instanceof Date ||
+        if (paramObj instanceof String || paramObj.getClass().isPrimitive() || paramObj instanceof Number || paramObj instanceof Date ||
                 paramObj instanceof Collection || paramObj.getClass().isArray()) {
-            appendCondition(entityMeta, "", prefix, ComparisonOperatorEnum.EQUAL, paramObj, sql, conditionCount);
-            conditionCount++;
+            int hasCondition = appendCondition(entityMeta, "", prefix, prefix, ComparisonOperatorEnum.EQUAL, paramObj, sql, conditionCount);
+            if (hasCondition > 0) {
+                conditionCount++;
+            }
         } else {
             Field[] fields = ReflectUtils.getFields(paramObj.getClass());
             for (Field field : fields) {
@@ -104,8 +106,10 @@ public class SelectSqlProvider {
                     Condition condition = field.getAnnotation(Condition.class);
                     String fieldName = (condition == null) ? field.getName() : condition.field();
                     ComparisonOperatorEnum operator = (condition == null) ? ComparisonOperatorEnum.EQUAL : condition.operator();
-                    appendCondition(entityMeta, prefix, fieldName, operator, value, sql, conditionCount);
-                    conditionCount++;
+                    int hasCondition = appendCondition(entityMeta, prefix, fieldName, field.getName(), operator, value, sql, conditionCount);
+                    if (hasCondition > 0) {
+                        conditionCount++;
+                    }
                 } catch (Exception e) {
                     throw new RuntimeException("反射获取值失败", e);
                 }
@@ -115,16 +119,16 @@ public class SelectSqlProvider {
         return conditionCount;
     }
 
-    private void appendCondition(EntityMeta entityMeta, String prefix, String fieldName, ComparisonOperatorEnum operator, Object paramObj, StringBuilder sql, int conditionCount) {
+    private int appendCondition(EntityMeta entityMeta, String prefix, String fieldName, String paramName, ComparisonOperatorEnum operator, Object paramObj, StringBuilder sql, int conditionCount) {
         boolean isSet = false;
         if (paramObj instanceof Collection) {
             if (CollectionUtils.isEmpty((Collection)paramObj)) {
-                return;
+                return 0;
             }
             isSet = true;
         } else if (paramObj.getClass().isArray()) {
             if (Array.getLength(paramObj) == 0) {
-                return;
+                return 0;
             }
             isSet = true;
         }
@@ -141,8 +145,8 @@ public class SelectSqlProvider {
             if (StringUtils.isNotEmpty(prefix)) {
                 sql.append(prefix).append(".");
             }
-            sql.append(fieldName)
-                    .append(" separator=\"OR\" open=\"(\" close=\")\">")
+            sql.append(paramName)
+                    .append("\" separator=\"OR\" open=\"(\" close=\")\">")
                     .append(fieldMeta.getColumnName())
                     .append(" ");
             sql.append(genOperator("#{item}", operator));
@@ -153,6 +157,8 @@ public class SelectSqlProvider {
             sql.append(" ");
             sql.append(genOperator("#{" + conditionValue + "}", operator));
         }
+
+        return 1;
     }
 
     private String genOperator(String fieldName, ComparisonOperatorEnum operator) {

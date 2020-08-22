@@ -2,8 +2,8 @@ package org.horx.wdf.common.mybatis.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
-import org.horx.wdf.common.entity.PagingResult;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.entity.PaginationResult;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.common.mybatis.entity.SortRowBounds;
 import org.horx.wdf.common.mybatis.provider.SelectSqlProvider;
 
@@ -20,5 +20,5 @@ public interface BaseSelectMapper<P, Q> extends BaseMapper<P> {
     List<P> select(@Param("query") Q query, SortRowBounds sortRowBounds);
 
     @SelectProvider(type = SelectSqlProvider.class, method = "selectSql")
-    PagingResult<P> pagingSelect(@Param("query") Q query, PagingRowBounds pagingRowBounds);
+    PaginationResult<P> paginationSelect(@Param("query") Q query, PaginationRowBounds paginationRowBounds);
 }

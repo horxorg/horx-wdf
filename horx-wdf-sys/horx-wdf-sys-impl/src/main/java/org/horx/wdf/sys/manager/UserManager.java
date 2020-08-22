@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.manager;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.domain.User;
 import org.horx.wdf.sys.domain.UserRole;
 import org.horx.wdf.sys.dto.UserIdentifyDTO;
@@ -25,7 +25,7 @@ public interface UserManager {
 
     List<UserRole> queryForValidRoles(Long userId);
 
-    PagingResult<User> pagingQuery(UserQueryDTO userQuery, PagingParam pagingParam);
+    PaginationResult<User> paginationQuery(UserQueryDTO userQuery, PaginationParam paginationParam);
 
     void create(User user, SysDataAuthDTO sysDataAuth);
 

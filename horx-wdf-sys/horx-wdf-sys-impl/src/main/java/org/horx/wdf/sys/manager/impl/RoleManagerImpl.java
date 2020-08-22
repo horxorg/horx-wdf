@@ -1,10 +1,10 @@
 package org.horx.wdf.sys.manager.impl;
 
 import org.apache.commons.lang3.StringUtils;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.enums.OperationTypeEnum;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.sys.consts.SysConstants;
 import org.horx.wdf.sys.domain.MenuAuthority;
 import org.horx.wdf.sys.domain.Role;
@@ -63,15 +63,15 @@ public class RoleManagerImpl implements RoleManager {
 
     @Override
     @Transactional(readOnly = true)
-    public PagingResult<Role> pagingQuery(RoleQueryDTO roleQuery, PagingParam pagingParam) {
-        return roleMapper.pagingSelect(roleQuery, new PagingRowBounds(pagingParam));
+    public PaginationResult<Role> paginationQuery(RoleQueryDTO roleQuery, PaginationParam paginationParam) {
+        return roleMapper.paginationSelect(roleQuery, new PaginationRowBounds(paginationParam));
     }
 
 
     @Override
     @Transactional(readOnly = true)
-    public PagingResult<Role> pagingQueryUsable(RoleQueryDTO roleQuery, PagingParam pagingParam) {
-        return roleMapper.pagingSelectUsable(roleQuery, new PagingRowBounds(pagingParam));
+    public PaginationResult<Role> paginationQueryUsable(RoleQueryDTO roleQuery, PaginationParam paginationParam) {
+        return roleMapper.paginationSelectUsable(roleQuery, new PaginationRowBounds(paginationParam));
     }
 
 

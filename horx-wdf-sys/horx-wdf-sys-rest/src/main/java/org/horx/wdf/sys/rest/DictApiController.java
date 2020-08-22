@@ -1,11 +1,11 @@
 package org.horx.wdf.sys.rest;
 
 import org.horx.common.collection.Tree;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.enums.ErrorCodeEnum;
 import org.horx.wdf.common.tools.MsgTool;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.arg.annotation.ArgEntity;
 import org.horx.wdf.common.enums.SortEnum;
@@ -70,18 +70,18 @@ public class DictApiController {
     private DictItemQueryVoConverter dictItemQueryVoConverter;
 
     @AccessPermission("sys.dict.query")
-    @PostMapping("/pagingQuery")
-    public PagingResult<DictVO> pagingQuery(@ArgEntity DictQueryVO query, PagingParam pagingParam) {
+    @PostMapping("/paginationQuery")
+    public PaginationResult<DictVO> paginationQuery(@ArgEntity DictQueryVO query, PaginationParam paginationParam) {
         if (query.getDictDataAuth() != null && query.getDictDataAuth().getScope() == DataValidationScopeEnum.FORBIDDEN.getCode()) {
-            return PagingResult.empty();
+            return PaginationResult.empty();
         }
 
         DictQueryDTO dictQueryDTO = dictQueryVoConverter.fromVo(query);
-        PagingQuery<DictQueryDTO> pagingQuery = new PagingQuery<>(dictQueryDTO, pagingParam);
-        PagingResult<DictDTO> pagingResult = dictService.pagingQuery(pagingQuery);
-        PagingResult<DictVO> voPagingResult = PagingResult.copy(pagingResult);
-        voPagingResult.setData(dictVoConverter.toVoList(pagingResult.getData()));
-        return voPagingResult;
+        PaginationQuery<DictQueryDTO> paginationQuery = new PaginationQuery<>(dictQueryDTO, paginationParam);
+        PaginationResult<DictDTO> paginationResult = dictService.paginationQuery(paginationQuery);
+        PaginationResult<DictVO> voPaginationResult = PaginationResult.copy(paginationResult);
+        voPaginationResult.setData(dictVoConverter.toVoList(paginationResult.getData()));
+        return voPaginationResult;
     }
 
     @AccessPermission("sys.dict.query")
@@ -126,43 +126,43 @@ public class DictApiController {
     }
 
     @AccessPermission("sys.dict.query")
-    @PostMapping("/{dictId}/item/pagingQuery")
-    public PagingResult<DictItemVO> pagingQuery(@ArgEntity DictItemQueryVO query, PagingParam pagingParam, @ArgDataAuth DictDataAuthDTO dictDataAuth) {
+    @PostMapping("/{dictId}/item/paginationQuery")
+    public PaginationResult<DictItemVO> paginationQuery(@ArgEntity DictItemQueryVO query, PaginationParam paginationParam, @ArgDataAuth DictDataAuthDTO dictDataAuth) {
         DictDTO dictDTO = dictService.getByIdAuthorized(query.getDictId(), dictDataAuth);
         if (dictDTO == null) {
-            return new PagingResult<>(ErrorCodeEnum.A0300.getCode(), msgTool.getMsg("common.err.forbidden"));
+            return new PaginationResult<>(ErrorCodeEnum.A0300.getCode(), msgTool.getMsg("common.err.forbidden"));
         }
 
         DictItemQueryDTO dictItemQueryDTO = dictItemQueryVoConverter.fromVo(query);
-        PagingQuery<DictItemQueryDTO> pagingQuery = new PagingQuery<>(dictItemQueryDTO, pagingParam);
-        PagingResult<DictItemDTO> pagingResult = dictService.pagingQueryItem(pagingQuery);
-        PagingResult<DictItemVO> voPagingResult = PagingResult.copy(pagingResult);
-        voPagingResult.setData(dictItemVoConverter.toVoList(pagingResult.getData()));
-        return voPagingResult;
+        PaginationQuery<DictItemQueryDTO> paginationQuery = new PaginationQuery<>(dictItemQueryDTO, paginationParam);
+        PaginationResult<DictItemDTO> paginationResult = dictService.paginationQueryItem(paginationQuery);
+        PaginationResult<DictItemVO> voPaginationResult = PaginationResult.copy(paginationResult);
+        voPaginationResult.setData(dictItemVoConverter.toVoList(paginationResult.getData()));
+        return voPaginationResult;
     }
 
     @AccessPermission("sys.dict.query")
     @PostMapping("/{dictId}/item/queryForTree")
-    public Result<List<DictItemVO>> queryForTree(@ArgEntity DictItemQueryVO query, PagingParam pagingParam, @ArgDataAuth DictDataAuthDTO dictDataAuth) {
+    public Result<List<DictItemVO>> queryForTree(@ArgEntity DictItemQueryVO query, PaginationParam paginationParam, @ArgDataAuth DictDataAuthDTO dictDataAuth) {
         DictDTO dictDTO = dictService.getByIdAuthorized(query.getDictId(), dictDataAuth);
         if (dictDTO == null) {
             return new Result<>(ErrorCodeEnum.A0300.getCode(), msgTool.getMsg("common.err.forbidden"));
         }
 
         DictItemQueryDTO dictItemQueryDTO = dictItemQueryVoConverter.fromVo(query);
-        if (pagingParam == null) {
-            pagingParam = new PagingParam();
+        if (paginationParam == null) {
+            paginationParam = new PaginationParam();
         }
-        pagingParam.setPageSize(-1);
-        pagingParam.setCurrPage(1);
-        if (pagingParam.getSortField() == null || pagingParam.getSortField().length == 0) {
-            pagingParam.setSortField(new String[] {"displaySeq"});
-            pagingParam.setSortOrder(new String[] {SortEnum.ASC.name()});
+        paginationParam.setPageSize(-1);
+        paginationParam.setCurrPage(1);
+        if (paginationParam.getSortField() == null || paginationParam.getSortField().length == 0) {
+            paginationParam.setSortField(new String[] {"displaySeq"});
+            paginationParam.setSortOrder(new String[] {SortEnum.ASC.name()});
         }
 
-        PagingQuery<DictItemQueryDTO> pagingQuery = new PagingQuery<>(dictItemQueryDTO, pagingParam);
-        PagingResult<DictItemDTO> pagingResult = dictService.pagingQueryItem(pagingQuery);
-        List<DictItemVO> itemVOList = dictItemVoConverter.toVoList(pagingResult.getData());
+        PaginationQuery<DictItemQueryDTO> paginationQuery = new PaginationQuery<>(dictItemQueryDTO, paginationParam);
+        PaginationResult<DictItemDTO> paginationResult = dictService.paginationQueryItem(paginationQuery);
+        List<DictItemVO> itemVOList = dictItemVoConverter.toVoList(paginationResult.getData());
 
         Result<List<DictItemVO>> result = new Result<>();
         if (CollectionUtils.isEmpty(itemVOList)) {

@@ -7,13 +7,14 @@ import org.horx.wdf.common.extension.session.SessionDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.SimpleTypeConverter;
-import org.springframework.session.ExpiringSession;
 import org.springframework.session.Session;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * SpringSession的实现。
  * @since 1.0
  */
-public class SpringSession implements ExpiringSession {
+public class SpringSession implements Session {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringSession.class);
 
     private CacheableJdbcSessionRepository sessionRepository;
@@ -40,7 +41,7 @@ public class SpringSession implements ExpiringSession {
     private Map<String, Object> sessionAttrs;
     private long creationTime;
     private long lastAccessedTime;
-    private int maxInactiveInterval;
+    private long maxInactiveInterval;
 
     public SpringSession(CacheableJdbcSessionRepository sessionRepository) {
         this.sessionRepository = sessionRepository;
@@ -86,6 +87,18 @@ public class SpringSession implements ExpiringSession {
     }
 
     @Override
+    public String changeSessionId() {
+        String newSessionKey = UUID.randomUUID().toString();
+        SessionDTO session = new SessionDTO();
+        session.setId(persistId);
+        session.setSessionKey(newSessionKey);
+        sessionRepository.getSessionService().modify(session);
+        sessionRepository.changeSessionId(id, newSessionKey);
+        id = newSessionKey;
+        return newSessionKey;
+    }
+
+    @Override
     public <T> T getAttribute(String key) {
         if (sessionRepository.getSysConfig().getUserIdSessionKey().equals(key)) {
             return (T)userId;
@@ -96,6 +109,20 @@ public class SpringSession implements ExpiringSession {
         }
         Object obj = sessionAttrs.get(key);
         return (obj == null) ? null : (T)obj;
+    }
+
+    @Override
+    public <T> T getRequiredAttribute(String name) {
+        return getAttribute(name);
+    }
+
+    @Override
+    public <T> T getAttributeOrDefault(String name, T defaultValue) {
+        T value = getAttribute(name);
+        if (value == null) {
+            value = defaultValue;
+        }
+        return value;
     }
 
     @Override
@@ -168,13 +195,13 @@ public class SpringSession implements ExpiringSession {
     }
 
     @Override
-    public long getCreationTime() {
-        return creationTime;
+    public Instant getCreationTime() {
+        return Instant.ofEpochMilli(creationTime);
     }
 
     @Override
-    public void setLastAccessedTime(long lastAccessedTime) {
-        this.lastAccessedTime = lastAccessedTime;
+    public void setLastAccessedTime(Instant lastAccessedTime) {
+        this.lastAccessedTime = lastAccessedTime.toEpochMilli();
         try {
             if (needPersist()) {
                 persist(false);
@@ -186,18 +213,18 @@ public class SpringSession implements ExpiringSession {
     }
 
     @Override
-    public long getLastAccessedTime() {
-        return lastAccessedTime;
+    public Instant getLastAccessedTime() {
+        return Instant.ofEpochMilli(lastAccessedTime);
     }
 
     @Override
-    public void setMaxInactiveIntervalInSeconds(int maxInactiveInterval) {
-        this.maxInactiveInterval = maxInactiveInterval;
+    public void setMaxInactiveInterval(Duration maxInactiveInterval) {
+        this.maxInactiveInterval = maxInactiveInterval.getSeconds();
     }
 
     @Override
-    public int getMaxInactiveIntervalInSeconds() {
-        return maxInactiveInterval;
+    public Duration getMaxInactiveInterval() {
+        return Duration.ofSeconds(maxInactiveInterval);
     }
 
     @Override
@@ -233,7 +260,7 @@ public class SpringSession implements ExpiringSession {
         }
 
         this.setLastAccessedTime(springSession.getLastAccessedTime());
-        this.setMaxInactiveIntervalInSeconds(springSession.getMaxInactiveIntervalInSeconds());
+        this.setMaxInactiveInterval(springSession.getMaxInactiveInterval());
 
         if (sessionRepository.getSysConfig().isSessionUseAttr()) {
             for (Map.Entry<String, Object> entry : springSession.sessionAttrs.entrySet()) {
@@ -263,7 +290,7 @@ public class SpringSession implements ExpiringSession {
             session.setCreateTime(creationTimeDate);
             session.setLastAccessTime(creationTimeDate);
 
-            session.setInactiveInterval(maxInactiveInterval);
+            session.setInactiveInterval((int)maxInactiveInterval);
             session.setExpiredTime(getExpiredTime(creationTime));
 
             RequestAttributes reqAttrs = RequestContextHolder.currentRequestAttributes();

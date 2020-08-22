@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.springcloud.controller;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.DictDTO;
 import org.horx.wdf.sys.dto.DictItemDTO;
 import org.horx.wdf.sys.dto.dataauth.DictDataAuthDTO;
@@ -48,9 +48,9 @@ public class DictController {
         return dictService.getByCode(code);
     }
 
-    @PostMapping("/pagingQuery")
-    public PagingResult<DictDTO> pagingQuery(@RequestBody PagingQuery<DictQueryDTO> pagingQuery) {
-        return dictService.pagingQuery(pagingQuery);
+    @PostMapping("/paginationQuery")
+    public PaginationResult<DictDTO> paginationQuery(@RequestBody PaginationQuery<DictQueryDTO> paginationQuery) {
+        return dictService.paginationQuery(paginationQuery);
     }
 
     @PostMapping("/create")
@@ -73,9 +73,9 @@ public class DictController {
         return dictService.getItemById(id);
     }
 
-    @PostMapping("/pagingQueryItem")
-    public PagingResult<DictItemDTO> pagingQueryItem(@RequestBody PagingQuery<DictItemQueryDTO> pagingQuery) {
-        return dictService.pagingQueryItem(pagingQuery);
+    @PostMapping("/paginationQueryItem")
+    public PaginationResult<DictItemDTO> paginationQueryItem(@RequestBody PaginationQuery<DictItemQueryDTO> paginationQuery) {
+        return dictService.paginationQueryItem(paginationQuery);
     }
 
     @PostMapping("/createItem")

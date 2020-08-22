@@ -2,7 +2,6 @@ package org.horx.wdf.common.jdbc.dialect.support;
 
 import org.horx.common.collection.KeyValue;
 import org.horx.wdf.common.entity.Pageable;
-import org.horx.wdf.common.entity.PagingParam;
 import org.horx.wdf.common.jdbc.dialect.DbDialect;
 
 import java.util.ArrayList;
@@ -24,19 +23,19 @@ public class OracleDialect implements DbDialect {
     }
 
     @Override
-    public PagingSqlResult pagingSql(String sql, Pageable pageable) {
+    public PaginationSqlResult paginationSql(String sql, Pageable pageable) {
         Integer start = pageable.getStart();
         if (start == null) {
             return null;
         }
-        StringBuilder pagingSql = new StringBuilder(sql.length() + 100);
-        pagingSql.append("SELECT * FROM ( select TEMP.*, ROWNUM ROW_ID FROM (");
-        pagingSql.append(sql);
-        pagingSql.append(") TEMP WHERE ROWNUM <= ?");
-        pagingSql.append(") WHERE ROW_ID >= ?");
+        StringBuilder paginationSql = new StringBuilder(sql.length() + 100);
+        paginationSql.append("SELECT * FROM ( select TEMP.*, ROWNUM ROW_ID FROM (");
+        paginationSql.append(sql);
+        paginationSql.append(") TEMP WHERE ROWNUM <= ?");
+        paginationSql.append(") WHERE ROW_ID >= ?");
 
-        PagingSqlResult result = new PagingSqlResult();
-        result.setPagingSql(pagingSql.toString());
+        PaginationSqlResult result = new PaginationSqlResult();
+        result.setPaginationSql(paginationSql.toString());
 
         List<KeyValue<String, Object>> params = new ArrayList<>(2);
 

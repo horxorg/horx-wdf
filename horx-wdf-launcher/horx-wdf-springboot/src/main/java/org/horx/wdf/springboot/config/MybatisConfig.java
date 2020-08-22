@@ -4,7 +4,7 @@ import org.horx.wdf.common.entity.extension.EntityExtension;
 import org.horx.wdf.common.jdbc.dialect.DbDialect;
 import org.horx.wdf.common.jdbc.dialect.support.MysqlDialect;
 import org.horx.wdf.common.mybatis.interceptor.KeyGeneratorInterceptor;
-import org.horx.wdf.common.mybatis.interceptor.PagingInterceptor;
+import org.horx.wdf.common.mybatis.interceptor.PaginationInterceptor;
 import org.horx.wdf.common.mybatis.interceptor.ResultMapInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,11 +32,11 @@ class MybatisConfig {
 
     @Bean
     @Order(2)
-    PagingInterceptor pagingInterceptor() {
-        PagingInterceptor pagingInterceptor = new PagingInterceptor();
-        pagingInterceptor.setDbDialect(dbDialect());
-        pagingInterceptor.setEntityExtension(entityExtension);
-        return pagingInterceptor;
+    PaginationInterceptor paginationInterceptor() {
+        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+        paginationInterceptor.setDbDialect(dbDialect());
+        paginationInterceptor.setEntityExtension(entityExtension);
+        return paginationInterceptor;
     }
 
     @Bean

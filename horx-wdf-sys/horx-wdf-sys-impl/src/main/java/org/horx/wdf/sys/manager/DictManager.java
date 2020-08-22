@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.manager;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.domain.Dict;
 import org.horx.wdf.sys.domain.DictItem;
 import org.horx.wdf.sys.dto.query.DictItemQueryDTO;
@@ -22,7 +22,7 @@ public interface DictManager {
 
     Dict getByCode(String code);
 
-    PagingResult<Dict> pagingQuery(DictQueryDTO dictQuery, PagingParam pagingParam);
+    PaginationResult<Dict> paginationQuery(DictQueryDTO dictQuery, PaginationParam paginationParam);
 
     void create(Dict dict, DictDataAuthDTO dictDataAuth);
 
@@ -32,7 +32,7 @@ public interface DictManager {
 
     DictItem getItemById(Long id);
 
-    PagingResult<DictItem> pagingQueryItem(DictItemQueryDTO dictItemQuery, PagingParam pagingParam);
+    PaginationResult<DictItem> paginationQueryItem(DictItemQueryDTO dictItemQuery, PaginationParam paginationParam);
 
     List<DictItem> queryItemForTree(DictItemQueryDTO dictItemQuery);
 

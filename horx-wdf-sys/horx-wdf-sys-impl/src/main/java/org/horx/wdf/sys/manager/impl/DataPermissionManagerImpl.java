@@ -1,12 +1,12 @@
 package org.horx.wdf.sys.manager.impl;
 
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.enums.ErrorCodeEnum;
 import org.horx.wdf.common.tools.MsgTool;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.exception.ResultException;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.sys.consts.SysConstants;
 import org.horx.wdf.sys.domain.DataPermissionDef;
 import org.horx.wdf.sys.dto.query.DataPermissionQueryDTO;
@@ -50,9 +50,9 @@ public class DataPermissionManagerImpl implements DataPermissionManager {
 
     @Override
     @Transactional(readOnly = true)
-    public PagingResult<DataPermissionDef> pagingQuery(DataPermissionQueryDTO dataPermissionQuery,
-                                                       PagingParam pagingParam) {
-        return dataPermissionDefMapper.pagingSelect(dataPermissionQuery, new PagingRowBounds(pagingParam));
+    public PaginationResult<DataPermissionDef> paginationQuery(DataPermissionQueryDTO dataPermissionQuery,
+                                                               PaginationParam paginationParam) {
+        return dataPermissionDefMapper.paginationSelect(dataPermissionQuery, new PaginationRowBounds(paginationParam));
     }
 
     @Override

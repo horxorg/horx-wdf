@@ -31,7 +31,7 @@ $(document).ready(function(){
 
     var conf = {
         gridConf:{
-            url:$.root + "/api/sys/dataPermission/pagingQuery",
+            url:$.root + "/api/sys/dataPermission/paginationQuery",
             initSort:{field:"displaySeq", type:"asc"},
             cols: [[
                 {field: "id", type: "checkbox", width:40, align:"center", fixed: "left"},

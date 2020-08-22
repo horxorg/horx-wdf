@@ -1,7 +1,7 @@
 package org.horx.wdf.common.mybatis.config;
 
 import org.apache.ibatis.reflection.factory.DefaultObjectFactory;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationResult;
 
 /**
  * 扩展对象Factory。
@@ -11,6 +11,6 @@ public class ExtendedObjectFactory extends DefaultObjectFactory {
 
     @Override
     public <T> boolean isCollection(Class<T> type) {
-        return super.isCollection(type) || type.isAssignableFrom(PagingResult.class);
+        return super.isCollection(type) || type.isAssignableFrom(PaginationResult.class);
     }
 }

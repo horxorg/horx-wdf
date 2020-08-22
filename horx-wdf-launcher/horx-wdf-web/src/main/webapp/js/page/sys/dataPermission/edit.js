@@ -57,7 +57,7 @@ $(document).ready(function(){
                     multi:false,
                     load: {
                         "type": "POST",
-                        "url": $.root + "/api/sys/dict/pagingQuery",
+                        "url": $.root + "/api/sys/dict/paginationQuery",
                         "data": {pageSize: -1, pageIndex: 1}
                     },
                     search: true,

@@ -1,8 +1,8 @@
 package org.horx.wdf.sys.service.impl;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.converter.DataOperationLogConverter;
 import org.horx.wdf.sys.domain.DataOperationLog;
 import org.horx.wdf.sys.dto.DataOperationLogDTO;
@@ -41,13 +41,13 @@ public class DataOperationLogServiceImpl implements DataOperationLogService {
     }
 
     @Override
-    public PagingResult<DataOperationLogDTO> pagingQuery(PagingQuery<DataOperationLogQueryDTO> pagingQuery) {
-        DataOperationLogQueryDTO dataOperationLogQueryDTO = pagingQuery.getQuery();
-        PagingParam pagingParam = pagingQuery.getPagingParam();
-        PagingResult<DataOperationLog> pagingResult = dataOperationLogManager.pagingQuery(dataOperationLogQueryDTO, pagingParam);
-        PagingResult<DataOperationLogDTO> pagingResultDTO = PagingResult.copy(pagingResult);
-        List<DataOperationLogDTO> dtoList = dataOperationLogConverter.toDtoList(pagingResult.getData());
-        pagingResultDTO.setData(dtoList);
-        return pagingResultDTO;
+    public PaginationResult<DataOperationLogDTO> paginationQuery(PaginationQuery<DataOperationLogQueryDTO> paginationQuery) {
+        DataOperationLogQueryDTO dataOperationLogQueryDTO = paginationQuery.getQuery();
+        PaginationParam paginationParam = paginationQuery.getPaginationParam();
+        PaginationResult<DataOperationLog> paginationResult = dataOperationLogManager.paginationQuery(dataOperationLogQueryDTO, paginationParam);
+        PaginationResult<DataOperationLogDTO> paginationResultDTO = PaginationResult.copy(paginationResult);
+        List<DataOperationLogDTO> dtoList = dataOperationLogConverter.toDtoList(paginationResult.getData());
+        paginationResultDTO.setData(dtoList);
+        return paginationResultDTO;
     }
 }

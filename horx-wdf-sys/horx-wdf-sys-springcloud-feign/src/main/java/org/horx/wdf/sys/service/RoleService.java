@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.MenuAuthorityDTO;
 import org.horx.wdf.sys.dto.RoleDTO;
 import org.horx.wdf.sys.dto.dataauth.SysDataAuthDTO;
@@ -39,11 +39,11 @@ public interface RoleService {
     @PostMapping("/getByIdUsable")
     RoleDTO getByIdUsable(@RequestParam Long id, @RequestBody SysDataAuthDTO sysDataAuth);
 
-    @PostMapping("/pagingQuery")
-    PagingResult<RoleDTO> pagingQuery(@RequestBody PagingQuery<RoleQueryDTO> pagingQuery);
+    @PostMapping("/paginationQuery")
+    PaginationResult<RoleDTO> paginationQuery(@RequestBody PaginationQuery<RoleQueryDTO> paginationQuery);
 
-    @PostMapping("/pagingQueryUsable")
-    PagingResult<RoleDTO> pagingQueryUsable(@RequestBody PagingQuery<RoleQueryDTO> pagingQuery);
+    @PostMapping("/paginationQueryUsable")
+    PaginationResult<RoleDTO> paginationQueryUsable(@RequestBody PaginationQuery<RoleQueryDTO> paginationQuery);
 
     @PostMapping("/create")
     Long create(@RequestBody RoleWithAuthDTO roleWithAuthDTO);

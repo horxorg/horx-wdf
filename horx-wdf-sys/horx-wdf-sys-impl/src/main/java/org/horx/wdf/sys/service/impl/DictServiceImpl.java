@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service.impl;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.converter.DictConverter;
 import org.horx.wdf.sys.converter.DictItemConverter;
 import org.horx.wdf.sys.dto.DictDTO;
@@ -59,13 +59,13 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
-    public PagingResult<DictDTO> pagingQuery(PagingQuery<DictQueryDTO> pagingQuery) {
-        PagingResult<Dict> pagingResult = dictManager.pagingQuery(pagingQuery.getQuery(), pagingQuery.getPagingParam());
+    public PaginationResult<DictDTO> paginationQuery(PaginationQuery<DictQueryDTO> paginationQuery) {
+        PaginationResult<Dict> paginationResult = dictManager.paginationQuery(paginationQuery.getQuery(), paginationQuery.getPaginationParam());
 
-        PagingResult<DictDTO> pagingResultDTO = PagingResult.copy(pagingResult);
-        List<DictDTO> dtoList = dictConverter.toDtoList(pagingResult.getData());
-        pagingResultDTO.setData(dtoList);
-        return pagingResultDTO;
+        PaginationResult<DictDTO> paginationResultDTO = PaginationResult.copy(paginationResult);
+        List<DictDTO> dtoList = dictConverter.toDtoList(paginationResult.getData());
+        paginationResultDTO.setData(dtoList);
+        return paginationResultDTO;
     }
 
     @Override
@@ -96,13 +96,13 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
-    public PagingResult<DictItemDTO> pagingQueryItem(PagingQuery<DictItemQueryDTO> pagingQuery) {
-        PagingResult<DictItem> pagingResult = dictManager.pagingQueryItem(pagingQuery.getQuery(), pagingQuery.getPagingParam());
+    public PaginationResult<DictItemDTO> paginationQueryItem(PaginationQuery<DictItemQueryDTO> paginationQuery) {
+        PaginationResult<DictItem> paginationResult = dictManager.paginationQueryItem(paginationQuery.getQuery(), paginationQuery.getPaginationParam());
 
-        PagingResult<DictItemDTO> pagingResultDTO = PagingResult.copy(pagingResult);
-        List<DictItemDTO> dtoList = dictItemConverter.toDtoList(pagingResult.getData());
-        pagingResultDTO.setData(dtoList);
-        return pagingResultDTO;
+        PaginationResult<DictItemDTO> paginationResultDTO = PaginationResult.copy(paginationResult);
+        List<DictItemDTO> dtoList = dictItemConverter.toDtoList(paginationResult.getData());
+        paginationResultDTO.setData(dtoList);
+        return paginationResultDTO;
     }
 
     @Override

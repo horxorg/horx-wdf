@@ -1,10 +1,10 @@
 package org.horx.wdf.sys.rest;
 
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.enums.ErrorCodeEnum;
 import org.horx.wdf.common.tools.MsgTool;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.arg.annotation.ArgEntity;
 import org.horx.wdf.sys.annotation.AccessPermission;
@@ -48,18 +48,18 @@ public class DataPermissionApiController {
     /**
      * 分页查询。
      * @param query 查询条件。
-     * @param pagingParam 分页参数。
+     * @param paginationParam 分页参数。
      * @return
      */
     @AccessPermission("sys.dataPermission.query")
-    @PostMapping("/pagingQuery")
-    public PagingResult<DataPermissionDefVO> pagingQuery(@ArgEntity DataPermissionQueryVO query, PagingParam pagingParam) {
+    @PostMapping("/paginationQuery")
+    public PaginationResult<DataPermissionDefVO> paginationQuery(@ArgEntity DataPermissionQueryVO query, PaginationParam paginationParam) {
         DataPermissionQueryDTO dataPermissionQueryDTO = dataPermissionQueryVoConverter.fromVo(query);
-        PagingQuery<DataPermissionQueryDTO> pagingQuery = new PagingQuery<>(dataPermissionQueryDTO, pagingParam);
-        PagingResult<DataPermissionDefDTO> pagingResult = dataPermissionService.pagingQuery(pagingQuery);
-        PagingResult<DataPermissionDefVO> voPagingResult = PagingResult.copy(pagingResult);
-        voPagingResult.setData(dataPermissionDefVoConverter.toVoList(pagingResult.getData()));
-        return voPagingResult;
+        PaginationQuery<DataPermissionQueryDTO> paginationQuery = new PaginationQuery<>(dataPermissionQueryDTO, paginationParam);
+        PaginationResult<DataPermissionDefDTO> paginationResult = dataPermissionService.paginationQuery(paginationQuery);
+        PaginationResult<DataPermissionDefVO> voPaginationResult = PaginationResult.copy(paginationResult);
+        voPaginationResult.setData(dataPermissionDefVoConverter.toVoList(paginationResult.getData()));
+        return voPaginationResult;
     }
 
     /**

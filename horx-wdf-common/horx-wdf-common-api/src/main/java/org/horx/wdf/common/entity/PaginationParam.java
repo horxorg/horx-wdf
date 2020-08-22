@@ -6,7 +6,7 @@ import java.io.Serializable;
  * 分页参数。
  * @since 1.0
  */
-public class PagingParam extends SortParam implements Pageable, Serializable {
+public class PaginationParam extends SortParam implements Pageable, Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer pageSize;

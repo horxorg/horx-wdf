@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.DataOperationLogDTO;
 import org.horx.wdf.sys.dto.query.DataOperationLogQueryDTO;
 
@@ -15,5 +15,5 @@ public interface DataOperationLogService {
 
     DataOperationLogDTO getById(Long id);
 
-    PagingResult<DataOperationLogDTO> pagingQuery(PagingQuery<DataOperationLogQueryDTO> pagingQuery);
+    PaginationResult<DataOperationLogDTO> paginationQuery(PaginationQuery<DataOperationLogQueryDTO> paginationQuery);
 }

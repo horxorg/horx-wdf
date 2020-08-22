@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.DictDTO;
 import org.horx.wdf.sys.dto.DictItemDTO;
 import org.horx.wdf.sys.dto.dataauth.DictDataAuthDTO;
@@ -24,7 +24,7 @@ public interface DictService {
 
     DictDTO getByCode(String code);
 
-    PagingResult<DictDTO> pagingQuery(PagingQuery<DictQueryDTO> pagingQuery);
+    PaginationResult<DictDTO> paginationQuery(PaginationQuery<DictQueryDTO> paginationQuery);
 
     Long create(DictWithAuthDTO dictWithAuthDTO);
 
@@ -34,7 +34,7 @@ public interface DictService {
 
     DictItemDTO getItemById(Long id);
 
-    PagingResult<DictItemDTO> pagingQueryItem(PagingQuery<DictItemQueryDTO> pagingQuery);
+    PaginationResult<DictItemDTO> paginationQueryItem(PaginationQuery<DictItemQueryDTO> paginationQuery);
 
     Long createItem(DictItemDTO dictItem);
 

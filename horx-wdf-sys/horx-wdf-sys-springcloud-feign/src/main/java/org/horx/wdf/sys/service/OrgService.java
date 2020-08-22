@@ -1,6 +1,6 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
+import org.horx.wdf.common.entity.PaginationQuery;
 import org.horx.wdf.sys.dto.OrgDTO;
 import org.horx.wdf.sys.dto.dataauth.OrgAuthDTO;
 import org.horx.wdf.sys.dto.dataauth.SysDataAuthDTO;
@@ -35,7 +35,7 @@ public interface OrgService {
     OrgDTO getByIdAuthorized(@RequestParam Long id, @RequestBody SysDataAuthDTO sysDataAuth);
 
     @PostMapping("/query")
-    List<OrgDTO> query(@RequestBody PagingQuery<OrgQueryDTO> pagingQuery);
+    List<OrgDTO> query(@RequestBody PaginationQuery<OrgQueryDTO> paginationQuery);
 
     @PostMapping("/create")
     Long create(@RequestBody OrgWithAuthDTO orgWithAuthDTO);

@@ -1,6 +1,6 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
+import org.horx.wdf.common.entity.PaginationQuery;
 import org.horx.wdf.sys.dto.MenuDTO;
 import org.horx.wdf.sys.dto.query.MenuQueryDTO;
 import org.horx.wdf.sys.springcloud.SpringcloudConsumerContextInterceptor;
@@ -28,7 +28,7 @@ public interface MenuService {
     MenuDTO getById(@RequestParam Long id);
 
     @PostMapping("/query")
-    List<MenuDTO> query(@RequestBody PagingQuery<MenuQueryDTO> pagingQuery);
+    List<MenuDTO> query(@RequestBody PaginationQuery<MenuQueryDTO> paginationQuery);
 
     @PostMapping("/create")
     Long create(@RequestBody MenuDTO menuDTO);

@@ -40,7 +40,7 @@ $(document).ready(function(){
 
     var conf = {
         gridConf:{
-            url:$.root + "/api/sys/user/pagingQuery",
+            url:$.root + "/api/sys/user/paginationQuery",
             initSort:{field:"username", type:"asc"},
             cols: [[
                 {field: "id", type: "checkbox", width:40, align:"center", fixed: "left"},

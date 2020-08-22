@@ -126,7 +126,7 @@
         <include refid="sysDataAuth"/>
     </select>
 
-    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.User">
+    <select id="paginationSelect" resultType="org.horx.wdf.sys.domain.User">
         <include refid="selectSql"/>
         <if test="name != null and name != ''">
             AND t1.name LIKE ${_concatStart} '%' ${_concatSep} #{name} ${_concatSep} '%' ${_concatEnd}

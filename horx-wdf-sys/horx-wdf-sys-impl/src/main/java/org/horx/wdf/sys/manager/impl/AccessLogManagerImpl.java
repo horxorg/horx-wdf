@@ -1,9 +1,9 @@
 package org.horx.wdf.sys.manager.impl;
 
 import org.horx.common.utils.DateUtils;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.sys.config.SysConfig;
 import org.horx.wdf.sys.domain.AccessLog;
 import org.horx.wdf.sys.dto.query.AccessLogQueryDTO;
@@ -60,7 +60,7 @@ public class AccessLogManagerImpl implements AccessLogManager {
     }
 
     @Override
-    public PagingResult<AccessLog> pagingQuery(AccessLogQueryDTO accessLogQuery, PagingParam pagingParam) {
-        return accessLogMapper.pagingSelect(accessLogQuery, new PagingRowBounds(pagingParam));
+    public PaginationResult<AccessLog> paginationQuery(AccessLogQueryDTO accessLogQuery, PaginationParam paginationParam) {
+        return accessLogMapper.paginationSelect(accessLogQuery, new PaginationRowBounds(paginationParam));
     }
 }

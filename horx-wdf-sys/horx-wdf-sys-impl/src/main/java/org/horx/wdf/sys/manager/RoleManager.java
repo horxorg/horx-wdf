@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.manager;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.domain.MenuAuthority;
 import org.horx.wdf.sys.domain.Role;
 import org.horx.wdf.sys.dto.dataauth.SysDataAuthDTO;
@@ -22,9 +22,9 @@ public interface RoleManager {
 
     Role getByIdUsable(Long id, SysDataAuthDTO sysDataAuth);
 
-    PagingResult<Role> pagingQuery(RoleQueryDTO roleQuery, PagingParam pagingParam);
+    PaginationResult<Role> paginationQuery(RoleQueryDTO roleQuery, PaginationParam paginationParam);
 
-    PagingResult<Role> pagingQueryUsable(RoleQueryDTO roleQuery, PagingParam pagingParam);
+    PaginationResult<Role> paginationQueryUsable(RoleQueryDTO roleQuery, PaginationParam paginationParam);
 
     void create(Role role, SysDataAuthDTO sysDataAuth);
 

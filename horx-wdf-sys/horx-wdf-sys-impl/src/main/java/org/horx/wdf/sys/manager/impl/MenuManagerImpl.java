@@ -2,9 +2,9 @@ package org.horx.wdf.sys.manager.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.horx.common.collection.Tree;
-import org.horx.wdf.common.entity.PagingParam;
+import org.horx.wdf.common.entity.PaginationParam;
 import org.horx.wdf.common.enums.SortEnum;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.sys.consts.SysConstants;
 import org.horx.wdf.sys.domain.Menu;
 import org.horx.wdf.sys.dto.query.MenuQueryDTO;
@@ -39,20 +39,20 @@ public class MenuManagerImpl implements MenuManager {
     }
 
     @Override
-    public List<Menu> query(MenuQueryDTO menuQuery, PagingParam pagingParam) {
-        return menuMapper.select(menuQuery, new PagingRowBounds(pagingParam));
+    public List<Menu> query(MenuQueryDTO menuQuery, PaginationParam paginationParam) {
+        return menuMapper.select(menuQuery, new PaginationRowBounds(paginationParam));
     }
 
     @Override
     public Tree<Menu, Long> queryForTree(MenuQueryDTO menuQuery) {
-        PagingParam pagingParam = new PagingParam();
-        pagingParam.setPageSize(-1);
-        pagingParam.setCurrPage(1);
-        pagingParam.setSortField(new String[] {"displaySeq"});
-        pagingParam.setSortOrder(new String[] {SortEnum.ASC.name()});
-        PagingRowBounds pagingRowBounds = new PagingRowBounds(pagingParam);
+        PaginationParam paginationParam = new PaginationParam();
+        paginationParam.setPageSize(-1);
+        paginationParam.setCurrPage(1);
+        paginationParam.setSortField(new String[] {"displaySeq"});
+        paginationParam.setSortOrder(new String[] {SortEnum.ASC.name()});
+        PaginationRowBounds paginationRowBounds = new PaginationRowBounds(paginationParam);
 
-        List<Menu> list = menuMapper.select(menuQuery, pagingRowBounds);
+        List<Menu> list = menuMapper.select(menuQuery, paginationRowBounds);
         Tree<Menu, Long> tree = new Tree<>();
         for (Menu menu : list) {
             tree.addNode(menu, menu.getId(), menu.getParentId());

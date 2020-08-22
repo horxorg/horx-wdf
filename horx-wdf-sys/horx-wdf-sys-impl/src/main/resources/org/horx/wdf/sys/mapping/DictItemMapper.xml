@@ -61,7 +61,7 @@
         ORDER BY t1.display_seq,t1.code
     </select>
 
-    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.DictItem">
+    <select id="paginationSelect" resultType="org.horx.wdf.sys.domain.DictItem">
         <include refid="selectSql"/>
         <if test="dictId != null">
             AND t1.dict_id = #{dictId}

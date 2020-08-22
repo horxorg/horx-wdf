@@ -39,7 +39,7 @@
             t1.id=#{id}
     </select>
 
-    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.DataOperationLog">
+    <select id="paginationSelect" resultType="org.horx.wdf.sys.domain.DataOperationLog">
         SELECT
             t1.id,
             t1.user_id,

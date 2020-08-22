@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.springcloud.controller;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.DataOperationLogDTO;
 import org.horx.wdf.sys.dto.query.DataOperationLogQueryDTO;
 import org.horx.wdf.sys.service.DataOperationLogService;
@@ -35,8 +35,8 @@ public class DataOperationLogController {
         return dataOperationLogService.getById(id);
     }
 
-    @PostMapping("/pagingQuery")
-    public PagingResult<DataOperationLogDTO> pagingQuery(@RequestBody PagingQuery<DataOperationLogQueryDTO> pagingQuery) {
-        return dataOperationLogService.pagingQuery(pagingQuery);
+    @PostMapping("/paginationQuery")
+    public PaginationResult<DataOperationLogDTO> paginationQuery(@RequestBody PaginationQuery<DataOperationLogQueryDTO> paginationQuery) {
+        return dataOperationLogService.paginationQuery(paginationQuery);
     }
 }

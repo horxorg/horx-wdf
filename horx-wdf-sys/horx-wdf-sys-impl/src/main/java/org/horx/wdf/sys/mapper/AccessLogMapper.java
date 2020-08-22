@@ -3,8 +3,8 @@ package org.horx.wdf.sys.mapper;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.horx.wdf.common.entity.PagingResult;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.entity.PaginationResult;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.common.mybatis.provider.InsertSqlProvider;
 import org.horx.wdf.sys.domain.AccessLog;
 import org.horx.wdf.sys.dto.query.AccessLogQueryDTO;
@@ -25,5 +25,5 @@ public interface AccessLogMapper {
 
     AccessLog selectById(@Param("id") Long id);
 
-    PagingResult<AccessLog> pagingSelect(AccessLogQueryDTO query, PagingRowBounds pagingParam);
+    PaginationResult<AccessLog> paginationSelect(AccessLogQueryDTO query, PaginationRowBounds paginationParam);
 }

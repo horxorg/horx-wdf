@@ -15,7 +15,7 @@ $(document).ready(function(){
 
     var conf = {
         gridConf:{
-            url: $.root + "/api/sys/accessLog/pagingQuery",
+            url: $.root + "/api/sys/accessLog/paginationQuery",
             initSort: {field:"startTime", type:"desc"},
             where: {startTime: $("#startTime").val(), endTime: $("#endTime").val()},
             cols: [[

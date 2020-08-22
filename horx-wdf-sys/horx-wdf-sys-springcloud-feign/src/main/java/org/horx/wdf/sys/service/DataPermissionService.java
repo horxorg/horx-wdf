@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.DataPermissionDefDTO;
 import org.horx.wdf.sys.dto.query.DataPermissionQueryDTO;
 import org.horx.wdf.sys.springcloud.SpringcloudConsumerContextInterceptor;
@@ -31,8 +31,8 @@ public interface DataPermissionService {
     @GetMapping("/getByCode")
     DataPermissionDefDTO getByCode(@RequestParam String code);
 
-    @PostMapping("/pagingQuery")
-    PagingResult<DataPermissionDefDTO> pagingQuery(@RequestBody PagingQuery<DataPermissionQueryDTO> pagingQuery);
+    @PostMapping("/paginationQuery")
+    PaginationResult<DataPermissionDefDTO> paginationQuery(@RequestBody PaginationQuery<DataPermissionQueryDTO> paginationQuery);
 
     @GetMapping("/queryForAuthorityObj")
     List<DataPermissionDefDTO> queryForAuthorityObj(@RequestParam String authorityObjType, @RequestParam Long authorityObjId);

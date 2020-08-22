@@ -7,23 +7,23 @@ import java.io.Serializable;
  * @param <T> 查询条件对象。
  * @since 1.0
  */
-public class PagingQuery<T> implements Serializable {
+public class PaginationQuery<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private T query;
 
-    private PagingParam pagingParam;
+    private PaginationParam paginationParam;
 
-    public PagingQuery() {}
+    public PaginationQuery() {}
 
     /**
      * 构造方法。
      * @param query 查询条件对象。
-     * @param pagingParam 分页参数。
+     * @param paginationParam 分页参数。
      */
-    public PagingQuery(T query, PagingParam pagingParam) {
+    public PaginationQuery(T query, PaginationParam paginationParam) {
         this.query = query;
-        this.pagingParam = pagingParam;
+        this.paginationParam = paginationParam;
     }
 
     /**
@@ -46,15 +46,15 @@ public class PagingQuery<T> implements Serializable {
      * 获取分页参数。
      * @return 分页参数。
      */
-    public PagingParam getPagingParam() {
-        return pagingParam;
+    public PaginationParam getPaginationParam() {
+        return paginationParam;
     }
 
     /**
      * 设置分页参数。
-     * @param pagingParam 分页参数。
+     * @param paginationParam 分页参数。
      */
-    public void setPagingParam(PagingParam pagingParam) {
-        this.pagingParam = pagingParam;
+    public void setPaginationParam(PaginationParam paginationParam) {
+        this.paginationParam = paginationParam;
     }
 }

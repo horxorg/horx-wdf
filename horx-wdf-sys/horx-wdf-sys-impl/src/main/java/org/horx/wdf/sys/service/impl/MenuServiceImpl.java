@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service.impl;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationQuery;
 import org.horx.wdf.common.enums.SortEnum;
 import org.horx.wdf.sys.converter.MenuConverter;
 import org.horx.wdf.sys.domain.Menu;
@@ -35,18 +35,18 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<MenuDTO> query(PagingQuery<MenuQueryDTO> pagingQuery) {
-        MenuQueryDTO menuQueryDTO = (pagingQuery == null) ? null : pagingQuery.getQuery();
-        PagingParam pagingParam = (pagingQuery == null) ? null : pagingQuery.getPagingParam();
-        if (pagingParam == null) {
-            pagingParam = new PagingParam();
+    public List<MenuDTO> query(PaginationQuery<MenuQueryDTO> paginationQuery) {
+        MenuQueryDTO menuQueryDTO = (paginationQuery == null) ? null : paginationQuery.getQuery();
+        PaginationParam paginationParam = (paginationQuery == null) ? null : paginationQuery.getPaginationParam();
+        if (paginationParam == null) {
+            paginationParam = new PaginationParam();
         }
-        if (pagingParam.getSortField() == null || pagingParam.getSortField().length == 0) {
-            pagingParam.setSortField(new String[] {"displaySeq"});
-            pagingParam.setSortOrder(new String[] {SortEnum.ASC.name()});
+        if (paginationParam.getSortField() == null || paginationParam.getSortField().length == 0) {
+            paginationParam.setSortField(new String[] {"displaySeq"});
+            paginationParam.setSortOrder(new String[] {SortEnum.ASC.name()});
         }
 
-        List<Menu> list = menuManager.query(menuQueryDTO, pagingParam);
+        List<Menu> list = menuManager.query(menuQueryDTO, paginationParam);
         List<MenuDTO> dtoList = menuConverter.toDtoList(list);
         return dtoList;
     }

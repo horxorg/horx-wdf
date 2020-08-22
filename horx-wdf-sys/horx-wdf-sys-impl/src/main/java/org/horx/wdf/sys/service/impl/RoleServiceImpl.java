@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service.impl;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.converter.MenuAuthorityConverter;
 import org.horx.wdf.sys.converter.RoleConverter;
 import org.horx.wdf.sys.dto.MenuAuthorityDTO;
@@ -60,23 +60,23 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public PagingResult<RoleDTO> pagingQuery(PagingQuery<RoleQueryDTO> pagingQuery) {
-        PagingResult<Role> pagingResult = roleManager.pagingQuery(pagingQuery.getQuery(), pagingQuery.getPagingParam());
+    public PaginationResult<RoleDTO> paginationQuery(PaginationQuery<RoleQueryDTO> paginationQuery) {
+        PaginationResult<Role> paginationResult = roleManager.paginationQuery(paginationQuery.getQuery(), paginationQuery.getPaginationParam());
 
-        PagingResult<RoleDTO> pagingResultDTO = PagingResult.copy(pagingResult);
-        List<RoleDTO> dtoList = roleConverter.toDtoList(pagingResult.getData());
-        pagingResultDTO.setData(dtoList);
-        return pagingResultDTO;
+        PaginationResult<RoleDTO> paginationResultDTO = PaginationResult.copy(paginationResult);
+        List<RoleDTO> dtoList = roleConverter.toDtoList(paginationResult.getData());
+        paginationResultDTO.setData(dtoList);
+        return paginationResultDTO;
     }
 
     @Override
-    public PagingResult<RoleDTO> pagingQueryUsable(PagingQuery<RoleQueryDTO> pagingQuery) {
-        PagingResult<Role> pagingResult = roleManager.pagingQueryUsable(pagingQuery.getQuery(), pagingQuery.getPagingParam());
+    public PaginationResult<RoleDTO> paginationQueryUsable(PaginationQuery<RoleQueryDTO> paginationQuery) {
+        PaginationResult<Role> paginationResult = roleManager.paginationQueryUsable(paginationQuery.getQuery(), paginationQuery.getPaginationParam());
 
-        PagingResult<RoleDTO> pagingResultDTO = PagingResult.copy(pagingResult);
-        List<RoleDTO> dtoList = roleConverter.toDtoList(pagingResult.getData());
-        pagingResultDTO.setData(dtoList);
-        return pagingResultDTO;
+        PaginationResult<RoleDTO> paginationResultDTO = PaginationResult.copy(paginationResult);
+        List<RoleDTO> dtoList = roleConverter.toDtoList(paginationResult.getData());
+        paginationResultDTO.setData(dtoList);
+        return paginationResultDTO;
     }
 
     @Override

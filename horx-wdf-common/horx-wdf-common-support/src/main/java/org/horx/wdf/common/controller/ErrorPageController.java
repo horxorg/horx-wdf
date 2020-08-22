@@ -62,7 +62,7 @@ public class ErrorPageController {
             return mav;
         }
 
-        mav.addObject("result",result);
+        mav.addObject("result", result);
         mav.addObject("staticVer", webTool.getStaticVer());
         mav.addObject("loadJsSrc", webTool.isLoadJsSrc());
         mav.setViewName(exViewName);

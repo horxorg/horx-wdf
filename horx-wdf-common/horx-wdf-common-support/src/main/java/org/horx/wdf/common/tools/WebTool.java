@@ -1,11 +1,10 @@
 package org.horx.wdf.common.tools;
 
 import org.apache.commons.lang3.StringUtils;
-import org.horx.wdf.common.entity.PagingParam;
+import org.horx.wdf.common.entity.PaginationParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.web.context.ContextLoader;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -39,11 +38,11 @@ public class WebTool {
      * @param request
      * @return
      */
-    public PagingParam genPagingParam(HttpServletRequest request) {
-        PagingParam pagingParam = new PagingParam();
-        genPaging(request, pagingParam);
-        genSort(request, pagingParam);
-        return pagingParam;
+    public PaginationParam genPaginationParam(HttpServletRequest request) {
+        PaginationParam paginationParam = new PaginationParam();
+        genPagination(request, paginationParam);
+        genSort(request, paginationParam);
+        return paginationParam;
     }
 
     /**
@@ -156,31 +155,31 @@ public class WebTool {
     /**
      * 生成分页参数。
      * @param request
-     * @param pagingParam
+     * @param paginationParam
      */
-    protected void genPaging(HttpServletRequest request, PagingParam pagingParam) {
+    protected void genPagination(HttpServletRequest request, PaginationParam paginationParam) {
         String str = request.getParameter("pageSize");
         if (StringUtils.isEmpty(str)) {
-            pagingParam.setPageSize(10);
+            paginationParam.setPageSize(10);
         } else {
-            pagingParam.setPageSize(Integer.valueOf(str));
+            paginationParam.setPageSize(Integer.valueOf(str));
         }
         str = request.getParameter("currPage");
         if (StringUtils.isEmpty(str)) {
-            pagingParam.setCurrPage(1);
+            paginationParam.setCurrPage(1);
         } else {
-            pagingParam.setCurrPage(Integer.valueOf(str));
+            paginationParam.setCurrPage(Integer.valueOf(str));
         }
     }
 
     /**
      * 生成排序参数。
      * @param request
-     * @param pagingParam
+     * @param paginationParam
      */
-    protected void genSort(HttpServletRequest request, PagingParam pagingParam) {
-        pagingParam.setSortField(getArrForRequest(request, "sortField"));
-        pagingParam.setSortOrder(getArrForRequest(request, "sortOrder"));
+    protected void genSort(HttpServletRequest request, PaginationParam paginationParam) {
+        paginationParam.setSortField(getArrForRequest(request, "sortField"));
+        paginationParam.setSortOrder(getArrForRequest(request, "sortOrder"));
     }
 
     private String[] getArrForRequest(HttpServletRequest request, String key) {

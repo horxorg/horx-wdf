@@ -1,8 +1,8 @@
 package org.horx.wdf.sys.rest;
 
 import org.horx.common.collection.Tree;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationQuery;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.arg.annotation.ArgEntity;
 import org.horx.wdf.sys.annotation.AccessPermission;
@@ -52,17 +52,17 @@ public class MenuApiController {
 
     @AccessPermission("sys.menu.query")
     @PostMapping("/query")
-    public Result<List<MenuVO>> query(@ArgEntity MenuQueryVO query, PagingParam pagingParam) {
+    public Result<List<MenuVO>> query(@ArgEntity MenuQueryVO query, PaginationParam paginationParam) {
         MenuQueryDTO menuQueryDTO = menuQueryVoConverter.fromVo(query);
-        PagingQuery<MenuQueryDTO> pagingQuery = new PagingQuery<>(menuQueryDTO, pagingParam);
-        List<MenuDTO> list = menuService.query(pagingQuery);
+        PaginationQuery<MenuQueryDTO> paginationQuery = new PaginationQuery<>(menuQueryDTO, paginationParam);
+        List<MenuDTO> list = menuService.query(paginationQuery);
         List<MenuVO> voList = menuVoConverter.toVoList(list);
         return new Result<>(voList);
     }
 
     @PostMapping("/queryForTree")
-    public Result<List<MenuVO>> queryForTree(@ArgEntity MenuQueryVO query, PagingParam pagingParam) {
-        Result<List<MenuVO>> result = query(query, pagingParam);
+    public Result<List<MenuVO>> queryForTree(@ArgEntity MenuQueryVO query, PaginationParam paginationParam) {
+        Result<List<MenuVO>> result = query(query, paginationParam);
         Tree<MenuVO, Long> tree = new Tree<>();
         for (MenuVO menu : result.getData()) {
             tree.addNode(menu, menu.getId(), menu.getParentId());

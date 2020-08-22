@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.OnlineUserDTO;
 import org.horx.wdf.sys.dto.query.OnlineUserQueryDTO;
 import org.horx.wdf.sys.dto.wrapper.BatchWithSysAuthDTO;
@@ -12,7 +12,7 @@ import org.horx.wdf.sys.dto.wrapper.BatchWithSysAuthDTO;
  */
 public interface OnlineUserService {
 
-    PagingResult<OnlineUserDTO> pagingQuery(PagingQuery<OnlineUserQueryDTO> pagingQuery);
+    PaginationResult<OnlineUserDTO> paginationQuery(PaginationQuery<OnlineUserQueryDTO> paginationQuery);
 
     /**
      * 用户下线检查。

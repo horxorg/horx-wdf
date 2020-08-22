@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.DataOperationLogDTO;
 import org.horx.wdf.sys.dto.query.DataOperationLogQueryDTO;
 import org.horx.wdf.sys.springcloud.SpringcloudConsumerContextInterceptor;
@@ -29,6 +29,6 @@ public interface DataOperationLogService {
     @GetMapping("/getById")
     DataOperationLogDTO getById(@RequestParam Long id);
 
-    @PostMapping("/pagingQuery")
-    PagingResult<DataOperationLogDTO> pagingQuery(@RequestBody PagingQuery<DataOperationLogQueryDTO> pagingQuery);
+    @PostMapping("/paginationQuery")
+    PaginationResult<DataOperationLogDTO> paginationQuery(@RequestBody PaginationQuery<DataOperationLogQueryDTO> paginationQuery);
 }

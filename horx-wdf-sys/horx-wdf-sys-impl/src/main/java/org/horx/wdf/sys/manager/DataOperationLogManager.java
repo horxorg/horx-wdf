@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.manager;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.domain.DataOperationLog;
 import org.horx.wdf.sys.dto.query.DataOperationLogQueryDTO;
 
@@ -17,5 +17,6 @@ public interface DataOperationLogManager {
 
     DataOperationLog getById(Long id);
 
-    PagingResult<DataOperationLog> pagingQuery(DataOperationLogQueryDTO dataOperationLogQuery, PagingParam pagingParam);
+    PaginationResult<DataOperationLog> paginationQuery(DataOperationLogQueryDTO dataOperationLogQuery,
+                                                       PaginationParam paginationParam);
 }

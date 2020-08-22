@@ -4,9 +4,9 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.jdbc.annotation.EntityClass;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.common.mybatis.provider.InsertSqlProvider;
 import org.horx.wdf.common.mybatis.provider.LogicalDeleteByIdProvider;
 import org.horx.wdf.common.mybatis.provider.UpdateSqlProvider;
@@ -37,7 +37,7 @@ public interface RoleMapper {
 
     Role selectByIdUsable(@Param("id") Long id, @Param("sysDataAuth") SysDataAuthDTO sysDataAuth);
 
-    PagingResult<Role> pagingSelect(RoleQueryDTO query, PagingRowBounds pagingParam);
+    PaginationResult<Role> paginationSelect(RoleQueryDTO query, PaginationRowBounds paginationParam);
 
-    PagingResult<Role> pagingSelectUsable(RoleQueryDTO query, PagingRowBounds pagingParam);
+    PaginationResult<Role> paginationSelectUsable(RoleQueryDTO query, PaginationRowBounds paginationParam);
 }

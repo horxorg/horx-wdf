@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service.impl;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.converter.UserConverter;
 import org.horx.wdf.sys.converter.UserRoleConverter;
 import org.horx.wdf.sys.domain.User;
@@ -75,13 +75,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PagingResult<UserDTO> pagingQuery(PagingQuery<UserQueryDTO> pagingQuery) {
-        PagingResult<User> pagingResult = userManager.pagingQuery(pagingQuery.getQuery(), pagingQuery.getPagingParam());
+    public PaginationResult<UserDTO> paginationQuery(PaginationQuery<UserQueryDTO> paginationQuery) {
+        PaginationResult<User> paginationResult = userManager.paginationQuery(paginationQuery.getQuery(), paginationQuery.getPaginationParam());
 
-        PagingResult<UserDTO> pagingResultDTO = PagingResult.copy(pagingResult);
-        List<UserDTO> dtoList = userConverter.toDtoList(pagingResult.getData());
-        pagingResultDTO.setData(dtoList);
-        return pagingResultDTO;
+        PaginationResult<UserDTO> paginationResultDTO = PaginationResult.copy(paginationResult);
+        List<UserDTO> dtoList = userConverter.toDtoList(paginationResult.getData());
+        paginationResultDTO.setData(dtoList);
+        return paginationResultDTO;
     }
 
     @Override

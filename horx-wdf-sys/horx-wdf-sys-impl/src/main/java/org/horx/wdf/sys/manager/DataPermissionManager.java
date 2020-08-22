@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.manager;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.domain.DataPermissionDef;
 import org.horx.wdf.sys.dto.query.DataPermissionQueryDTO;
 
@@ -17,7 +17,8 @@ public interface DataPermissionManager {
 
     DataPermissionDef getByCode(String code);
 
-    PagingResult<DataPermissionDef> pagingQuery(DataPermissionQueryDTO dataPermissionQuery, PagingParam pagingParam);
+    PaginationResult<DataPermissionDef> paginationQuery(DataPermissionQueryDTO dataPermissionQuery,
+                                                        PaginationParam paginationParam);
 
     List<DataPermissionDef> queryForAuthorityObj(String authorityObjType, Long authorityObjId);
 

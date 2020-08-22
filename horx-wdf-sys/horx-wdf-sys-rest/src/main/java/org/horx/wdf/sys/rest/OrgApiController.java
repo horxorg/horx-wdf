@@ -5,8 +5,6 @@ import org.horx.wdf.common.entity.SortParam;
 import org.horx.wdf.common.entity.SortQuery;
 import org.horx.wdf.common.enums.ErrorCodeEnum;
 import org.horx.wdf.common.tools.MsgTool;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.arg.annotation.ArgEntity;
 import org.horx.wdf.sys.annotation.AccessPermission;

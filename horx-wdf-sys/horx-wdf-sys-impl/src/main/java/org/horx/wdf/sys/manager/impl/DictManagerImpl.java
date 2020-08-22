@@ -1,12 +1,12 @@
 package org.horx.wdf.sys.manager.impl;
 
+import org.horx.wdf.common.entity.PaginationParam;
 import org.horx.wdf.common.enums.ErrorCodeEnum;
 import org.horx.wdf.common.tools.MsgTool;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.exception.ResultException;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.sys.domain.Dict;
 import org.horx.wdf.sys.domain.DictItem;
 import org.horx.wdf.sys.dto.query.DictItemQueryDTO;
@@ -78,8 +78,8 @@ public class DictManagerImpl implements DictManager {
 
     @Override
     @Transactional(readOnly = true)
-    public PagingResult<Dict> pagingQuery(DictQueryDTO dictQuery, PagingParam pagingParam) {
-        return dictMapper.pagingSelect(dictQuery, new PagingRowBounds(pagingParam));
+    public PaginationResult<Dict> paginationQuery(DictQueryDTO dictQuery, PaginationParam paginationParam) {
+        return dictMapper.paginationSelect(dictQuery, new PaginationRowBounds(paginationParam));
     }
 
     @Override
@@ -138,9 +138,9 @@ public class DictManagerImpl implements DictManager {
 
     @Override
     @Transactional(readOnly = true)
-    public PagingResult<DictItem> pagingQueryItem(DictItemQueryDTO dictItemQuery, PagingParam pagingParam) {
+    public PaginationResult<DictItem> paginationQueryItem(DictItemQueryDTO dictItemQuery, PaginationParam paginationParam) {
 
-        return dictItemMapper.pagingSelect(dictItemQuery, new PagingRowBounds(pagingParam));
+        return dictItemMapper.paginationSelect(dictItemQuery, new PaginationRowBounds(paginationParam));
     }
 
     @Override

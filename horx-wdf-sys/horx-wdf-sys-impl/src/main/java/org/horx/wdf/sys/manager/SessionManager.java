@@ -1,8 +1,7 @@
 package org.horx.wdf.sys.manager;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.domain.OnlineUser;
 import org.horx.wdf.sys.domain.Session;
 import org.horx.wdf.sys.domain.SessionAttr;
@@ -34,7 +33,7 @@ public interface SessionManager {
 
     List<SessionAttr> queryBySessionId(Long sessionId);
 
-    PagingResult<OnlineUser> pagingQueryOnlineUser(OnlineUserQueryDTO query, PagingParam pagingParam);
+    PaginationResult<OnlineUser> paginationQueryOnlineUser(OnlineUserQueryDTO query, PaginationParam paginationParam);
 
     /**
      * 检查用户是否可下线。

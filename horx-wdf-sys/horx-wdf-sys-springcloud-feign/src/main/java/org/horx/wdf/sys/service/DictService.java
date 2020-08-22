@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.DictDTO;
 import org.horx.wdf.sys.dto.DictItemDTO;
 import org.horx.wdf.sys.dto.dataauth.DictDataAuthDTO;
@@ -40,8 +40,8 @@ public interface DictService {
     @GetMapping("/getByCode")
     DictDTO getByCode(@RequestParam String code);
 
-    @PostMapping("/pagingQuery")
-    PagingResult<DictDTO> pagingQuery(@RequestBody PagingQuery<DictQueryDTO> pagingQuery);
+    @PostMapping("/paginationQuery")
+    PaginationResult<DictDTO> paginationQuery(@RequestBody PaginationQuery<DictQueryDTO> paginationQuery);
 
     @PostMapping("/create")
     Long create(@RequestBody DictWithAuthDTO dictWithAuthDTO);
@@ -55,8 +55,8 @@ public interface DictService {
     @GetMapping("/getItemById")
     DictItemDTO getItemById(@RequestParam Long id);
 
-    @PostMapping("/pagingQueryItem")
-    PagingResult<DictItemDTO> pagingQueryItem(@RequestBody PagingQuery<DictItemQueryDTO> pagingQuery);
+    @PostMapping("/paginationQueryItem")
+    PaginationResult<DictItemDTO> paginationQueryItem(@RequestBody PaginationQuery<DictItemQueryDTO> paginationQuery);
 
     @PostMapping("/createItem")
     Long createItem(@RequestBody DictItemDTO dictItem);

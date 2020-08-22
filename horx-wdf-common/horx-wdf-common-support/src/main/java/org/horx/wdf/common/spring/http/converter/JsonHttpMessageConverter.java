@@ -1,7 +1,7 @@
 package org.horx.wdf.common.spring.http.converter;
 
 import org.horx.common.utils.JsonUtils;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.extension.result.ResultConverter;
 import org.slf4j.Logger;
@@ -47,8 +47,8 @@ public class JsonHttpMessageConverter extends AbstractGenericHttpMessageConverte
         try {
             Object convertedResult = t;
             if (resultConverter != null && t != null) {
-                if (t instanceof PagingResult) {
-                    convertedResult = resultConverter.convertPagingResult((PagingResult)t);
+                if (t instanceof PaginationResult) {
+                    convertedResult = resultConverter.convertPaginationResult((PaginationResult)t);
                 } else if (t instanceof Result) {
                     convertedResult = resultConverter.convertResult((Result)t);
                 }

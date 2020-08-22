@@ -1,10 +1,10 @@
 package org.horx.wdf.sys.rest;
 
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.enums.ErrorCodeEnum;
 import org.horx.wdf.common.tools.MsgTool;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.arg.annotation.ArgEntity;
 import org.horx.wdf.sys.annotation.AccessPermission;
@@ -54,14 +54,14 @@ public class  UserApiController {
     private UserQueryVoConverter userQueryVoConverter;
 
     @AccessPermission("sys.user.query")
-    @PostMapping("/pagingQuery")
-    public PagingResult<UserVO> pagingQuery(@ArgEntity UserQueryVO query, PagingParam pagingParam) {
+    @PostMapping("/paginationQuery")
+    public PaginationResult<UserVO> paginationQuery(@ArgEntity UserQueryVO query, PaginationParam paginationParam) {
         UserQueryDTO userQueryDTO = userQueryVoConverter.fromVo(query);
-        PagingQuery<UserQueryDTO> pagingQuery = new PagingQuery<>(userQueryDTO, pagingParam);
-        PagingResult<UserDTO> pagingResult = userService.pagingQuery(pagingQuery);
-        PagingResult<UserVO> voPagingResult = PagingResult.copy(pagingResult);
-        voPagingResult.setData(userVoConverter.toVoList(pagingResult.getData()));
-        return voPagingResult;
+        PaginationQuery<UserQueryDTO> paginationQuery = new PaginationQuery<>(userQueryDTO, paginationParam);
+        PaginationResult<UserDTO> paginationResult = userService.paginationQuery(paginationQuery);
+        PaginationResult<UserVO> voPaginationResult = PaginationResult.copy(paginationResult);
+        voPaginationResult.setData(userVoConverter.toVoList(paginationResult.getData()));
+        return voPaginationResult;
     }
 
     @AccessPermission("sys.user.query")

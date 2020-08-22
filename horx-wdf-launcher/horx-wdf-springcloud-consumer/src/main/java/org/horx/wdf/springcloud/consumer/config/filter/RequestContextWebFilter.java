@@ -5,7 +5,7 @@ import org.springframework.core.annotation.Order;
 
 import javax.servlet.annotation.WebFilter;
 
-@WebFilter(filterName = "requestContextFilter", urlPatterns = {"/api/*", "/page/*", "/login", "/identify", "/main", "/logout"})
-@Order(2)
+@WebFilter(filterName = "requestContextFilter", urlPatterns = {"/api/*", "/page/*", "/public/*", "/login", "/main", "/logout"})
+@Order(1)
 public class RequestContextWebFilter extends RequestContextFilter {
 }

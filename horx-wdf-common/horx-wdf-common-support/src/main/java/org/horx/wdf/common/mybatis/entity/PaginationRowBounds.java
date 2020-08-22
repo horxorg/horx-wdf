@@ -2,7 +2,7 @@ package org.horx.wdf.common.mybatis.entity;
 
 import org.apache.ibatis.session.RowBounds;
 import org.horx.wdf.common.entity.Pageable;
-import org.horx.wdf.common.entity.PagingParam;
+import org.horx.wdf.common.entity.PaginationParam;
 import org.horx.wdf.common.entity.SortItem;
 import org.horx.wdf.common.entity.Sortable;
 
@@ -10,13 +10,17 @@ import org.horx.wdf.common.entity.Sortable;
  * 分页RowBounds。
  * @since 1.0
  */
-public class PagingRowBounds extends RowBounds implements Pageable, Sortable {
+public class PaginationRowBounds extends RowBounds implements Pageable, Sortable {
 
-    private PagingParam pagingParam;
+    private PaginationParam paginationParam;
     private Integer total;
 
-    public PagingRowBounds(PagingParam pagingParam) {
-        this.pagingParam = (pagingParam == null) ? new PagingParam() : pagingParam;
+    public PaginationRowBounds() {
+        this.paginationParam = new PaginationParam();
+    }
+
+    public PaginationRowBounds(PaginationParam paginationParam) {
+        this.paginationParam = (paginationParam == null) ? new PaginationParam() : paginationParam;
     }
 
     @Override
@@ -26,7 +30,7 @@ public class PagingRowBounds extends RowBounds implements Pageable, Sortable {
 
     @Override
     public int getLimit() {
-        Integer pageSize = pagingParam.getPageSize();
+        Integer pageSize = paginationParam.getPageSize();
         return (pageSize == null || pageSize <= 0) ? Integer.MAX_VALUE : pageSize;
     }
 
@@ -40,21 +44,21 @@ public class PagingRowBounds extends RowBounds implements Pageable, Sortable {
 
     @Override
     public Integer getPageSize() {
-        return pagingParam.getPageSize();
+        return paginationParam.getPageSize();
     }
 
     @Override
     public Integer getCurrPage() {
-        return pagingParam.getCurrPage();
+        return paginationParam.getCurrPage();
     }
 
     @Override
     public Integer getStart() {
-        return pagingParam.getStart();
+        return paginationParam.getStart();
     }
 
     @Override
     public SortItem[] getSortItems() {
-        return pagingParam.getSortItems();
+        return paginationParam.getSortItems();
     }
 }

@@ -40,7 +40,7 @@
                <bean class="org.horx.wdf.common.mybatis.interceptor.KeyGeneratorInterceptor">
                    <property name="dbDialect" ref="dbDialect"/>
                </bean>
-               <bean class="org.horx.wdf.common.mybatis.interceptor.PagingInterceptor">
+               <bean class="org.horx.wdf.common.mybatis.interceptor.PaginationInterceptor">
                    <property name="dbDialect" ref="dbDialect"/>
                    <property name="entityExtension" ref="entityExtension"/>
                </bean>

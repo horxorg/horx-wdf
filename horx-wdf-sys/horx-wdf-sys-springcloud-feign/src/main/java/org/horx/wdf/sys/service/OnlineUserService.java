@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.OnlineUserDTO;
 import org.horx.wdf.sys.dto.query.OnlineUserQueryDTO;
 import org.horx.wdf.sys.dto.wrapper.BatchWithSysAuthDTO;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient(value = "horx-wdf-springcloud-provider", configuration = SpringcloudConsumerContextInterceptor.class)
 public interface OnlineUserService {
 
-    @PostMapping("/pagingQuery")
-    PagingResult<OnlineUserDTO> pagingQuery(@RequestBody PagingQuery<OnlineUserQueryDTO> pagingQuery);
+    @PostMapping("/paginationQuery")
+    PaginationResult<OnlineUserDTO> paginationQuery(@RequestBody PaginationQuery<OnlineUserQueryDTO> paginationQuery);
 
     @PostMapping("/offlineCheck")
     String[] offlineCheck(@RequestBody BatchWithSysAuthDTO batchWithAuth);

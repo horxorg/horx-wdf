@@ -1,9 +1,9 @@
 package org.horx.wdf.sys.rest;
 
 import org.horx.wdf.common.arg.annotation.ArgEntity;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.sys.annotation.AccessPermission;
 import org.horx.wdf.sys.converter.AccessLogVoConverter;
@@ -46,13 +46,13 @@ public class AccessLogApiController {
     }
 
     @AccessPermission("sys.accessLog.query")
-    @PostMapping("/pagingQuery")
-    public PagingResult<AccessLogVO> pagingQuery(@ArgEntity AccessLogQueryVO query, PagingParam pagingParam) {
+    @PostMapping("/paginationQuery")
+    public PaginationResult<AccessLogVO> paginationQuery(@ArgEntity AccessLogQueryVO query, PaginationParam paginationParam) {
         AccessLogQueryDTO accessLogQueryDTO = accessLogQueryVoConverter.fromVo(query);
-        PagingQuery<AccessLogQueryDTO> pagingQuery = new PagingQuery<>(accessLogQueryDTO, pagingParam);
-        PagingResult<AccessLogDTO> pagingResult = accessLogService.pagingQuery(pagingQuery);
-        PagingResult<AccessLogVO> voPagingResult = PagingResult.copy(pagingResult);
-        voPagingResult.setData(accessLogVoConverter.toVoList(pagingResult.getData()));
-        return voPagingResult;
+        PaginationQuery<AccessLogQueryDTO> paginationQuery = new PaginationQuery<>(accessLogQueryDTO, paginationParam);
+        PaginationResult<AccessLogDTO> paginationResult = accessLogService.paginationQuery(paginationQuery);
+        PaginationResult<AccessLogVO> voPaginationResult = PaginationResult.copy(paginationResult);
+        voPaginationResult.setData(accessLogVoConverter.toVoList(paginationResult.getData()));
+        return voPaginationResult;
     }
 }

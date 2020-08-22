@@ -2,8 +2,8 @@ package org.horx.wdf.sys.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.horx.wdf.common.entity.PagingResult;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.entity.PaginationResult;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.common.mybatis.mapper.BaseMapper;
 import org.horx.wdf.sys.dto.dataauth.DictItemAuthDTO;
 import org.horx.wdf.sys.domain.DictItem;
@@ -20,7 +20,7 @@ public interface DictItemMapper extends BaseMapper<DictItem> {
 
     DictItem selectByCode(@Param("dictId") Long dictId, @Param("code") String code);
 
-    PagingResult<DictItem> pagingSelect(DictItemQueryDTO query, PagingRowBounds pagingParam);
+    PaginationResult<DictItem> paginationSelect(DictItemQueryDTO query, PaginationRowBounds paginationParam);
 
     List<DictItem> selectForTree(DictItemQueryDTO query);
 

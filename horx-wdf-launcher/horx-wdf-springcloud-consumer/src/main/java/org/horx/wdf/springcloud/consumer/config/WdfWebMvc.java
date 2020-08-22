@@ -20,6 +20,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.ui.context.ThemeSource;
 import org.springframework.ui.context.support.ResourceBundleThemeSource;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ThemeResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -77,6 +78,11 @@ public class WdfWebMvc extends WebMvcConfigurerAdapter implements EnvironmentAwa
         jsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
         jsonHttpMessageConverter.setDefaultCharset(Charset.forName("UTF-8"));
         converters.add(0, jsonHttpMessageConverter);
+    }
+
+    @Override
+    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+        exceptionResolvers.add(0, exceptionResolver());
     }
 
     @Bean

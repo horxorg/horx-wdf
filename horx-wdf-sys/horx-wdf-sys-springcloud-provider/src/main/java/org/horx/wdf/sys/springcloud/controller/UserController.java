@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.springcloud.controller;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.UserDTO;
 import org.horx.wdf.sys.dto.UserIdentifyDTO;
 import org.horx.wdf.sys.dto.UserRoleDTO;
@@ -57,9 +57,9 @@ public class UserController {
         return userService.queryForValidRoles(userId);
     }
 
-    @PostMapping("/pagingQuery")
-    public PagingResult<UserDTO> pagingQuery(@RequestBody PagingQuery<UserQueryDTO> pagingQuery) {
-        return userService.pagingQuery(pagingQuery);
+    @PostMapping("/paginationQuery")
+    public PaginationResult<UserDTO> paginationQuery(@RequestBody PaginationQuery<UserQueryDTO> paginationQuery) {
+        return userService.paginationQuery(paginationQuery);
     }
 
     @PostMapping("/create")

@@ -97,6 +97,7 @@
             <mvc:mapping path="/login"/>
             <mvc:mapping path="/main"/>
             <mvc:mapping path="/page/**"/>
+            <mvc:mapping path="/public/page/**"/>
             <bean class="org.horx.wdf.common.spring.interceptor.WebPageInterceptor"/>
         </mvc:interceptor>
 

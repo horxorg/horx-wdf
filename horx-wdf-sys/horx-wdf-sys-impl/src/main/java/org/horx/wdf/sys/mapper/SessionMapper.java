@@ -5,9 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.jdbc.annotation.EntityClass;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.common.mybatis.provider.InsertSqlProvider;
 import org.horx.wdf.common.mybatis.provider.SelectByIdProvider;
 import org.horx.wdf.common.mybatis.provider.UpdateSqlProvider;
@@ -38,5 +38,5 @@ public interface SessionMapper {
 
     int deleteExpired();
 
-    PagingResult<OnlineUser> pagingSelectOnlineUser(OnlineUserQueryDTO query, PagingRowBounds pagingParam);
+    PaginationResult<OnlineUser> paginationSelectOnlineUser(OnlineUserQueryDTO query, PaginationRowBounds paginationParam);
 }

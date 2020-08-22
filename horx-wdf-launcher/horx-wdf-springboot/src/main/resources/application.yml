@@ -53,7 +53,7 @@ wdf:
   enterMethodInterceptor:
     patterns: /**
   pageInterceptor:
-    patterns: /login,/main,/page/**
+    patterns: /login,/main,/page/**,/public/page/**
   loginInterceptor:
     patterns: /page/**,/api/**
   permissionInterceptor:

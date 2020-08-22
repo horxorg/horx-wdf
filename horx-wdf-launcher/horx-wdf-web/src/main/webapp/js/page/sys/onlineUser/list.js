@@ -18,7 +18,7 @@ $(document).ready(function(){
 
     var conf = {
         gridConf:{
-            url:$.root + "/api/sys/onlineUser/pagingQuery",
+            url:$.root + "/api/sys/onlineUser/paginationQuery",
             initSort:{field:"createTime", type:"desc"},
             cols: [[
                 {field: "id", type: "checkbox", width:40, align:"center", fixed: "left"},

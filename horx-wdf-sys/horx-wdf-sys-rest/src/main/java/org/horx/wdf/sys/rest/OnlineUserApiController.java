@@ -1,8 +1,8 @@
 package org.horx.wdf.sys.rest;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.arg.annotation.ArgEntity;
 import org.horx.wdf.sys.annotation.AccessPermission;
@@ -39,12 +39,12 @@ public class OnlineUserApiController {
     private SessionRepository sessionRepository;
 
     @AccessPermission("sys.onlineUser.query")
-    @PostMapping("/pagingQuery")
-    public PagingResult<OnlineUserDTO> pagingQuery(@ArgEntity OnlineUserQueryVO query, PagingParam pagingParam) {
+    @PostMapping("/paginationQuery")
+    public PaginationResult<OnlineUserDTO> paginationQuery(@ArgEntity OnlineUserQueryVO query, PaginationParam paginationParam) {
         OnlineUserQueryDTO onlineUserQueryDTO = onlineUserQueryVoConverter.fromVo(query);
-        PagingQuery<OnlineUserQueryDTO> pagingQuery = new PagingQuery<>(onlineUserQueryDTO, pagingParam);
-        PagingResult<OnlineUserDTO> pagingResult = onlineUserService.pagingQuery(pagingQuery);
-        return pagingResult;
+        PaginationQuery<OnlineUserQueryDTO> paginationQuery = new PaginationQuery<>(onlineUserQueryDTO, paginationParam);
+        PaginationResult<OnlineUserDTO> paginationResult = onlineUserService.paginationQuery(paginationQuery);
+        return paginationResult;
     }
 
     @AccessPermission("sys.onlineUser.offline")
@@ -56,7 +56,7 @@ public class OnlineUserApiController {
         String[] sessionKeys = onlineUserService.offlineCheck(batchWithAuthDTO);
         if (sessionKeys != null && sessionKeys.length > 0) {
             for (String sessionKey : sessionKeys) {
-                sessionRepository.delete(sessionKey);
+                sessionRepository.deleteById(sessionKey);
             }
         }
         return new Result();

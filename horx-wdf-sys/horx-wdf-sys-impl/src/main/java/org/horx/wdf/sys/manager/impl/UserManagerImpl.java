@@ -2,12 +2,12 @@ package org.horx.wdf.sys.manager.impl;
 
 import org.horx.common.utils.DateUtils;
 import org.horx.wdf.common.config.CommonConfig;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.exception.ErrorCodeException;
 import org.horx.wdf.common.entity.extension.EntityExtension;
 import org.horx.wdf.common.enums.OperationTypeEnum;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.sys.consts.SysErrorCodes;
 import org.horx.wdf.sys.consts.SysConstants;
 import org.horx.wdf.sys.domain.Role;
@@ -164,8 +164,8 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public PagingResult<User> pagingQuery(UserQueryDTO userQuery, PagingParam pagingParam) {
-        return userMapper.pagingSelect(userQuery, new PagingRowBounds(pagingParam));
+    public PaginationResult<User> paginationQuery(UserQueryDTO userQuery, PaginationParam paginationParam) {
+        return userMapper.paginationSelect(userQuery, new PaginationRowBounds(paginationParam));
     }
 
 

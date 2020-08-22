@@ -4,9 +4,9 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.jdbc.annotation.EntityClass;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.common.mybatis.provider.InsertSqlProvider;
 import org.horx.wdf.common.mybatis.provider.LogicalDeleteByIdProvider;
 import org.horx.wdf.common.mybatis.provider.UpdateSqlProvider;
@@ -36,7 +36,7 @@ public interface DataPermissionDefMapper {
 
     DataPermissionDef selectByCode(@Param("code") String code);
 
-    PagingResult<DataPermissionDef> pagingSelect(DataPermissionQueryDTO query, PagingRowBounds pagingParam);
+    PaginationResult<DataPermissionDef> paginationSelect(DataPermissionQueryDTO query, PaginationRowBounds paginationParam);
 
     List<DataPermissionDef> select(DataPermissionQueryDTO query);
 }

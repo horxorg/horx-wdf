@@ -29,8 +29,8 @@ import org.horx.wdf.common.jdbc.dialect.DbDialect;
 import org.horx.wdf.common.entity.extension.EntityExtension;
 import org.horx.wdf.common.entity.meta.EntityMeta;
 import org.horx.wdf.common.entity.meta.MetaUtils;
-import org.horx.wdf.common.mybatis.config.PagingList;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.config.PaginationList;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +50,8 @@ import java.util.Properties;
  */
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class}),
         @Signature(type = ResultSetHandler.class, method = "handleResultSets", args = {Statement.class})})
-public class PagingInterceptor implements Interceptor {
-    private final static Logger LOGGER = LoggerFactory.getLogger(PagingInterceptor.class);
+public class PaginationInterceptor implements Interceptor {
+    private final static Logger LOGGER = LoggerFactory.getLogger(PaginationInterceptor.class);
 
     private DbDialect dbDialect;
     private EntityExtension entityExtension;
@@ -108,17 +108,17 @@ public class PagingInterceptor implements Interceptor {
             return invocation.proceed();
         }
 
-        PagingRowBounds pagingRowBounds = null;
+        PaginationRowBounds paginationRowBounds = null;
         SortItem[] sortItems = null;
-        if (rowBoundsObj instanceof PagingRowBounds) {
-            pagingRowBounds = (PagingRowBounds) rowBoundsObj;
-            sortItems = pagingRowBounds.getSortItems();
+        if (rowBoundsObj instanceof PaginationRowBounds) {
+            paginationRowBounds = (PaginationRowBounds) rowBoundsObj;
+            sortItems = paginationRowBounds.getSortItems();
         } else if (rowBoundsObj instanceof Sortable) {
             Sortable sortable = (Sortable)rowBounds;
             sortItems = sortable.getSortItems();
         }
 
-        if ((sortItems == null || sortItems.length == 0) && (pagingRowBounds == null || pagingRowBounds.getStart() == null)){
+        if ((sortItems == null || sortItems.length == 0) && (paginationRowBounds == null || paginationRowBounds.getStart() == null)){
             return invocation.proceed();
         }
 
@@ -129,13 +129,13 @@ public class PagingInterceptor implements Interceptor {
         String sql = boundSql.getSql();
         Connection connection = (Connection) invocation.getArgs()[0];
         int total = getTotal(sql, connection, mappedStatement, boundSql);
-        if (pagingRowBounds != null) {
-            pagingRowBounds.setTotal(total);
+        if (paginationRowBounds != null) {
+            paginationRowBounds.setTotal(total);
         }
 
         // 重写sql
         Configuration configuration = (Configuration) metaStatementHandler.getValue("delegate.configuration");
-        buildPagingSql(mappedStatement, metaStatementHandler, boundSql, pagingRowBounds, sortItems, configuration);
+        buildPaginationSql(mappedStatement, metaStatementHandler, boundSql, paginationRowBounds, sortItems, configuration);
 
         return invocation.proceed();
     }
@@ -145,17 +145,17 @@ public class PagingInterceptor implements Interceptor {
         MetaObject metaobj = MetaObjectUtils.getMetaObject(resultSetHandler);
         Object rowBoundsObj = metaobj.getValue("rowBounds");
         Object result = null;
-        if (rowBoundsObj != null && rowBoundsObj instanceof PagingRowBounds) {
-            PagingRowBounds pagingRowBounds = (PagingRowBounds)rowBoundsObj;
+        if (rowBoundsObj != null && rowBoundsObj instanceof PaginationRowBounds) {
+            PaginationRowBounds paginationRowBounds = (PaginationRowBounds)rowBoundsObj;
             List list = null;
-            if (pagingRowBounds.getStart() != null && pagingRowBounds.getTotal() != null && pagingRowBounds.getStart() > pagingRowBounds.getTotal()) {
+            if (paginationRowBounds.getStart() != null && paginationRowBounds.getTotal() != null && paginationRowBounds.getStart() > paginationRowBounds.getTotal()) {
                 list = new ArrayList(0);
             } else {
                 list = (List)invocation.proceed();
             }
 
-            PagingList pagingList = new PagingList(pagingRowBounds, list);
-            result = pagingList;
+            PaginationList paginationList = new PaginationList(paginationRowBounds, list);
+            result = paginationList;
         } else {
             result = invocation.proceed();
         }
@@ -224,21 +224,21 @@ public class PagingInterceptor implements Interceptor {
         parameterHandler.setParameters(ps);
     }
 
-    private void buildPagingSql(MappedStatement mappedStatement, MetaObject metaStatementHandler, BoundSql boundSql, PagingRowBounds pagingRowBounds, SortItem[] sortItems, Configuration configuration) {
+    private void buildPaginationSql(MappedStatement mappedStatement, MetaObject metaStatementHandler, BoundSql boundSql, PaginationRowBounds paginationRowBounds, SortItem[] sortItems, Configuration configuration) {
         String sql = boundSql.getSql();
         if (sortItems != null && sortItems.length > 0) {
             sql = genOrderSql(mappedStatement, sql, sortItems);
         }
 
-        if (pagingRowBounds == null) {
+        if (paginationRowBounds == null) {
             if (sortItems != null && sortItems.length > 0) {
                 metaStatementHandler.setValue("delegate.boundSql.sql", sql);
             }
             return;
         }
 
-        DbDialect.PagingSqlResult pagingSqlResult = dbDialect.pagingSql(sql, pagingRowBounds);
-        if (pagingSqlResult == null) {
+        DbDialect.PaginationSqlResult paginationSqlResult = dbDialect.paginationSql(sql, paginationRowBounds);
+        if (paginationSqlResult == null) {
             if (sortItems != null && sortItems.length > 0) {
                 metaStatementHandler.setValue("delegate.boundSql.sql", sql);
             }
@@ -246,9 +246,9 @@ public class PagingInterceptor implements Interceptor {
         }
 
         //重写分页sql
-        metaStatementHandler.setValue("delegate.boundSql.sql", pagingSqlResult.getPagingSql());
+        metaStatementHandler.setValue("delegate.boundSql.sql", paginationSqlResult.getPaginationSql());
 
-        List<KeyValue<String, Object>> params = pagingSqlResult.getParams();
+        List<KeyValue<String, Object>> params = paginationSqlResult.getParams();
         if (params != null && params.size() > 0) {
             MetaObject boundSqlMeta = MetaObjectUtils.getMetaObject(boundSql);
             List<ParameterMapping> paramList = new ArrayList<ParameterMapping>();

@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.springcloud.controller;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.OnlineUserDTO;
 import org.horx.wdf.sys.dto.query.OnlineUserQueryDTO;
 import org.horx.wdf.sys.dto.wrapper.BatchWithSysAuthDTO;
@@ -24,9 +24,9 @@ public class OnlineUserController {
     @Autowired
     private OnlineUserService onlineUserService;
 
-    @PostMapping("/pagingQuery")
-    public PagingResult<OnlineUserDTO> pagingQuery(@RequestBody PagingQuery<OnlineUserQueryDTO> pagingQuery) {
-        return onlineUserService.pagingQuery(pagingQuery);
+    @PostMapping("/paginationQuery")
+    public PaginationResult<OnlineUserDTO> paginationQuery(@RequestBody PaginationQuery<OnlineUserQueryDTO> paginationQuery) {
+        return onlineUserService.paginationQuery(paginationQuery);
     }
 
     @PostMapping("/offlineCheck")

@@ -2,10 +2,10 @@ package org.horx.wdf.sys.manager.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.horx.wdf.common.config.CommonConfig;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.enums.OperationTypeEnum;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.sys.consts.SysConstants;
 import org.horx.wdf.sys.domain.OnlineUser;
 import org.horx.wdf.sys.domain.Session;
@@ -143,8 +143,8 @@ public class SessionManagerImpl implements SessionManager {
     }
 
     @Override
-    public PagingResult<OnlineUser> pagingQueryOnlineUser(OnlineUserQueryDTO query, PagingParam pagingParam) {
-        return sessionMapper.pagingSelectOnlineUser(query, new PagingRowBounds(pagingParam));
+    public PaginationResult<OnlineUser> paginationQueryOnlineUser(OnlineUserQueryDTO query, PaginationParam paginationParam) {
+        return sessionMapper.paginationSelectOnlineUser(query, new PaginationRowBounds(paginationParam));
     }
 
 

@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.horx</groupId>
         <artifactId>horx-wdf</artifactId>
-        <version>1.0.1-RELEASE</version>
+        <version>1.0.2-RELEASE</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -84,7 +84,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session</artifactId>
+            <artifactId>spring-session-core</artifactId>
         </dependency>
 
         <dependency>

@@ -149,13 +149,13 @@
         )
     </select>
 
-    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.Role">
+    <select id="paginationSelect" resultType="org.horx.wdf.sys.domain.Role">
         <include refid="selectSql"/>
         <include refid="whereSql"/>
         <include refid="sysDataAuth"/>
     </select>
 
-    <select id="pagingSelectUsable" resultType="org.horx.wdf.sys.domain.Role">
+    <select id="paginationSelectUsable" resultType="org.horx.wdf.sys.domain.Role">
         <include refid="selectSql"/>
         <include refid="whereSql"/>
         AND (

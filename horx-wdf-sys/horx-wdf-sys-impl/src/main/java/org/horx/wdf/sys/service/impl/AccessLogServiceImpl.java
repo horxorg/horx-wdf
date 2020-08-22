@@ -1,8 +1,8 @@
 package org.horx.wdf.sys.service.impl;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.converter.AccessLogConverter;
 import org.horx.wdf.sys.domain.AccessLog;
 import org.horx.wdf.sys.dto.AccessLogDTO;
@@ -41,13 +41,13 @@ public class AccessLogServiceImpl implements AccessLogService {
     }
 
     @Override
-    public PagingResult<AccessLogDTO> pagingQuery(PagingQuery<AccessLogQueryDTO> pagingQuery) {
-        AccessLogQueryDTO accessLogQuery = pagingQuery.getQuery();
-        PagingParam pagingParam = pagingQuery.getPagingParam();
-        PagingResult<AccessLog> pagingResult = accessLogManager.pagingQuery(accessLogQuery, pagingParam);
-        PagingResult<AccessLogDTO> pagingResultDTO = PagingResult.copy(pagingResult);
-        List<AccessLogDTO> dtoList = accessLogConverter.toDtoList(pagingResult.getData());
-        pagingResultDTO.setData(dtoList);
-        return pagingResultDTO;
+    public PaginationResult<AccessLogDTO> paginationQuery(PaginationQuery<AccessLogQueryDTO> paginationQuery) {
+        AccessLogQueryDTO accessLogQuery = paginationQuery.getQuery();
+        PaginationParam paginationParam = paginationQuery.getPaginationParam();
+        PaginationResult<AccessLog> paginationResult = accessLogManager.paginationQuery(accessLogQuery, paginationParam);
+        PaginationResult<AccessLogDTO> paginationResultDTO = PaginationResult.copy(paginationResult);
+        List<AccessLogDTO> dtoList = accessLogConverter.toDtoList(paginationResult.getData());
+        paginationResultDTO.setData(dtoList);
+        return paginationResultDTO;
     }
 }

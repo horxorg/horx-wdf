@@ -61,16 +61,16 @@ public class SysUserMapperTest {
     @Test
     public void testFindForPage() {
         UserQueryDTO userQuery = new UserQueryDTO();
-        PagingParam pagingParam = new PagingParam();
-        pagingParam.setPageSize(10);
-        pagingParam.setCurrPage(1);
+        PaginationParam paginationParam = new PaginationParam();
+        paginationParam.setPageSize(10);
+        paginationParam.setCurrPage(1);
 
-        PagingResult<User> pagingResult = sysUserMapper.pagingSelect(userQuery, pagingParam);
-        System.out.println(pagingResult.getTotal());
-        System.out.println(JsonUtils.toJson(pagingResult));
+        PaginationResult<User> paginationResult = sysUserMapper.paginationSelect(userQuery, paginationParam);
+        System.out.println(paginationResult.getTotal());
+        System.out.println(JsonUtils.toJson(paginationResult));
 
-        //List<SysUser> pagingResult = sysUserMapper.findForPage(param, pagingParam);
-        //System.out.println(pagingParam.getCount());
-        //System.out.println(pagingResult.size());
+        //List<SysUser> paginationResult = sysUserMapper.findForPage(param, paginationParam);
+        //System.out.println(paginationParam.getCount());
+        //System.out.println(paginationResult.size());
     }*/
 }

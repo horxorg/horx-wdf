@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.horx.wdf.common.jdbc.annotation.EntityClass;
-import org.horx.wdf.common.mybatis.entity.PagingRowBounds;
+import org.horx.wdf.common.mybatis.entity.PaginationRowBounds;
 import org.horx.wdf.common.mybatis.provider.InsertSqlProvider;
 import org.horx.wdf.common.mybatis.provider.LogicalDeleteByIdProvider;
 import org.horx.wdf.common.mybatis.provider.UpdateSqlProvider;
@@ -32,5 +32,5 @@ public interface MenuMapper {
 
     Menu selectById(@Param("id") Long id);
 
-    List<Menu> select(MenuQueryDTO query, PagingRowBounds pagingRowBounds);
+    List<Menu> select(MenuQueryDTO query, PaginationRowBounds paginationRowBounds);
 }

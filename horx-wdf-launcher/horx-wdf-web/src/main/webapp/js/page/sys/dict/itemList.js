@@ -7,7 +7,7 @@ $(document).ready(function(){
 
     var conf = {
         gridConf:{
-            url:$.root + "/api/sys/dict/" + dictId + "/item/pagingQuery",
+            url:$.root + "/api/sys/dict/" + dictId + "/item/paginationQuery",
             initSort:{field:"code", type:"asc"},
             cols: [[
                 {field: "id", type: "checkbox", width:40, align:"center"},

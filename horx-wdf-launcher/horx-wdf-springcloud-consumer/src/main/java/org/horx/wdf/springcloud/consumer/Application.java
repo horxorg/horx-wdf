@@ -10,7 +10,6 @@ import org.springframework.session.config.annotation.web.http.EnableSpringHttpSe
 
 @SpringBootApplication
 @ComponentScan({"org.horx.wdf"})
-@EnableSpringHttpSession
 @ServletComponentScan(basePackages = {"org.horx.wdf.springcloud.consumer.config"})
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"org.horx.wdf.sys.service"})

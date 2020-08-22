@@ -14,7 +14,7 @@ import org.apache.ibatis.plugin.Signature;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.type.JdbcType;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.entity.extension.EntityExtension;
 import org.horx.wdf.common.entity.meta.EntityMeta;
 import org.horx.wdf.common.entity.meta.MetaUtils;
@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +84,7 @@ public class ResultMapInterceptor implements Interceptor {
     }
 
     private ResultMap genResultMap(Configuration configuration,  MappedStatement mappedStatement, Class<?> clazz) {
-        if (clazz.isAssignableFrom(PagingResult.class) && mappedStatement.getSqlSource() != null && mappedStatement.getSqlSource() instanceof ProviderSqlSource) {
+        if (clazz.isAssignableFrom(PaginationResult.class) && mappedStatement.getSqlSource() != null && mappedStatement.getSqlSource() instanceof ProviderSqlSource) {
             MetaObject metaObject = MetaObjectUtils.getTargetMetaObject(mappedStatement.getSqlSource());
             Class<?> cls = (Class<?>)metaObject.getValue("providerContext.mapperType");
             clazz = ReflectUtils.getParameterizedClassFromInterface(cls, 0);

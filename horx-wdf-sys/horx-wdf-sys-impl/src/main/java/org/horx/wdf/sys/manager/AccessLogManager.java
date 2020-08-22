@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.manager;
 
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.domain.AccessLog;
 import org.horx.wdf.sys.dto.query.AccessLogQueryDTO;
 
@@ -17,5 +17,5 @@ public interface AccessLogManager {
 
     AccessLog getById(Long id);
 
-    PagingResult<AccessLog> pagingQuery(AccessLogQueryDTO accessLogQuery, PagingParam pagingParam);
+    PaginationResult<AccessLog> paginationQuery(AccessLogQueryDTO accessLogQuery, PaginationParam paginationParam);
 }

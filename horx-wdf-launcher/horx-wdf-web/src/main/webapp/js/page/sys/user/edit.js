@@ -50,7 +50,7 @@ $(document).ready(function(){
             value:(data == null) ? null : data.roleIds,
             load: {
                 type: "POST",
-                url: $.root + "/api/sys/role/usable/pagingQuery",
+                url: $.root + "/api/sys/role/usable/paginationQuery",
                 data: {"currPage":1, "pageSize":-1, "sortField":"name"}
             },
             search:true

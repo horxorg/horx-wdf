@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.manager;
 
 import org.horx.common.collection.Tree;
-import org.horx.wdf.common.entity.PagingParam;
+import org.horx.wdf.common.entity.PaginationParam;
 import org.horx.wdf.sys.domain.Menu;
 import org.horx.wdf.sys.dto.query.MenuQueryDTO;
 
@@ -15,7 +15,7 @@ public interface MenuManager {
 
     Menu getById(Long id);
 
-    List<Menu> query(MenuQueryDTO menuQuery, PagingParam pagingParam);
+    List<Menu> query(MenuQueryDTO menuQuery, PaginationParam paginationParam);
 
     Tree<Menu, Long> queryForTree(MenuQueryDTO menuQuery);
 

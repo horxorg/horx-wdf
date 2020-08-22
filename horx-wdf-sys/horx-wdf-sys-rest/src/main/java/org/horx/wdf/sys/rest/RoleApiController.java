@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.apache.commons.lang3.StringUtils;
 import org.horx.common.collection.Tree;
 import org.horx.common.collection.TreeNode;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.enums.ErrorCodeEnum;
 import org.horx.wdf.common.tools.MsgTool;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationQuery;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.common.arg.annotation.ArgEntity;
 import org.horx.common.utils.JsonUtils;
@@ -86,26 +86,26 @@ public class RoleApiController {
 
 
     @AccessPermission("sys.role.query")
-    @PostMapping("/pagingQuery")
-    public PagingResult<RoleVO> pagingQuery(@ArgEntity RoleQueryVO query, PagingParam pagingParam) {
+    @PostMapping("/paginationQuery")
+    public PaginationResult<RoleVO> paginationQuery(@ArgEntity RoleQueryVO query, PaginationParam paginationParam) {
         RoleQueryDTO roleQueryDTO = roleQueryVoConverter.fromVo(query);
-        PagingQuery<RoleQueryDTO> pagingQuery = new PagingQuery<>(roleQueryDTO, pagingParam);
-        PagingResult<RoleDTO> pagingResult = roleService.pagingQuery(pagingQuery);
-        PagingResult<RoleVO> voPagingResult = PagingResult.copy(pagingResult);
-        voPagingResult.setData(roleVoConverter.toVoList(pagingResult.getData()));
-        return voPagingResult;
+        PaginationQuery<RoleQueryDTO> paginationQuery = new PaginationQuery<>(roleQueryDTO, paginationParam);
+        PaginationResult<RoleDTO> paginationResult = roleService.paginationQuery(paginationQuery);
+        PaginationResult<RoleVO> voPaginationResult = PaginationResult.copy(paginationResult);
+        voPaginationResult.setData(roleVoConverter.toVoList(paginationResult.getData()));
+        return voPaginationResult;
     }
 
     @AccessPermission("sys.role.usable")
-    @PostMapping("/usable/pagingQuery")
-    public PagingResult<RoleVO> pagingQueryUsable(@ArgEntity RoleQueryVO query, PagingParam pagingParam) {
+    @PostMapping("/usable/paginationQuery")
+    public PaginationResult<RoleVO> paginationQueryUsable(@ArgEntity RoleQueryVO query, PaginationParam paginationParam) {
         RoleQueryDTO roleQueryDTO = roleQueryVoConverter.fromVo(query);
         roleQueryDTO.setEnabled(true);
-        PagingQuery<RoleQueryDTO> pagingQuery = new PagingQuery<>(roleQueryDTO, pagingParam);
-        PagingResult<RoleDTO> pagingResult = roleService.pagingQueryUsable(pagingQuery);
-        PagingResult<RoleVO> voPagingResult = PagingResult.copy(pagingResult);
-        voPagingResult.setData(roleVoConverter.toVoList(pagingResult.getData()));
-        return voPagingResult;
+        PaginationQuery<RoleQueryDTO> paginationQuery = new PaginationQuery<>(roleQueryDTO, paginationParam);
+        PaginationResult<RoleDTO> paginationResult = roleService.paginationQueryUsable(paginationQuery);
+        PaginationResult<RoleVO> voPaginationResult = PaginationResult.copy(paginationResult);
+        voPaginationResult.setData(roleVoConverter.toVoList(paginationResult.getData()));
+        return voPaginationResult;
     }
 
     @AccessPermission("sys.role.query")

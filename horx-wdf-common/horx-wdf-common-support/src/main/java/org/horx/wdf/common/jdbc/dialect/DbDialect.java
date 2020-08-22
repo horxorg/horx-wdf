@@ -30,7 +30,7 @@ public interface DbDialect {
      * @param pageable 分页参数。
      * @return 分页sql。
      */
-    PagingSqlResult pagingSql(String sql, Pageable pageable);
+    PaginationSqlResult paginationSql(String sql, Pageable pageable);
 
     /**
      * 生成like条件值。
@@ -42,17 +42,17 @@ public interface DbDialect {
     /**
      * 分页sql结果。
      */
-    public static class PagingSqlResult {
-        private String pagingSql;
+    public static class PaginationSqlResult {
+        private String paginationSql;
 
         private List<KeyValue<String, Object>> params;
 
-        public String getPagingSql() {
-            return pagingSql;
+        public String getPaginationSql() {
+            return paginationSql;
         }
 
-        public void setPagingSql(String pagingSql) {
-            this.pagingSql = pagingSql;
+        public void setPaginationSql(String paginationSql) {
+            this.paginationSql = paginationSql;
         }
 
         public List<KeyValue<String, Object>> getParams() {

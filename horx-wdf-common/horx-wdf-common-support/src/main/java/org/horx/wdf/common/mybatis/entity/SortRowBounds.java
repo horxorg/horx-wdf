@@ -13,6 +13,10 @@ public class SortRowBounds extends RowBounds implements Sortable {
 
     private SortParam sortParam;
 
+    public SortRowBounds() {
+        this.sortParam = new SortParam();
+    }
+
     public SortRowBounds(SortParam sortParam) {
         this.sortParam = (sortParam == null) ? new SortParam() : sortParam;
     }

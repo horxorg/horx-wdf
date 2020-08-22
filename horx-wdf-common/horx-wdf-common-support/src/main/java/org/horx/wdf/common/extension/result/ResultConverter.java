@@ -1,6 +1,6 @@
 package org.horx.wdf.common.extension.result;
 
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.entity.Result;
 
 /**
@@ -21,5 +21,5 @@ public interface ResultConverter {
      * @param pageResult
      * @return
      */
-    Object convertPagingResult(PagingResult pageResult);
+    Object convertPaginationResult(PaginationResult pageResult);
 }

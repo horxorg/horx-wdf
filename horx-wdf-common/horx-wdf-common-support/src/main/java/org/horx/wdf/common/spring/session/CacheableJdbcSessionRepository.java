@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.SessionRepository;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -55,12 +57,12 @@ public class CacheableJdbcSessionRepository implements SessionRepository<SpringS
     public SpringSession createSession() {
         SpringSession session = new SpringSession(this);
         sessionMap.put(session.getId(), session);
-        session.setMaxInactiveIntervalInSeconds(defaultMaxInactiveInterval);
+        session.setMaxInactiveInterval(Duration.ofSeconds(defaultMaxInactiveInterval));
         return session;
     }
 
     @Override
-    public SpringSession getSession(String id) {
+    public SpringSession findById(String id) {
         SpringSession springSession = sessionMap.get(id);
         if (springSession == null) {
             SessionDTO session =  sessionService.getBySessionKey(id);
@@ -69,10 +71,10 @@ public class CacheableJdbcSessionRepository implements SessionRepository<SpringS
                 sessionMap.put(springSession.getId(), springSession);
             }
         } else if (springSession.isExpired()) {
-            delete(id);
+            deleteById(id);
             springSession = null;
         } else {
-            springSession.setLastAccessedTime(System.currentTimeMillis());
+            springSession.setLastAccessedTime(Instant.now());
         }
         return springSession;
     }
@@ -87,13 +89,13 @@ public class CacheableJdbcSessionRepository implements SessionRepository<SpringS
             SpringSession oldSession = sessionMap.get(session.getId());
             oldSession.refresh(session);
             if (oldSession.isExpired()) {
-                delete(oldSession.getId());
+                deleteById(oldSession.getId());
             }
         }
     }
 
     @Override
-    public void delete(String id) {
+    public void deleteById(String id) {
         sessionService.removeBySessionKey(id);
         sessionMap.remove(id);
     }
@@ -122,6 +124,11 @@ public class CacheableJdbcSessionRepository implements SessionRepository<SpringS
         this.persistInterval = persistInterval;
     }
 
+    void changeSessionId(String oldId, String newId) {
+        SpringSession springSession = sessionMap.get(oldId);
+        sessionMap.put(newId, springSession);
+    }
+
     CommonSessionService getSessionService() {
         return sessionService;
     }
@@ -142,7 +149,7 @@ public class CacheableJdbcSessionRepository implements SessionRepository<SpringS
                 for (Map.Entry<String, SpringSession> entry : sessionMap.entrySet()) {
                     if (entry.getValue().isExpired()) {
 
-                        delete(entry.getKey());
+                        deleteById(entry.getKey());
                     } else if (entry.getValue().needPersist()) {
                         entry.getValue().persist(false);
                     }

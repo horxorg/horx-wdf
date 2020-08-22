@@ -8,7 +8,7 @@ import java.util.List;
  * 分页结果。
  * @param <T>
  */
-public class PagingResult<T> extends Result<List<T>> implements Serializable {
+public class PaginationResult<T> extends Result<List<T>> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -21,14 +21,14 @@ public class PagingResult<T> extends Result<List<T>> implements Serializable {
      */
     protected List<T> data;
 
-    public PagingResult() {}
+    public PaginationResult() {}
 
     /**
      * 构造方法。
      * @param code 结果代码。
      * @param msg 结果消息。
      */
-    public PagingResult(String code, String msg) {
+    public PaginationResult(String code, String msg) {
         this.code = code;
         this.msg = msg;
     }
@@ -69,8 +69,8 @@ public class PagingResult<T> extends Result<List<T>> implements Serializable {
      * 获取一个空的分页结果对象。
      * @return 空的分页结果对象。
      */
-    public static PagingResult empty() {
-        PagingResult result = new PagingResult();
+    public static PaginationResult empty() {
+        PaginationResult result = new PaginationResult();
         result.setTotal(0);
         result.setData(new ArrayList(0));
         return result;
@@ -81,8 +81,8 @@ public class PagingResult<T> extends Result<List<T>> implements Serializable {
      * @param result 源分页结果对象。
      * @return 复制后的分页结果对象。
      */
-    public static PagingResult copy(PagingResult result) {
-        PagingResult newResult = new PagingResult();
+    public static PaginationResult copy(PaginationResult result) {
+        PaginationResult newResult = new PaginationResult();
         newResult.setTotal(result.getTotal());
         return newResult;
     }

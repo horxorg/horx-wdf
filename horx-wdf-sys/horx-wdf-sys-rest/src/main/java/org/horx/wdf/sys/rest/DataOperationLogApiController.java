@@ -1,9 +1,9 @@
 package org.horx.wdf.sys.rest;
 
 import org.horx.wdf.common.arg.annotation.ArgEntity;
-import org.horx.wdf.common.entity.PagingParam;
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationParam;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.common.entity.Result;
 import org.horx.wdf.sys.annotation.AccessPermission;
 import org.horx.wdf.sys.converter.DataOperationLogVoConverter;
@@ -46,13 +46,13 @@ public class DataOperationLogApiController {
     }
 
     @AccessPermission("sys.dataLog.query")
-    @PostMapping("/pagingQuery")
-    public PagingResult<DataOperationLogVO> pagingQuery(@ArgEntity DataOperationLogQueryVO query, PagingParam pagingParam) {
+    @PostMapping("/paginationQuery")
+    public PaginationResult<DataOperationLogVO> paginationQuery(@ArgEntity DataOperationLogQueryVO query, PaginationParam paginationParam) {
         DataOperationLogQueryDTO dataOperationLogQueryDTO = dataOperationLogQueryVoConverter.fromVo(query);
-        PagingQuery<DataOperationLogQueryDTO> pagingQuery = new PagingQuery<>(dataOperationLogQueryDTO, pagingParam);
-        PagingResult<DataOperationLogDTO> pagingResult = dataOperationLogService.pagingQuery(pagingQuery);
-        PagingResult<DataOperationLogVO> voPagingResult = PagingResult.copy(pagingResult);
-        voPagingResult.setData(dataOperationLogVoConverter.toVoList(pagingResult.getData()));
-        return voPagingResult;
+        PaginationQuery<DataOperationLogQueryDTO> paginationQuery = new PaginationQuery<>(dataOperationLogQueryDTO, paginationParam);
+        PaginationResult<DataOperationLogDTO> paginationResult = dataOperationLogService.paginationQuery(paginationQuery);
+        PaginationResult<DataOperationLogVO> voPaginationResult = PaginationResult.copy(paginationResult);
+        voPaginationResult.setData(dataOperationLogVoConverter.toVoList(paginationResult.getData()));
+        return voPaginationResult;
     }
 }

@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.service.impl;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.converter.DataPermissionDefConverter;
 import org.horx.wdf.sys.domain.DataPermissionDef;
 import org.horx.wdf.sys.dto.DataPermissionDefDTO;
@@ -41,13 +41,13 @@ public class DataPermissionServiceImpl implements DataPermissionService {
     }
 
     @Override
-    public PagingResult<DataPermissionDefDTO> pagingQuery(PagingQuery<DataPermissionQueryDTO> pagingQuery) {
-        PagingResult<DataPermissionDef> pagingResult = dataPermissionManager.pagingQuery(pagingQuery.getQuery(), pagingQuery.getPagingParam());
+    public PaginationResult<DataPermissionDefDTO> paginationQuery(PaginationQuery<DataPermissionQueryDTO> paginationQuery) {
+        PaginationResult<DataPermissionDef> paginationResult = dataPermissionManager.paginationQuery(paginationQuery.getQuery(), paginationQuery.getPaginationParam());
 
-        PagingResult<DataPermissionDefDTO> pagingResultDTO = PagingResult.copy(pagingResult);
-        List<DataPermissionDefDTO> dtoList = dataPermissionDefConverter.toDtoList(pagingResult.getData());
-        pagingResultDTO.setData(dtoList);
-        return pagingResultDTO;
+        PaginationResult<DataPermissionDefDTO> paginationResultDTO = PaginationResult.copy(paginationResult);
+        List<DataPermissionDefDTO> dtoList = dataPermissionDefConverter.toDtoList(paginationResult.getData());
+        paginationResultDTO.setData(dtoList);
+        return paginationResultDTO;
     }
 
     @Override

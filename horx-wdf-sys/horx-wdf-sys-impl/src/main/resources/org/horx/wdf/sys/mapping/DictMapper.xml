@@ -23,7 +23,7 @@
         AND t1.code=#{code}
     </select>
 
-    <select id="pagingSelect" resultType="org.horx.wdf.sys.domain.Dict">
+    <select id="paginationSelect" resultType="org.horx.wdf.sys.domain.Dict">
         <include refid="selectSql"/>
         <if test="code != null and code != ''">
             AND t1.code LIKE ${_concatStart} '%' ${_concatSep} #{code} ${_concatSep} '%' ${_concatEnd}

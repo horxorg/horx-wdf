@@ -102,11 +102,11 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>requestContextFilter</filter-name>
-        <url-pattern>/login</url-pattern>
+        <url-pattern>/public/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>requestContextFilter</filter-name>
-        <url-pattern>/identify</url-pattern>
+        <url-pattern>/login</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>requestContextFilter</filter-name>
@@ -130,12 +130,12 @@
         <url-pattern>/page/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>accessLogFilter</filter-name>
-        <url-pattern>/login</url-pattern>
+        <filter-name>requestContextFilter</filter-name>
+        <url-pattern>/public/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>accessLogFilter</filter-name>
-        <url-pattern>/identify</url-pattern>
+        <url-pattern>/login</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>accessLogFilter</filter-name>

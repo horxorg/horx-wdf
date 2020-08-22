@@ -1,7 +1,7 @@
 package org.horx.wdf.sys.springcloud.controller;
 
-import org.horx.wdf.common.entity.PagingQuery;
-import org.horx.wdf.common.entity.PagingResult;
+import org.horx.wdf.common.entity.PaginationQuery;
+import org.horx.wdf.common.entity.PaginationResult;
 import org.horx.wdf.sys.dto.MenuAuthorityDTO;
 import org.horx.wdf.sys.dto.RoleDTO;
 import org.horx.wdf.sys.dto.dataauth.SysDataAuthDTO;
@@ -47,14 +47,14 @@ public class RoleController {
         return roleService.getByIdUsable(id, sysDataAuth);
     }
 
-    @PostMapping("/pagingQuery")
-    public PagingResult<RoleDTO> pagingQuery(@RequestBody PagingQuery<RoleQueryDTO> pagingQuery) {
-        return roleService.pagingQuery(pagingQuery);
+    @PostMapping("/paginationQuery")
+    public PaginationResult<RoleDTO> paginationQuery(@RequestBody PaginationQuery<RoleQueryDTO> paginationQuery) {
+        return roleService.paginationQuery(paginationQuery);
     }
 
-    @PostMapping("/pagingQueryUsable")
-    public PagingResult<RoleDTO> pagingQueryUsable(@RequestBody PagingQuery<RoleQueryDTO> pagingQuery) {
-        return roleService.pagingQueryUsable(pagingQuery);
+    @PostMapping("/paginationQueryUsable")
+    public PaginationResult<RoleDTO> paginationQueryUsable(@RequestBody PaginationQuery<RoleQueryDTO> paginationQuery) {
+        return roleService.paginationQueryUsable(paginationQuery);
     }
 
     @PostMapping("/create")

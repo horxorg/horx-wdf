@@ -30,7 +30,7 @@
         WHERE t1.session_key=#{sessionKey} AND t1.expired_time &gt; ${_now}
     </select>
 
-    <select id="pagingSelectOnlineUser" resultType="org.horx.wdf.sys.domain.OnlineUser">
+    <select id="paginationSelectOnlineUser" resultType="org.horx.wdf.sys.domain.OnlineUser">
         SELECT
             t1.id,
             t1.user_id,
