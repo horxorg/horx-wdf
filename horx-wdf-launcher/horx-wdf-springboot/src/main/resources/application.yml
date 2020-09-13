@@ -15,8 +15,14 @@ spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
   cache:
-    ehcache:
-      config: classpath:ehcache.xml
+    type: redis
+    #ehcache:
+    #  config: classpath:ehcache.xml
+    redis:
+      use-key-prefix: true
+      key-prefix: cache.
+      time-to-live: 5m
+      cache-null-values: true
   freemarker:
     allow-request-override: false # 是否允许HttpServletRequest属性覆盖(隐藏)控制器生成的同名模型属性
     allow-session-override: false # 是否允许HttpSession属性覆盖(隐藏)控制器生成的同名模型属性

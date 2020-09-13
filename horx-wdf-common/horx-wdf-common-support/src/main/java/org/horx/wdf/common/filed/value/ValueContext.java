@@ -29,7 +29,7 @@ import java.util.Map;
  * @since 1.0
  */
 public class ValueContext {
-    private final static Logger LOGGER = LoggerFactory.getLogger(ValueContext.class);
+    private final static Logger logger = LoggerFactory.getLogger(ValueContext.class);
 
     private Object entity;
     private Class<?>[] groups;
@@ -186,7 +186,7 @@ public class ValueContext {
                 date = DateUtils.parse(str, pattern);
             }
         } catch (ParseException e) {
-            LOGGER.error("解析" + str + "错误，格式：" + pattern);
+            logger.error("解析" + str + "错误，格式：" + pattern);
             MsgTool msgTool = SpringContext.getBean(MsgTool.class);
             throw new ResultException(new Result(ErrorCodeEnum.A0430.getCode(), msgTool.getMsg("common.err.param") + ":" + str));
         }

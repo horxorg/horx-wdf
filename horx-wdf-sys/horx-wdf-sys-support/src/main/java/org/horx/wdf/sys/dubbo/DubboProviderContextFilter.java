@@ -27,7 +27,7 @@ import java.util.Locale;
  */
 @Activate
 public class DubboProviderContextFilter implements Filter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DubboProviderContextFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(DubboProviderContextFilter.class);
 
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
@@ -92,7 +92,7 @@ public class DubboProviderContextFilter implements Filter {
 
             return result;
         } catch (Exception e) {
-            LOGGER.error("调用{}异常", RpcContext.getContext().getUrl().toString(), e);
+            logger.error("调用{}异常", RpcContext.getContext().getUrl().toString(), e);
             accessLogDTO.setSuccess(false);
             throw e;
         } finally {

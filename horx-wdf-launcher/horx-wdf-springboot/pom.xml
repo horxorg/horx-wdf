@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.horx</groupId>
         <artifactId>horx-wdf</artifactId>
-        <version>1.0.2-RELEASE</version>
+        <version>1.0.3-RELEASE</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -35,6 +35,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
@@ -57,18 +62,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-core</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>javax.validation</groupId>

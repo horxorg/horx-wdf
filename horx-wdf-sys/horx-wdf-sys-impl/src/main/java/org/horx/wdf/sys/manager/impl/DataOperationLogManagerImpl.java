@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @Component("dataOperationLogManager")
 public class DataOperationLogManagerImpl implements DataOperationLogManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataOperationLogManagerImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataOperationLogManagerImpl.class);
 
     @Autowired
     private DataOperationLogMapper dataOperationLogMapper;
@@ -50,7 +50,7 @@ public class DataOperationLogManagerImpl implements DataOperationLogManager {
 
         int rows = dataOperationLogMapper.deleteHistory(dateTime);
         if (rows > 0) {
-            LOGGER.info("删除{}前数据操作日志{}条", DateUtils.format(dateTime, "yyyy-MM-dd HH:mm:ss"), rows);
+            logger.info("删除{}前数据操作日志{}条", DateUtils.format(dateTime, "yyyy-MM-dd HH:mm:ss"), rows);
         }
     }
 

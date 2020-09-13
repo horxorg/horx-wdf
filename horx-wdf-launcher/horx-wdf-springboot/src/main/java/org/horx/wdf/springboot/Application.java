@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan({"org.horx.wdf"})
 @MapperScan(basePackages = {"org.horx.wdf.sys.mapper"})
 @EnableTransactionManagement(order = 2)
-//@EnableCaching(order = 1)
+@EnableCaching(order = 1)
 @ServletComponentScan(basePackages = {"org.horx.wdf.springboot.config"})
 @EnableScheduling
 public class Application {

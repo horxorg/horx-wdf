@@ -23,7 +23,7 @@ import java.io.IOException;
  * @since 1.0
  */
 public class RequestContextFilter implements Filter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RequestContextFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestContextFilter.class);
 
     @Autowired
     protected ThreadContextHolder threadContextHolder;
@@ -41,7 +41,7 @@ public class RequestContextFilter implements Filter {
         ServletRequestAttributes servletRequestAttributes = new ServletRequestAttributes((HttpServletRequest)servletRequest, (HttpServletResponse)servletResponse);
         RequestContextHolder.setRequestAttributes(servletRequestAttributes);
         threadContextHolder.startRequest(true);
-        LOGGER.info("请求开始");
+        logger.info("请求开始");
         try {
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {
@@ -49,7 +49,7 @@ public class RequestContextFilter implements Filter {
             servletRequest.getRequestDispatcher("/err").forward(servletRequest, servletResponse);
         }
 
-        LOGGER.info("请求结束");
+        logger.info("请求结束");
         threadContextHolder.clearRequest();
         RequestContextHolder.resetRequestAttributes();
     }

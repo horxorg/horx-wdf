@@ -17,7 +17,7 @@ import java.lang.reflect.Field;
  * @since 1.0
  */
 public class DeletedRidGenerator implements ValueGenerator {
-    private final static Logger LOGGER = LoggerFactory.getLogger(DeletedRidGenerator.class);
+    private final static Logger logger = LoggerFactory.getLogger(DeletedRidGenerator.class);
 
     @Override
     public Object value(Annotation anno, Field field, ValueContext context) {
@@ -33,7 +33,7 @@ public class DeletedRidGenerator implements ValueGenerator {
                 try {
                     obj = MetaUtils.getValue(context.getEntity(), idFieldMeta);
                 } catch (Exception e) {
-                    LOGGER.warn("获取对象属性值错误", e);
+                    logger.warn("获取对象属性值错误", e);
                 }
             }
         }

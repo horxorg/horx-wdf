@@ -19,6 +19,7 @@
                 <value>classpath:config/sys.properties</value>
                 <value>classpath:config/tool.properties</value>
                 <value>classpath:config/jdbc.properties</value>
+                <value>classpath:config/redis.properties</value>
             </list>
         </property>
     </bean>
@@ -26,6 +27,7 @@
     <import resource="spring/spring-common.xml" />
     <import resource="spring/spring-jdbc.xml" />
     <!--<import resource="spring/spring-init-data.xml" />-->
+    <import resource="spring/spring-redis.xml" />
     <import resource="spring/spring-cache.xml" />
     <import resource="spring/spring-web.xml" />
     <import resource="spring/spring-impl.xml" />

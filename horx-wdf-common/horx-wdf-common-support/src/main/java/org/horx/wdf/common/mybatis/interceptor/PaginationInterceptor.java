@@ -51,7 +51,7 @@ import java.util.Properties;
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class}),
         @Signature(type = ResultSetHandler.class, method = "handleResultSets", args = {Statement.class})})
 public class PaginationInterceptor implements Interceptor {
-    private final static Logger LOGGER = LoggerFactory.getLogger(PaginationInterceptor.class);
+    private final static Logger logger = LoggerFactory.getLogger(PaginationInterceptor.class);
 
     private DbDialect dbDialect;
     private EntityExtension entityExtension;
@@ -204,7 +204,7 @@ public class PaginationInterceptor implements Interceptor {
                 try {
                     rs.close();
                 } catch (SQLException e) {
-                    LOGGER.error("Ignore this exception", e);
+                    logger.error("Ignore this exception", e);
                 }
             }
 
@@ -212,7 +212,7 @@ public class PaginationInterceptor implements Interceptor {
                 try {
                     countStmt.close();
                 } catch (SQLException e) {
-                    LOGGER.error("Ignore this exception", e);
+                    logger.error("Ignore this exception", e);
                 }
             }
         }

@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component("userManager")
 public class UserManagerImpl implements UserManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserManagerImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserManagerImpl.class);
 
     @Autowired
     private UserMapper userMapper;
@@ -373,7 +373,7 @@ public class UserManagerImpl implements UserManager {
             try {
                 date = DateUtils.parse("9999-12-31 23:59:59", "yyyy-MM-dd HH:mm:ss");
             } catch (Exception e) {
-                LOGGER.warn("解析时间错误", e);
+                logger.warn("解析时间错误", e);
             }
         } else {
             date = new Date();

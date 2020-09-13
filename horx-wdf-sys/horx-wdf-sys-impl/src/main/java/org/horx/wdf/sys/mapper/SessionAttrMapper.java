@@ -19,7 +19,6 @@ public interface SessionAttrMapper {
     @InsertProvider(type = InsertSqlProvider.class, method = "insertSql")
     int insert(SessionAttr po);
 
-
     @UpdateProvider(type = UpdateSqlProvider.class, method = "updateSql")
     int update(@Param("po") SessionAttr po);
 
@@ -32,4 +31,6 @@ public interface SessionAttrMapper {
     int deleteExpired();
 
     List<SessionAttr> select(@Param("sessionId") Long sessionId);
+
+    SessionAttr selectByAttrKey(@Param("sessionId") Long sessionId, @Param("attrKey") String attrKey);
 }

@@ -13,10 +13,10 @@ import java.text.SimpleDateFormat;
  * @since 1.0
  */
 public class DataLoggerHandler implements DataLogHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataLoggerHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataLoggerHandler.class);
 
     @Override
     public void handle(DataOperationLogDTO dataLog) {
-        LOGGER.info(JsonUtils.toJson(dataLog, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")));
+        logger.info(JsonUtils.toJson(dataLog, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")));
     }
 }

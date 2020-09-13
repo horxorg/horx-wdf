@@ -29,6 +29,7 @@
                 <value>classpath:config/sys.properties</value>
                 <value>classpath:config/tool.properties</value>
                 <value>classpath:config/jdbc.properties</value>
+                <value>classpath:config/redis.properties</value>
             </list>
         </property>
     </bean>

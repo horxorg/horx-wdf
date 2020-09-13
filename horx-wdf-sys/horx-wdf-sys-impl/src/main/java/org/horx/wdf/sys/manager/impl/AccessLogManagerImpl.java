@@ -22,7 +22,7 @@ import java.util.Date;
  */
 @Component("accessLogManager")
 public class AccessLogManagerImpl implements AccessLogManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccessLogManagerImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccessLogManagerImpl.class);
 
     @Autowired
     private AccessLogMapper accessLogMapper;
@@ -50,7 +50,7 @@ public class AccessLogManagerImpl implements AccessLogManager {
 
         int rows = accessLogMapper.deleteHistory(dateTime);
         if (rows > 0) {
-            LOGGER.info("删除{}前访问日志{}条", DateUtils.format(dateTime, "yyyy-MM-dd HH:mm:ss"), rows);
+            logger.info("删除{}前访问日志{}条", DateUtils.format(dateTime, "yyyy-MM-dd HH:mm:ss"), rows);
         }
     }
 

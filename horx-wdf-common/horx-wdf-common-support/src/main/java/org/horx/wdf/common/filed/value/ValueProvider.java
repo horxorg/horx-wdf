@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0
  */
 public class ValueProvider {
-    private final static Logger LOGGER = LoggerFactory.getLogger(ValueProvider.class);
+    private final static Logger logger = LoggerFactory.getLogger(ValueProvider.class);
 
     private Map<ValueDef, ValueGenerator> valueGeneratorMap = new ConcurrentHashMap<>();
 
@@ -67,7 +67,7 @@ public class ValueProvider {
                     continue;
                 }
             } catch (Exception e) {
-                LOGGER.warn("获取对象属性值异常", e);
+                logger.warn("获取对象属性值异常", e);
             }
 
 
@@ -112,7 +112,7 @@ public class ValueProvider {
                 try {
                     result = (Class<?>[]) (method.invoke(anno));
                 } catch (Exception e) {
-                    LOGGER.warn(e.getMessage(), e);
+                    logger.warn(e.getMessage(), e);
                 }
             }
         }

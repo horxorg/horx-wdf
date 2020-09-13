@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 public class LoginApiController {
-    private final static Logger LOGGER = LoggerFactory.getLogger(LoginApiController.class);
+    private final static Logger logger = LoggerFactory.getLogger(LoginApiController.class);
 
     private static final String NEED_VCODE_KEY = "needVcode";
 
@@ -98,7 +98,7 @@ public class LoginApiController {
             user = userService.identify(userIdentifyDTO);
             sessionHandler.login(user.getId());
         } catch (ErrorCodeException e) {
-            LOGGER.error(request.getRequestURI(), e);
+            logger.error(request.getRequestURI(), e);
 
             threadContextHolder.setEx(e);
             Result exResult = exceptionResolver.convertEx(e);

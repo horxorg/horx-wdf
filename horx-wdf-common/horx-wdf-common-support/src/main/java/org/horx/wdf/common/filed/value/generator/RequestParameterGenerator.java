@@ -18,7 +18,7 @@ import java.lang.reflect.Field;
  * @since 1.0
  */
 public class RequestParameterGenerator implements ValueGenerator {
-    private final static Logger LOGGER = LoggerFactory.getLogger(RequestParameterGenerator.class);
+    private final static Logger logger = LoggerFactory.getLogger(RequestParameterGenerator.class);
 
     @Override
     public Object value(Annotation anno, Field field, ValueContext context) {

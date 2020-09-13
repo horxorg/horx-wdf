@@ -14,9 +14,14 @@ spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
   cache:
+    type: ehcache
     ehcache:
       config: classpath:ehcache.xml
-
+    #redis:
+    #  use-key-prefix: true
+    #  key-prefix: cache.
+    #  time-to-live: 5m
+    #  cache-null-values: true
 eureka:
   client:
     serviceUrl:

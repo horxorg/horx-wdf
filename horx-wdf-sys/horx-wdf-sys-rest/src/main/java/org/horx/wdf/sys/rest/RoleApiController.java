@@ -58,7 +58,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/sys/role")
 public class RoleApiController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RoleApiController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RoleApiController.class);
 
     @Autowired
     private RoleService roleService;
@@ -247,7 +247,7 @@ public class RoleApiController {
     public Result<Map<Long, Integer>> queryForMenu(@PathVariable Long roleId, @RequestParam(required = false) String usable, @RequestParam String objType, @ArgDataAuth SysDataAuthDTO sysDataAuth) {
         Result<Map<Long, Integer>> result = new Result<>();
         if (roleId == null) {
-            LOGGER.error("roleId不允许为空");
+            logger.error("roleId不允许为空");
             result.setCode(ErrorCodeEnum.A0430.getCode());
             result.setMsg(msgTool.getMsg("common.err.param"));
             return result;
@@ -275,7 +275,7 @@ public class RoleApiController {
     public Result<Map<String, Boolean>> queryAdminRolePermission(@PathVariable Long roleId, @ArgDataAuth SysDataAuthDTO sysDataAuth) {
         Result<Map<String, Boolean>> result = new Result<>();
         if (roleId == null) {
-            LOGGER.error("roleId不允许为空");
+            logger.error("roleId不允许为空");
             result.setCode(ErrorCodeEnum.A0430.getCode());
             result.setMsg(msgTool.getMsg("common.err.param"));
             return result;

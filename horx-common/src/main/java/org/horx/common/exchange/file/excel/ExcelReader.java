@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * @since 1.0
  */
 public class ExcelReader implements AutoCloseable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExcelReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExcelReader.class);
 
     private InputStream is;
 
@@ -302,7 +302,7 @@ public class ExcelReader implements AutoCloseable {
             try {
                 result = DateUtils.parse(str);
             } catch (Exception e) {
-                LOGGER.warn("解析日期错误", e);
+                logger.warn("解析日期错误", e);
             }
         }
         return result;
@@ -532,7 +532,7 @@ public class ExcelReader implements AutoCloseable {
             try {
                 is.close();
             } catch (IOException e) {
-                LOGGER.error("关闭Excel文件失败", e);
+                logger.error("关闭Excel文件失败", e);
             }
         }
     }

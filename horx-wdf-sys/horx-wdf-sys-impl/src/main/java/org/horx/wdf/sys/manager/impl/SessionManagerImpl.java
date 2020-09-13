@@ -36,7 +36,7 @@ import java.util.List;
  */
 @Component("sessionManager")
 public class SessionManagerImpl implements SessionManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SessionManagerImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SessionManagerImpl.class);
 
     @Autowired
     private SessionMapper sessionMapper;
@@ -105,12 +105,17 @@ public class SessionManagerImpl implements SessionManager {
     public void removeExpired() {
         int delCnt = sessionMapper.deleteExpired();
         if (delCnt > 0) {
-            LOGGER.info("数据库删除过期session{}条", delCnt);
+            logger.info("数据库删除过期session{}条", delCnt);
         }
 
         if (commonConfig.isSessionUseAttr()) {
             sessionAttrMapper.deleteExpired();
         }
+    }
+
+    @Override
+    public Session getBySessionKey(String sessionKey) {
+        return sessionMapper.selectBySessionKey(sessionKey);
     }
 
     @Override
@@ -133,13 +138,13 @@ public class SessionManagerImpl implements SessionManager {
     }
 
     @Override
-    public Session getBySessionKey(String sessionKey) {
-        return sessionMapper.selectBySessionKey(sessionKey);
+    public List<SessionAttr> queryAttrBySessionId(Long sessionId) {
+        return sessionAttrMapper.select(sessionId);
     }
 
     @Override
-    public List<SessionAttr> queryBySessionId(Long sessionId) {
-        return sessionAttrMapper.select(sessionId);
+    public SessionAttr getAttrByKey(Long sessionId, String attrKey) {
+        return sessionAttrMapper.selectByAttrKey(sessionId, attrKey);
     }
 
     @Override

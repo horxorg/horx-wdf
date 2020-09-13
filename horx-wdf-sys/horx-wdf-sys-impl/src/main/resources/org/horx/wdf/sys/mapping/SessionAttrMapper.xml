@@ -43,5 +43,15 @@
         WHERE t1.session_id=#{sessionId}
     </select>
 
-
+    <select id="selectByAttrKey" resultType="org.horx.wdf.sys.domain.SessionAttr">
+            SELECT
+            t1.id,
+            t1.session_id,
+            t1.attr_key,
+            t1.attr_type,
+            t1.attr_value
+        FROM wdf_session_attr t1
+        WHERE t1.session_id=#{sessionId}
+            AND t1.attr_key=#{attrKey}
+    </select>
 </mapper>

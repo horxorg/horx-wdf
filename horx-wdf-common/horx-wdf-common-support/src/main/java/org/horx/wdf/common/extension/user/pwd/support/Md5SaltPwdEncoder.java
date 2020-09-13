@@ -15,7 +15,7 @@ import java.util.UUID;
  * @since 1.0
  */
 public class Md5SaltPwdEncoder implements PwdEncoder {
-    private static final Logger LOGGER = LoggerFactory.getLogger(Md5SaltPwdEncoder.class);
+    private static final Logger logger = LoggerFactory.getLogger(Md5SaltPwdEncoder.class);
 
     @Override
     public void modifyPwd(CommonUser user) {

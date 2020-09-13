@@ -1,6 +1,5 @@
 package org.horx.wdf.common.spring.session;
 
-import org.horx.common.utils.DateUtils;
 import org.horx.common.utils.JsonUtils;
 import org.horx.wdf.common.extension.session.SessionAttrDTO;
 import org.horx.wdf.common.extension.session.SessionDTO;
@@ -29,7 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @since 1.0
  */
 public class SpringSession implements Session {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpringSession.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringSession.class);
 
     private CacheableJdbcSessionRepository sessionRepository;
 
@@ -38,23 +37,19 @@ public class SpringSession implements Session {
     private Long userId;
 
     private String id;
-    private Map<String, Object> sessionAttrs;
     private long creationTime;
     private long lastAccessedTime;
     private long maxInactiveInterval;
+    private long cacheTime = System.currentTimeMillis();
 
     public SpringSession(CacheableJdbcSessionRepository sessionRepository) {
         this.sessionRepository = sessionRepository;
 
         this.id = UUID.randomUUID().toString();
-
-        if (sessionRepository.getSysConfig().isSessionUseAttr()) {
-            this.sessionAttrs = new HashMap();
-        }
-
         this.creationTime = System.currentTimeMillis();
         this.lastAccessedTime = this.creationTime;
-        this.maxInactiveInterval = 2400;
+        this.maxInactiveInterval = TimeUnit.MILLISECONDS.toSeconds(
+                sessionRepository.getDefaultMaxInactiveInterval().toMillis());
 
         persist(false);
     }
@@ -63,22 +58,20 @@ public class SpringSession implements Session {
         this.sessionRepository = sessionRepository;
 
         this.id = session.getSessionKey();
-        this.creationTime = session.getCreateTime().getTime();
-        this.lastAccessedTime = session.getLastAccessTime().getTime();
-        this.maxInactiveInterval = session.getInactiveInterval();
+        if (session.getCreateTime() != null) {
+            this.creationTime = session.getCreateTime().getTime();
+        }
+        if (session.getLastAccessTime() != null) {
+            this.lastAccessedTime = session.getLastAccessTime().getTime();
+        }
+        if (session.getInactiveInterval() != null) {
+            this.maxInactiveInterval = session.getInactiveInterval();
+        } else {
+            this.maxInactiveInterval = TimeUnit.MILLISECONDS.toSeconds(
+                    sessionRepository.getDefaultMaxInactiveInterval().toMillis());
+        }
         this.persistId = session.getId();
         this.userId = session.getUserId();
-
-        if (sessionRepository.getSysConfig().isSessionUseAttr()) {
-            this.sessionAttrs = new HashMap();
-
-            sessionAttrs.put(sessionRepository.getSysConfig().getUserIdSessionKey(), session.getUserId());
-
-            List<SessionAttrDTO> list = sessionRepository.getSessionService().queryAttrBySessionId(persistId);
-            for (SessionAttrDTO attr : list) {
-                sessionAttrs.put(attr.getAttrKey(), attrValueToObject(attr.getAttrType(), attr.getAttrValue()));
-            }
-        }
     }
 
     @Override
@@ -93,6 +86,17 @@ public class SpringSession implements Session {
         session.setId(persistId);
         session.setSessionKey(newSessionKey);
         sessionRepository.getSessionService().modify(session);
+
+        if (sessionRepository.isEnableRedis()) {
+            String oldKey = sessionRepository.getRedisKey(id);
+            String newKey = sessionRepository.getRedisKey(newSessionKey);
+            Map attrs = sessionRepository.getRedisTemplate().opsForHash().entries(oldKey);
+            sessionRepository.getRedisTemplate().opsForHash().putAll(
+                    sessionRepository.getRedisKey(newSessionKey), attrs);
+            sessionRepository.getRedisTemplate().delete(oldKey);
+            sessionRepository.getRedisTemplate().expire(newKey, maxInactiveInterval, TimeUnit.SECONDS);
+        }
+
         sessionRepository.changeSessionId(id, newSessionKey);
         id = newSessionKey;
         return newSessionKey;
@@ -104,11 +108,18 @@ public class SpringSession implements Session {
             return (T)userId;
         }
 
-        if (sessionAttrs == null) {
-            return null;
+        if (sessionRepository.isEnableRedis()) {
+            Object valueObj = sessionRepository.getRedisTemplate().opsForHash().get(
+                    sessionRepository.getRedisKey(id), sessionRepository.getRedisAttrKey(key));
+            if (valueObj == null) {
+                return null;
+            }
+            Map<String, String> attrMap = JsonUtils.fromJson(valueObj.toString(), Map.class);
+            return (T)attrValueToObject(attrMap.get("type"), attrMap.get("value"));
         }
-        Object obj = sessionAttrs.get(key);
-        return (obj == null) ? null : (T)obj;
+
+        SessionAttrDTO attrDTO = sessionRepository.getSessionService().getAttrByKey(persistId, key);
+        return (attrDTO == null) ? null : (T)attrValueToObject(attrDTO.getAttrType(), attrDTO.getAttrValue());
     }
 
     @Override
@@ -127,10 +138,19 @@ public class SpringSession implements Session {
 
     @Override
     public Set<String> getAttributeNames() {
-        if (sessionAttrs == null) {
-            return null;
+        if (sessionRepository.isEnableRedis()) {
+            return sessionRepository.getRedisTemplate().opsForHash().keys(sessionRepository.getRedisKey(id));
         }
-        return new HashSet(this.sessionAttrs.keySet());
+
+        List<SessionAttrDTO> list = sessionRepository.getSessionService().queryAttrBySessionId(persistId);
+        Set<String> result = new HashSet<>();
+        String keyPrefix = CacheableJdbcSessionRepository.SESSION_ATTR_REDIS_KEY_PREFIX;
+        for (SessionAttrDTO attrDTO : list) {
+            if (attrDTO.getAttrKey().startsWith(keyPrefix)) {
+                result.add(attrDTO.getAttrKey().substring(keyPrefix.length() + 1));
+            }
+        }
+        return result;
     }
 
     @Override
@@ -144,16 +164,26 @@ public class SpringSession implements Session {
             lastAccessedTime = System.currentTimeMillis();
 
             if (sessionRepository.getSysConfig().getUserIdSessionKey().equals(key)) {
-                userId = (Long)value;
+                userId = (Long) value;
                 creationTime = System.currentTimeMillis();
                 persist(true);
                 return;
             } else if (!sessionRepository.getSysConfig().isSessionUseAttr()) {
-                throw new RuntimeException("不支持session attr，如果需要支持，请设置common.properties中common.session.useAttr=true");
+                throw new RuntimeException("不支持session attr，如果需要支持，" +
+                        "请设置common.properties中common.session.useAttr=true");
             }
 
-            boolean exists = sessionAttrs.containsKey(key);
-            sessionAttrs.put(key, value);
+            if (sessionRepository.isEnableRedis()) {
+                Map<String, String> attrMap = new HashMap<>();
+                attrMap.put("type", value.getClass().getName());
+                attrMap.put("value", attrValueToString(value));
+                sessionRepository.getRedisTemplate().opsForHash().put(sessionRepository.getRedisKey(id),
+                        sessionRepository.getRedisAttrKey(key), JsonUtils.toJson(attrMap));
+                return;
+            }
+
+            SessionAttrDTO attrDTO = sessionRepository.getSessionService().getAttrByKey(persistId, key);
+            boolean exists = attrDTO != null;
 
             SessionAttrDTO sessionAttr = new SessionAttrDTO();
             sessionAttr.setSessionId(persistId);
@@ -166,12 +196,12 @@ public class SpringSession implements Session {
                 try {
                     sessionRepository.getSessionService().createAttr(sessionAttr);
                 } catch (Exception e) {
-                    LOGGER.error(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                     sessionRepository.getSessionService().modifyAttr(sessionAttr);
                 }
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error("设置session属性异常,session:{},attr:", id, key, e);
             throw e;
         }
     }
@@ -179,17 +209,20 @@ public class SpringSession implements Session {
     @Override
     public void removeAttribute(String key) {
         try {
-            sessionAttrs.remove(key);
             lastAccessedTime = System.currentTimeMillis();
 
             if (sessionRepository.getSysConfig().getUserIdSessionKey().equals(key)) {
-                userId = null;
-                persist(false);
+                sessionRepository.deleteById(id);
             } else if (sessionRepository.getSysConfig().isSessionUseAttr()) {
-                sessionRepository.getSessionService().removeAttrByKey(persistId, key);
+                if (sessionRepository.isEnableRedis()) {
+                    sessionRepository.getRedisTemplate().opsForHash().delete(sessionRepository.getRedisKey(id),
+                            sessionRepository.getRedisAttrKey(key));
+                } else {
+                    sessionRepository.getSessionService().removeAttrByKey(persistId, key);
+                }
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw e;
         }
     }
@@ -204,10 +237,10 @@ public class SpringSession implements Session {
         this.lastAccessedTime = lastAccessedTime.toEpochMilli();
         try {
             if (needPersist()) {
-                persist(false);
+                updateLastAccessedTime();
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw e;
         }
     }
@@ -220,6 +253,7 @@ public class SpringSession implements Session {
     @Override
     public void setMaxInactiveInterval(Duration maxInactiveInterval) {
         this.maxInactiveInterval = maxInactiveInterval.getSeconds();
+        persist(false);
     }
 
     @Override
@@ -232,7 +266,8 @@ public class SpringSession implements Session {
         if (this.maxInactiveInterval < 0) {
             return false;
         } else {
-            return System.currentTimeMillis() - TimeUnit.SECONDS.toMillis((long)this.maxInactiveInterval) >= this.lastAccessedTime;
+            return System.currentTimeMillis() - TimeUnit.SECONDS.toMillis(this.maxInactiveInterval)
+                    >= this.lastAccessedTime;
         }
     }
 
@@ -246,41 +281,32 @@ public class SpringSession implements Session {
         return this.id.hashCode();
     }
 
-    public boolean needPersist() {
-        if (lastPersistTime == 0L || lastAccessedTime >= lastPersistTime + TimeUnit.SECONDS.toMillis((long)sessionRepository.getPersistInterval()) ||
-            System.currentTimeMillis() >= lastPersistTime + TimeUnit.SECONDS.toMillis((long)sessionRepository.getPersistInterval())) {
+    long getCacheTime() {
+        return cacheTime;
+    }
+
+    boolean needPersist() {
+        if (lastPersistTime == 0L ||
+                lastAccessedTime >= lastPersistTime + sessionRepository.getPersistInterval().toMillis() ||
+                System.currentTimeMillis() >= lastPersistTime + sessionRepository.getPersistInterval().toMillis()) {
             return true;
         }
         return false;
     }
 
-    public void refresh(SpringSession springSession) {
+    void refresh(SpringSession springSession) {
         if (springSession == null) {
             return;
         }
 
         this.setLastAccessedTime(springSession.getLastAccessedTime());
         this.setMaxInactiveInterval(springSession.getMaxInactiveInterval());
-
-        if (sessionRepository.getSysConfig().isSessionUseAttr()) {
-            for (Map.Entry<String, Object> entry : springSession.sessionAttrs.entrySet()) {
-                if (this.sessionAttrs.containsKey(entry.getKey())) {
-                    Object oldV = this.sessionAttrs.get(entry.getKey());
-                    Object newV = springSession.sessionAttrs.get(entry.getKey());
-                    if (oldV == null && newV != null || oldV != null && !oldV.equals(newV)) {
-                        this.sessionAttrs.put(entry.getKey(), newV);
-                    }
-                } else {
-                    this.sessionAttrs.put(entry.getKey(), springSession.sessionAttrs.get(entry.getKey()));
-                }
-            }
-        }
     }
 
     /**
      * 对session对象持久化保存。
      */
-    public void persist(boolean isLogin) {
+    void persist(boolean isLogin) {
         SessionDTO session = new SessionDTO();
         if (persistId == null) {
             session.setSessionKey(id);
@@ -306,6 +332,7 @@ public class SpringSession implements Session {
             Date lastAccessedTimeDate = new Date();
             lastAccessedTimeDate.setTime(lastAccessedTime);
             session.setLastAccessTime(lastAccessedTimeDate);
+            session.setInactiveInterval((int)maxInactiveInterval);
             session.setExpiredTime(getExpiredTime(lastAccessedTime));
 
             if (isLogin && userId != null) {
@@ -328,21 +355,43 @@ public class SpringSession implements Session {
             sessionRepository.getSessionService().modify(session);
         }
 
+        if (sessionRepository.isEnableRedis()) {
+            Map<String, Object> map = new HashMap<>();
+            if (persistId != null) {
+                map.put("persistId", String.valueOf(persistId));
+            }
+            if (userId != null) {
+                map.put("userId", String.valueOf(userId));
+            }
+            map.put("maxInactiveInterval", String.valueOf(maxInactiveInterval));
+
+            String redisKey = sessionRepository.getRedisKey(id);
+            sessionRepository.getRedisTemplate().opsForHash().putAll(redisKey, map);
+            sessionRepository.getRedisTemplate().expire(redisKey, maxInactiveInterval, TimeUnit.SECONDS);
+        }
+    }
+
+    void updateLastAccessedTime() {
+        if (sessionRepository.isEnableRedis()) {
+            sessionRepository.getRedisTemplate().expire(sessionRepository.getRedisKey(id),
+                    maxInactiveInterval, TimeUnit.SECONDS);
+        }
+
+        if (persistId != null) {
+            SessionDTO session = new SessionDTO();
+            session.setId(persistId);
+            Date lastAccessedTimeDate = new Date();
+            lastAccessedTimeDate.setTime(lastAccessedTime);
+            session.setLastAccessTime(lastAccessedTimeDate);
+            session.setExpiredTime(getExpiredTime(lastAccessedTime));
+            sessionRepository.getSessionService().modify(session);
+        }
+
     }
 
     private Date getExpiredTime(long time) {
-        Date date = null;
-        if (maxInactiveInterval <= 0) {
-            try {
-                date = DateUtils.parse("9999-12-31 23:59:59", "yyyy-MM-dd HH:mm:ss");
-            } catch (Exception e) {
-                LOGGER.warn("解析时间错误", e);
-            }
-        } else {
-            date = new Date();
-            date.setTime(time + TimeUnit.SECONDS.toMillis((long)this.maxInactiveInterval));
-        }
-
+        Date date = new Date();
+        date.setTime(time + TimeUnit.SECONDS.toMillis(this.maxInactiveInterval));
         return date;
     }
 
@@ -359,7 +408,7 @@ public class SpringSession implements Session {
     private Object attrValueToObject(String type, String value) {
         try {
             Class cls = Class.forName(type);
-            Object obj = null;
+            Object obj;
             if (cls.isPrimitive() || cls.isAssignableFrom(String.class)) {
                 SimpleTypeConverter typeConverter = new SimpleTypeConverter();
                 obj = typeConverter.convertIfNecessary(value, cls);
@@ -372,6 +421,5 @@ public class SpringSession implements Session {
             throw new RuntimeException("get session attr error, type:" + type + ", value:" + value, e);
         }
     }
-
 
 }

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * @since 1.0
  */
 public class AccessPermissionInterceptor extends HandlerInterceptorAdapter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccessPermissionInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccessPermissionInterceptor.class);
 
     @Autowired
     private SysContextHolder sysContextHolder;
@@ -51,7 +51,7 @@ public class AccessPermissionInterceptor extends HandlerInterceptorAdapter {
             Long userId = sysContextHolder.getUserId();
             boolean isAllowed = accessPermissionService.isPermissionAllowedForUser(userId, permissionCode);
             if (!isAllowed) {
-                LOGGER.error("用户{}无访问权限{}", userId, permissionCode);
+                logger.error("用户{}无访问权限{}", userId, permissionCode);
                 throw new PermissionDeniedException();
             }
 

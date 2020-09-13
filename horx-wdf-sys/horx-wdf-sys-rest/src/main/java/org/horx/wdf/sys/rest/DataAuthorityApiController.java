@@ -48,7 +48,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/sys/dataAuthority")
 public class DataAuthorityApiController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataAuthorityApiController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataAuthorityApiController.class);
 
     @Autowired
     private DataAuthorityService dataAuthorityService;

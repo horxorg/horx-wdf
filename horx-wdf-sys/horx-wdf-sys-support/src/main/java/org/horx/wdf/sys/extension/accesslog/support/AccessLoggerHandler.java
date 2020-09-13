@@ -13,10 +13,10 @@ import java.text.SimpleDateFormat;
  * @since 1.0
  */
 public class AccessLoggerHandler implements AccessLogHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccessLoggerHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(AccessLoggerHandler.class);
 
     @Override
     public void handle(AccessLogDTO accessLog) {
-        LOGGER.info(JsonUtils.toJson(accessLog, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")));
+        logger.info(JsonUtils.toJson(accessLog, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")));
     }
 }

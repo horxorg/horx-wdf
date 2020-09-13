@@ -93,8 +93,14 @@ public class SessionServiceImpl implements SessionService {
 
     @Override
     public List<SessionAttrDTO> queryAttrBySessionId(Long sessionId) {
-        List<SessionAttr> attrList = sessionManager.queryBySessionId(sessionId);
+        List<SessionAttr> attrList = sessionManager.queryAttrBySessionId(sessionId);
         return sessionAttrConverter.toDtoList(attrList);
+    }
+
+    @Override
+    public SessionAttrDTO getAttrByKey(Long sessionId, String attrKey) {
+        SessionAttr sessionAttr = sessionManager.getAttrByKey(sessionId, attrKey);
+        return sessionAttrConverter.toDto(sessionAttr);
     }
 
     @Override

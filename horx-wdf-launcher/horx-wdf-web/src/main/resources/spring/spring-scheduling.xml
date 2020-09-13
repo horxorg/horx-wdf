@@ -25,11 +25,23 @@
         <property name="repeatInterval" value="86400000" />
     </bean>
 
+    <bean id="jobSessionCleaner" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="sessionService" />
+        <property name="targetMethod" value="removeExpired" />
+        <property name="concurrent" value="false" />
+    </bean>
+    <bean id="jobSessionCleanerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+        <property name="jobDetail" ref="jobSessionCleaner" />
+        <property name="startDelay" value="40000" />
+        <property name="repeatInterval" value="300000" />
+    </bean>
+
     <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
             <list>
                 <ref bean="jobAccessLogTrigger" />
                 <ref bean="jobDataLogTrigger" />
+                <ref bean="jobSessionCleanerTrigger" />
             </list>
         </property>
     </bean>

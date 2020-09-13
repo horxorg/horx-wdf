@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Component("dataValidationTool")
 public class DataValidationTool {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataValidationTool.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataValidationTool.class);
 
     @Autowired
     private SysContextHolder sysContextHolder;
@@ -100,7 +100,7 @@ public class DataValidationTool {
         String dataPermissionCode = anno.value();
         DataPermissionDefDTO dataPermissionDef = dataPermissionService.getByCode(dataPermissionCode);
         if (dataPermissionDef == null) {
-            LOGGER.warn("数据权限编码" + dataPermissionCode + "不存在");
+            logger.warn("数据权限编码" + dataPermissionCode + "不存在");
             return null;
         }
 

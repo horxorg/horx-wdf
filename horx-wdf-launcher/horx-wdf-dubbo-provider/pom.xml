@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.horx</groupId>
         <artifactId>horx-wdf</artifactId>
-        <version>1.0.2-RELEASE</version>
+        <version>1.0.3-RELEASE</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -34,6 +34,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
@@ -49,6 +54,10 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
         </dependency>
 
         <dependency>
@@ -91,6 +100,14 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
         </dependency>
 
         <dependency>
@@ -227,6 +244,14 @@
             <artifactId>javax.el</artifactId>
             <version>2.2.6</version>
         </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -243,6 +268,7 @@
                     <include>ehcache.xml</include>
                     <include>spring/spring-common.xml</include>
                     <include>spring/spring-jdbc.xml</include>
+                    <include>spring/spring-redis.xml</include>
                     <include>spring/spring-cache.xml</include>
                     <include>spring/spring-impl.xml</include>
                     <include>spring/spring-scheduling.xml</include>

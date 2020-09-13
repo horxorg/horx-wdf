@@ -23,15 +23,17 @@ public interface SessionManager {
 
     void removeExpired();
 
+    Session getBySessionKey(String sessionKey);
+
     void createAttr(SessionAttr sessionAttr);
 
     void modifyAttr(SessionAttr sessionAttr);
 
     void removeAttrByKey(Long sessionId, String attrKey);
 
-    Session getBySessionKey(String sessionKey);
+    List<SessionAttr> queryAttrBySessionId(Long sessionId);
 
-    List<SessionAttr> queryBySessionId(Long sessionId);
+    SessionAttr getAttrByKey(Long sessionId, String attrKey);
 
     PaginationResult<OnlineUser> paginationQueryOnlineUser(OnlineUserQueryDTO query, PaginationParam paginationParam);
 

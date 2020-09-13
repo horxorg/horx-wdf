@@ -17,7 +17,7 @@ import java.util.Map;
  * @since 1.0
  */
 public class LogicalDeleteByIdProvider {
-    private final static Logger LOGGER = LoggerFactory.getLogger(LogicalDeleteByIdProvider.class);
+    private final static Logger logger = LoggerFactory.getLogger(LogicalDeleteByIdProvider.class);
 
     /**
      * 生成根据id删除的sql。
@@ -47,7 +47,7 @@ public class LogicalDeleteByIdProvider {
             Object objId = param.get("id");
             MetaUtils.setValue(entity, idFieldMeta, objId);
         } catch (Exception e) {
-            LOGGER.warn("设置对象属性值错误", e);
+            logger.warn("设置对象属性值错误", e);
         }
 
         EntityTool entityTool = SpringContext.getBean(EntityTool.class);

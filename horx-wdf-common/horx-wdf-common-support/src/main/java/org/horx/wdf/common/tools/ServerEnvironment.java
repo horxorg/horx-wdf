@@ -15,7 +15,7 @@ import java.util.Enumeration;
  * @since 1.0
  */
 public class ServerEnvironment {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerEnvironment.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServerEnvironment.class);
 
     @Value("${common.serverIpPrefix}")
     private String serverIpPrefix;
@@ -39,7 +39,7 @@ public class ServerEnvironment {
                 NetworkInterface netInterface = allNetInterfaces.nextElement();
                 Enumeration<InetAddress> addresses = netInterface.getInetAddresses();
                 while (addresses.hasMoreElements()) {
-                    InetAddress inetAddress = (InetAddress) addresses.nextElement();
+                    InetAddress inetAddress = addresses.nextElement();
                     if (inetAddress != null && inetAddress instanceof Inet4Address) {
                         String ip = inetAddress.getHostAddress();
                         if ("127.0.0.1".equals(ip)) {
@@ -60,7 +60,7 @@ public class ServerEnvironment {
                 }
             }
         } catch (SocketException e) {
-            LOGGER.error("获取服务器网络接口异常", e);
+            logger.error("获取服务器网络接口异常", e);
         }
 
         if (serverIp == null) {

@@ -60,10 +60,18 @@ public interface CommonSessionService {
     void removeAttrByKey(Long sessionId, String attrKey);
 
     /**
-     * 获取会话属性。
+     * 获取所有会话属性。
      * @param sessionId
      * @return
      */
     List<SessionAttrDTO> queryAttrBySessionId(Long sessionId);
+
+    /**
+     * 获取会话属性。
+     * @param sessionId
+     * @param attrKey
+     * @return
+     */
+    SessionAttrDTO getAttrByKey(Long sessionId, String attrKey);
 
 }
